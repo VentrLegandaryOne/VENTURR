@@ -6,6 +6,11 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
+import NewProject from "./pages/NewProject";
+import Projects from "./pages/Projects";
+import ProjectDetail from "./pages/ProjectDetail";
+import Calculator from "./pages/Calculator";
+import QuoteGenerator from "./pages/QuoteGenerator";
 import { lazy, Suspense } from "react";
 
 const LoadingFallback = () => (
@@ -23,6 +28,11 @@ function Router() {
       <Switch>
         <Route path={"/"} component={Home} />
         <Route path={"/dashboard"} component={Dashboard} />
+        <Route path={"/projects"} component={Projects} />
+        <Route path={"/projects/new"} component={NewProject} />
+        <Route path={"/projects/:id"} component={ProjectDetail} />
+        <Route path={"/projects/:id/calculator"} component={Calculator} />
+        <Route path={"/projects/:id/quote"} component={QuoteGenerator} />
         <Route path={"/404"} component={NotFound} />
         <Route component={NotFound} />
       </Switch>

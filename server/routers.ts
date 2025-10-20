@@ -177,16 +177,18 @@ export const appRouter = router({
         gst: z.string(),
         total: z.string(),
         deposit: z.string().optional(),
-        validUntil: z.date().optional(),
+        validUntil: z.string().optional(),
         items: z.string().optional(),
         terms: z.string().optional(),
         notes: z.string().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
         const quoteId = nanoid();
+        const { validUntil, ...rest } = input;
         await createQuote({
           id: quoteId,
-          ...input,
+          ...rest,
+          validUntil: validUntil ? new Date(validUntil) : undefined,
           status: "draft",
           createdBy: ctx.user.id,
         });
