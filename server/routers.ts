@@ -1,6 +1,7 @@
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
+import { sendQuoteEmail } from "./emailService";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { 
@@ -192,6 +193,19 @@ export const appRouter = router({
           status: "draft",
           createdBy: ctx.user.id,
         });
+        
+        // Send email notification if client email is available
+        const project = await getProject(input.projectId);
+        if (project?.clientEmail && project?.clientName) {
+          await sendQuoteEmail(
+            project.clientEmail,
+            project.clientName,
+            project.title,
+            input.quoteNumber,
+            input.total
+          );
+        }
+        
         return { id: quoteId };
       }),
     

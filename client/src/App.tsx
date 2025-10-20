@@ -11,6 +11,9 @@ import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
 import Calculator from "./pages/Calculator";
 import QuoteGenerator from "./pages/QuoteGenerator";
+import SiteMeasurement from "./pages/SiteMeasurement";
+import Profile from "./pages/Profile";
+import OrganizationSettings from "./pages/OrganizationSettings";
 import { lazy, Suspense } from "react";
 
 const LoadingFallback = () => (
@@ -33,6 +36,9 @@ function Router() {
         <Route path={"/projects/:id"} component={ProjectDetail} />
         <Route path={"/projects/:id/calculator"} component={Calculator} />
         <Route path={"/projects/:id/quote"} component={QuoteGenerator} />
+        <Route path={"/projects/:id/measure"} component={SiteMeasurement} />
+        <Route path={"/settings/profile"} component={Profile} />
+        <Route path={"/settings/organization"} component={OrganizationSettings} />
         <Route path={"/404"} component={NotFound} />
         <Route component={NotFound} />
       </Switch>

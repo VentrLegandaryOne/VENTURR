@@ -5,12 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, FileText, Loader2, Plus, Save, Trash2, Eye } from "lucide-react";
+import { ArrowLeft, Download, FileText, Loader2, Plus, Save, Trash2, Eye } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation, useRoute } from "wouter";
 import { getLoginUrl } from "@/const";
 import { toast } from "sonner";
 import { nanoid } from "nanoid";
+import { downloadQuotePDF } from "@/lib/pdfGenerator";
 
 interface LineItem {
   id: string;
@@ -147,6 +148,36 @@ Validity: 30 days from quote date`,
 
   const { subtotal, gst, total } = calculateTotals();
 
+  const handleDownloadPDF = async () => {
+    if (!project) return;
+    
+    const quoteNumber = `VEN-${Date.now()}`;
+    const { subtotal, gst, total } = calculateTotals();
+    const filename = `Quote-${quoteNumber}-${project.title.replace(/\s+/g, '-')}.pdf`;
+    
+    await downloadQuotePDF(
+      {
+        quoteNumber,
+        validUntil: formData.validUntil,
+        subtotal: subtotal.toFixed(2),
+        gst: gst.toFixed(2),
+        total: total.toFixed(2),
+        terms: formData.terms,
+        notes: formData.notes,
+        items: JSON.stringify(lineItems),
+      },
+      {
+        title: project.title,
+        address: project.address || undefined,
+        clientName: project.clientName || undefined,
+        clientEmail: project.clientEmail || undefined,
+        clientPhone: project.clientPhone || undefined,
+      },
+      filename
+    );
+    toast.success("PDF downloaded successfully");
+  };
+
   const handleSave = async () => {
     if (!projectId) return;
 
@@ -204,6 +235,13 @@ Validity: 30 days from quote date`,
               <Button variant="outline" onClick={handlePreview}>
                 <Eye className="w-4 h-4 mr-2" />
                 Preview
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleDownloadPDF}
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Download PDF
               </Button>
               <Button
                 onClick={handleSave}
