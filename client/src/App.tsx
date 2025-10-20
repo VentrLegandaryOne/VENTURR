@@ -9,7 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import NewProject from "./pages/NewProject";
 import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
-import Calculator from "./pages/Calculator";
+import Calculator from "./pages/CalculatorEnhanced";
 import QuoteGenerator from "./pages/QuoteGenerator";
 import SiteMeasurement from "./pages/SiteMeasurement";
 import Profile from "./pages/Profile";
