@@ -1,6 +1,20 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { 
+  InsertUser, 
+  users, 
+  organizations, 
+  InsertOrganization,
+  memberships,
+  projects,
+  InsertProject,
+  takeoffs,
+  InsertTakeoff,
+  quotes,
+  InsertQuote,
+  measurements,
+  InsertMeasurement
+} from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -85,4 +99,126 @@ export async function getUser(id: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Organization queries
+export async function createOrganization(org: InsertOrganization) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(organizations).values(org);
+  return org;
+}
+
+export async function getOrganization(id: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(organizations).where(eq(organizations.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getUserOrganizations(userId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const result = await db
+    .select({ org: organizations })
+    .from(memberships)
+    .innerJoin(organizations, eq(memberships.organizationId, organizations.id))
+    .where(eq(memberships.userId, userId));
+  
+  return result.map(r => r.org);
+}
+
+// Project queries
+export async function createProject(project: InsertProject) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(projects).values(project);
+  return project;
+}
+
+export async function getProject(id: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(projects).where(eq(projects.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getOrganizationProjects(organizationId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(projects).where(eq(projects.organizationId, organizationId));
+}
+
+export async function updateProject(id: string, updates: Partial<InsertProject>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(projects).set(updates).where(eq(projects.id, id));
+}
+
+// Takeoff queries
+export async function createTakeoff(takeoff: InsertTakeoff) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(takeoffs).values(takeoff);
+  return takeoff;
+}
+
+export async function getProjectTakeoffs(projectId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(takeoffs).where(eq(takeoffs.projectId, projectId));
+}
+
+// Quote queries
+export async function createQuote(quote: InsertQuote) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(quotes).values(quote);
+  return quote;
+}
+
+export async function getQuote(id: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(quotes).where(eq(quotes.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getProjectQuotes(projectId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(quotes).where(eq(quotes.projectId, projectId));
+}
+
+export async function updateQuote(id: string, updates: Partial<InsertQuote>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(quotes).set(updates).where(eq(quotes.id, id));
+}
+
+// Measurement queries
+export async function createMeasurement(measurement: InsertMeasurement) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(measurements).values(measurement);
+  return measurement;
+}
+
+export async function getProjectMeasurements(projectId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(measurements).where(eq(measurements.projectId, projectId));
+}
