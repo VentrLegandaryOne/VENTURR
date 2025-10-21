@@ -114,31 +114,31 @@ export default function Dashboard() {
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-slate-900 mb-4">Quick Actions</h2>
           <div className="grid md:grid-cols-4 gap-4">
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 border-orange-200" onClick={() => setLocation("/measure")}>
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 border-orange-200" onClick={() => setLocation("/projects/new")}>
               <CardHeader>
                 <div className="w-12 h-12 bg-orange-50 rounded-lg flex items-center justify-center mb-2">
                   <Ruler className="w-6 h-6 text-orange-500" />
                 </div>
                 <CardTitle className="text-lg">Site Measure</CardTitle>
-                <CardDescription>Capture site measurements</CardDescription>
+                <CardDescription>Start a project to measure</CardDescription>
               </CardHeader>
             </Card>
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 border-green-200" onClick={() => setLocation("/calculator")}>
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 border-green-200" onClick={() => setLocation("/projects/new")}>
               <CardHeader>
                 <div className="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center mb-2">
                   <Calculator className="w-6 h-6 text-green-500" />
                 </div>
                 <CardTitle className="text-lg">Roofing Takeoff</CardTitle>
-                <CardDescription>Calculate materials</CardDescription>
+                <CardDescription>Start a project to calculate</CardDescription>
               </CardHeader>
             </Card>
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 border-pink-200" onClick={() => setLocation("/quote")}>
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 border-pink-200" onClick={() => setLocation("/projects/new")}>
               <CardHeader>
                 <div className="w-12 h-12 bg-pink-50 rounded-lg flex items-center justify-center mb-2">
                   <FileText className="w-6 h-6 text-pink-500" />
                 </div>
                 <CardTitle className="text-lg">Quote Generator</CardTitle>
-                <CardDescription>Create professional quotes</CardDescription>
+                <CardDescription>Start a project to quote</CardDescription>
               </CardHeader>
             </Card>
             <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 border-blue-200" onClick={() => setLocation("/projects/new")}>
