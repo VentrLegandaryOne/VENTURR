@@ -1,5 +1,6 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
+import { QuickProjectModal } from "@/components/QuickProjectModal";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
 import { Folder, Plus, Ruler, Calculator, FileText, TrendingUp } from "lucide-react";
@@ -11,6 +12,12 @@ export default function Dashboard() {
   const { user, isAuthenticated, loading } = useAuth();
   const [, setLocation] = useLocation();
   const [selectedOrg, setSelectedOrg] = useState<string | null>(null);
+  const [quickProjectModal, setQuickProjectModal] = useState<{
+    isOpen: boolean;
+    defaultTitle: string;
+    action: "measure" | "calculate" | "quote";
+    onComplete: (projectId: string) => void;
+  } | null>(null);
 
   const { data: organizations } = trpc.organizations.list.useQuery(undefined, {
     enabled: isAuthenticated,
@@ -114,31 +121,46 @@ export default function Dashboard() {
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-slate-900 mb-4">Quick Actions</h2>
           <div className="grid md:grid-cols-4 gap-4">
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 border-orange-200" onClick={() => setLocation("/projects/new")}>
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 border-orange-200" onClick={() => setQuickProjectModal({
+              isOpen: true,
+              defaultTitle: `Site Measurement - ${new Date().toLocaleDateString()}`,
+              action: "measure",
+              onComplete: (projectId) => setLocation(`/projects/${projectId}/measure`),
+            })}>
               <CardHeader>
                 <div className="w-12 h-12 bg-orange-50 rounded-lg flex items-center justify-center mb-2">
                   <Ruler className="w-6 h-6 text-orange-500" />
                 </div>
                 <CardTitle className="text-lg">Site Measure</CardTitle>
-                <CardDescription>Start a project to measure</CardDescription>
+                <CardDescription>Capture site measurements</CardDescription>
               </CardHeader>
             </Card>
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 border-green-200" onClick={() => setLocation("/projects/new")}>
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 border-green-200" onClick={() => setQuickProjectModal({
+              isOpen: true,
+              defaultTitle: `Roofing Calculation - ${new Date().toLocaleDateString()}`,
+              action: "calculate",
+              onComplete: (projectId) => setLocation(`/projects/${projectId}/calculator`),
+            })}>
               <CardHeader>
                 <div className="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center mb-2">
                   <Calculator className="w-6 h-6 text-green-500" />
                 </div>
                 <CardTitle className="text-lg">Roofing Takeoff</CardTitle>
-                <CardDescription>Start a project to calculate</CardDescription>
+                <CardDescription>Calculate materials</CardDescription>
               </CardHeader>
             </Card>
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 border-pink-200" onClick={() => setLocation("/projects/new")}>
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 border-pink-200" onClick={() => setQuickProjectModal({
+              isOpen: true,
+              defaultTitle: `Quote - ${new Date().toLocaleDateString()}`,
+              action: "quote",
+              onComplete: (projectId) => setLocation(`/projects/${projectId}/quote`),
+            })}>
               <CardHeader>
                 <div className="w-12 h-12 bg-pink-50 rounded-lg flex items-center justify-center mb-2">
                   <FileText className="w-6 h-6 text-pink-500" />
                 </div>
                 <CardTitle className="text-lg">Quote Generator</CardTitle>
-                <CardDescription>Start a project to quote</CardDescription>
+                <CardDescription>Create professional quotes</CardDescription>
               </CardHeader>
             </Card>
             <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 border-blue-200" onClick={() => setLocation("/projects/new")}>
@@ -205,6 +227,16 @@ export default function Dashboard() {
           )}
         </div>
       </main>
+
+      {quickProjectModal && (
+        <QuickProjectModal
+          isOpen={quickProjectModal.isOpen}
+          onClose={() => setQuickProjectModal(null)}
+          onProjectCreated={quickProjectModal.onComplete}
+          defaultTitle={quickProjectModal.defaultTitle}
+          action={quickProjectModal.action}
+        />
+      )}
     </div>
   );
 }

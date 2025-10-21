@@ -11,7 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import NewProject from "./pages/NewProject";
 import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
-import Calculator from "./pages/CalculatorEnhanced";
+import CalculatorEnhanced from "./pages/CalculatorEnhanced";
 import QuoteGenerator from "./pages/QuoteGenerator";
 import SiteMeasurement from "./pages/SiteMeasurement";
 import Profile from "./pages/Profile";
@@ -32,13 +32,14 @@ function Router() {
     <Suspense fallback={<LoadingFallback />}>
       <Switch>
         <Route path={"/"} component={Home} />
+      <Route path="/projects/:id/measure" component={SiteMeasurement} />
+      <Route path="/projects/:id/calculator" component={CalculatorEnhanced} />
+      <Route path="/projects/:id/quote" component={QuoteGenerator} />
         <Route path={"/dashboard"} component={Dashboard} />
         <Route path={"/projects"} component={Projects} />
         <Route path={"/projects/new"} component={NewProject} />
         <Route path={"/projects/:id"} component={ProjectDetail} />
-        <Route path={"/projects/:id/calculator"} component={Calculator} />
-        <Route path={"/projects/:id/quote"} component={QuoteGenerator} />
-        <Route path={"/projects/:id/measure"} component={SiteMeasurement} />
+
         <Route path={"/settings/profile"} component={Profile} />
         <Route path={"/settings/organization"} component={OrganizationSettings} />
         <Route path={"/import"} component={Import} />
