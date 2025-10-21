@@ -5,6 +5,8 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+import Import from "./pages/Import";
+import Export from "./pages/Export";
 import Dashboard from "./pages/Dashboard";
 import NewProject from "./pages/NewProject";
 import Projects from "./pages/Projects";
@@ -39,7 +41,9 @@ function Router() {
         <Route path={"/projects/:id/measure"} component={SiteMeasurement} />
         <Route path={"/settings/profile"} component={Profile} />
         <Route path={"/settings/organization"} component={OrganizationSettings} />
-        <Route path={"/404"} component={NotFound} />
+        <Route path={"/import"} component={Import} />
+      <Route path={"/export"} component={Export} />
+      <Route path={"/404"} component={NotFound} />
         <Route component={NotFound} />
       </Switch>
     </Suspense>
