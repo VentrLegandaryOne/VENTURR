@@ -58,6 +58,13 @@ export const projects = mysqlTable("projects", {
   clientPhone: varchar("clientPhone", { length: 50 }),
   propertyType: mysqlEnum("propertyType", ["residential", "commercial", "industrial"]).default("residential"),
   status: mysqlEnum("status", ["draft", "quoted", "approved", "in_progress", "completed", "canceled"]).default("draft").notNull(),
+  // Environmental factors
+  location: text("location"),
+  coastalDistance: varchar("coastalDistance", { length: 20 }),
+  windRegion: mysqlEnum("windRegion", ["A", "B", "C", "D"]),
+  balRating: mysqlEnum("balRating", ["BAL-LOW", "BAL-12.5", "BAL-19", "BAL-29", "BAL-40", "BAL-FZ"]),
+  saltExposure: varchar("saltExposure", { length: 10 }),
+  cycloneRisk: varchar("cycloneRisk", { length: 10 }),
   createdBy: varchar("createdBy", { length: 64 }).notNull(),
   createdAt: timestamp("createdAt").defaultNow(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow(),
@@ -125,3 +132,29 @@ export const measurements = mysqlTable("measurements", {
 
 export type Measurement = typeof measurements.$inferSelect;
 export type InsertMeasurement = typeof measurements.$inferInsert;
+
+
+// Materials library
+export const materials = mysqlTable("materials", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  category: varchar("category", { length: 100 }).notNull(),
+  manufacturer: varchar("manufacturer", { length: 100 }).notNull(),
+  profile: varchar("profile", { length: 100 }).notNull(),
+  thickness: varchar("thickness", { length: 50 }).notNull(),
+  coating: varchar("coating", { length: 100 }).notNull(),
+  pricePerUnit: varchar("pricePerUnit", { length: 20 }).notNull(),
+  unit: varchar("unit", { length: 20 }).notNull(),
+  coverWidth: varchar("coverWidth", { length: 20 }),
+  minPitch: varchar("minPitch", { length: 20 }),
+  maxSpan: varchar("maxSpan", { length: 20 }),
+  description: text("description"),
+  createdBy: varchar("createdBy", { length: 64 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow(),
+});
+
+export type Material = typeof materials.$inferSelect;
+export type InsertMaterial = typeof materials.$inferInsert;
+

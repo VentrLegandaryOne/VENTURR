@@ -148,7 +148,7 @@ export default function ProjectDetail() {
                 <CardDescription>Common tasks for this project</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid md:grid-cols-3 gap-4">
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <Button
                     variant="outline"
                     className="h-auto py-4 flex flex-col items-center space-y-2"
@@ -164,6 +164,14 @@ export default function ProjectDetail() {
                   >
                     <Calculator className="w-6 h-6 text-green-500" />
                     <span>Takeoff Calculator</span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="h-auto py-4 flex flex-col items-center space-y-2"
+                    onClick={() => setLocation(`/projects/${projectId}/calculator-labor`)}
+                  >
+                    <Calculator className="w-6 h-6 text-blue-500" />
+                    <span className="text-center">Labor Calculator</span>
                   </Button>
                   <Button
                     variant="outline"

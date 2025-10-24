@@ -75,6 +75,15 @@ export default function CalculatorEnhanced() {
     },
   });
 
+  const updateProjectMutation = trpc.projects.update.useMutation({
+    onSuccess: () => {
+      // Silent update - no toast notification
+    },
+    onError: (error) => {
+      console.error("Failed to update project:", error);
+    },
+  });
+
   const [formData, setFormData] = useState({
     roofLength: "",
     roofWidth: "",
@@ -106,6 +115,21 @@ export default function CalculatorEnhanced() {
     }
   }, [authLoading, isAuthenticated]);
 
+  // Initialize form data from project when loaded
+  useEffect(() => {
+    if (project) {
+      setFormData(prev => ({
+        ...prev,
+        location: project.location || "",
+        coastalDistance: project.coastalDistance || "",
+        windRegion: (project.windRegion as "A" | "B" | "C" | "D") || "B",
+        balRating: (project.balRating as "BAL-LOW" | "BAL-12.5" | "BAL-19" | "BAL-29" | "BAL-40" | "BAL-FZ") || "BAL-LOW",
+        saltExposure: project.saltExposure === "true",
+        cycloneRisk: project.cycloneRisk === "true",
+      }));
+    }
+  }, [project]);
+
   // Run environmental assessment when factors change
   useEffect(() => {
     if (formData.location) {
@@ -121,6 +145,26 @@ export default function CalculatorEnhanced() {
       setEnvAssessment(assessment);
     }
   }, [formData.location, formData.coastalDistance, formData.windRegion, formData.balRating, formData.saltExposure, formData.cycloneRisk]);
+
+  // Auto-save environmental factors to project
+  useEffect(() => {
+    if (projectId && project) {
+      // Debounce the update to avoid too many API calls
+      const timeoutId = setTimeout(() => {
+        updateProjectMutation.mutate({
+          id: projectId,
+          location: formData.location || undefined,
+          coastalDistance: formData.coastalDistance || undefined,
+          windRegion: formData.windRegion,
+          balRating: formData.balRating,
+          saltExposure: formData.saltExposure.toString(),
+          cycloneRisk: formData.cycloneRisk.toString(),
+        });
+      }, 1000); // Wait 1 second after last change
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [projectId, formData.location, formData.coastalDistance, formData.windRegion, formData.balRating, formData.saltExposure, formData.cycloneRisk, project]);
 
   const handleChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));

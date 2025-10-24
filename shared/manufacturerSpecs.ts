@@ -207,13 +207,153 @@ export const manufacturerDocs: Record<string, ManufacturerDocumentation> = {
       'Regular maintenance',
     ],
   },
+  'lysaght-spandek': {
+    manufacturer: 'Lysaght (BlueScope)',
+    productName: 'Spandek',
+    installationManualUrl: 'https://www.lysaght.com/content/dam/lysaght/australia/documents/installation-manuals/LYT0026-Installation-Manual-Roofing-and-Walling.pdf',
+    technicalDataSheetUrl: 'https://www.lysaght.com/content/dam/lysaght/australia/documents/technical-data-sheets/spandek.pdf',
+    warrantyDocumentUrl: 'https://www.lysaght.com/en-au/warranty',
+    complianceStandards: ['AS 1562.1:2018', 'AS/NZS 1170.2:2021', 'NCC 2022'],
+    minimumPitch: 2,
+    maximumSpan: 900,
+    fixingRequirements: {
+      type: 'pierce-fix',
+      fastenersPerM2: 8,
+      fastenerType: 'Self-drilling screws with bonded washers',
+      notes: [
+        'Fix through crest of rib',
+        'Every third rib at supports',
+        'Side-lap fasteners every 300mm',
+      ],
+    },
+    warrantyConditions: [
+      'Follow Lysaght Installation Manual LYT0026',
+      'Minimum pitch 2° for standard applications',
+      'Use Class 3 or higher fasteners',
+    ],
+  },
+  'stramit-megaclad': {
+    manufacturer: 'Stramit',
+    productName: 'Megaclad',
+    installationManualUrl: 'https://www.stramit.com.au/wp-content/uploads/2021/03/Stramit-Installation-Guide.pdf',
+    complianceStandards: ['AS 1562.1:2018', 'AS/NZS 1170.2:2021', 'NCC 2022'],
+    minimumPitch: 1,
+    maximumSpan: 1400,
+    fixingRequirements: {
+      type: 'pierce-fix',
+      fastenersPerM2: 7,
+      fastenerType: 'Self-drilling screws',
+      notes: [
+        'Wide cover width reduces fixing points',
+        'Fix through crest',
+        'Enhanced for long spans',
+      ],
+    },
+    warrantyConditions: [
+      'Stramit installation guide compliance',
+      'Suitable for commercial applications',
+      'Regular inspection in coastal areas',
+    ],
+  },
+  'stramit-speed-deck': {
+    manufacturer: 'Stramit',
+    productName: 'Speed Deck',
+    installationManualUrl: 'https://www.stramit.com.au/wp-content/uploads/2021/03/Stramit-Installation-Guide.pdf',
+    complianceStandards: ['AS 1562.1:2018', 'AS/NZS 1170.2:2021', 'NCC 2022'],
+    minimumPitch: 2,
+    maximumSpan: 1000,
+    fixingRequirements: {
+      type: 'concealed',
+      fastenersPerM2: 8,
+      fastenerType: 'Concealed clips',
+      notes: [
+        'Concealed fix system',
+        'Clean architectural appearance',
+        'Clips at every rib',
+      ],
+    },
+    warrantyConditions: [
+      'Use genuine Stramit clips',
+      'Licensed installer recommended',
+      'Annual maintenance inspection',
+    ],
+  },
+  'metroll-metrib': {
+    manufacturer: 'Metroll',
+    productName: 'Metrib',
+    installationManualUrl: 'https://www.metroll.com.au/wp-content/uploads/Installation-Manual.pdf',
+    complianceStandards: ['AS 1562.1:2018', 'NCC 2022'],
+    minimumPitch: 5,
+    maximumSpan: 900,
+    fixingRequirements: {
+      type: 'pierce-fix',
+      fastenersPerM2: 10,
+      fastenerType: 'Self-drilling screws with bonded washers',
+      notes: [
+        'Low rib corrugated profile',
+        'Fix through crest',
+        'Every corrugation at supports',
+      ],
+    },
+    warrantyConditions: [
+      'Follow Metroll installation manual',
+      'Suitable for residential applications',
+      'Regular maintenance required',
+    ],
+  },
+  'metroll-hi-deck': {
+    manufacturer: 'Metroll',
+    productName: 'Hi-Deck 650',
+    installationManualUrl: 'https://www.metroll.com.au/wp-content/uploads/Installation-Manual.pdf',
+    complianceStandards: ['AS 1562.1:2018', 'AS/NZS 1170.2:2021', 'NCC 2022'],
+    minimumPitch: 2,
+    maximumSpan: 1100,
+    fixingRequirements: {
+      type: 'pierce-fix',
+      fastenersPerM2: 8,
+      fastenerType: 'Self-drilling screws',
+      notes: [
+        'High rib trapezoidal profile',
+        'Enhanced structural capacity',
+        'Fix through crest',
+      ],
+    },
+    warrantyConditions: [
+      'Installation per Metroll specifications',
+      'Suitable for commercial and industrial',
+      'Maintenance per schedule',
+    ],
+  },
 };
 
 /**
  * Get manufacturer documentation for a material
+ * Normalizes material ID to match documentation keys
  */
 export function getManufacturerDocs(materialId: string): ManufacturerDocumentation | null {
-  return manufacturerDocs[materialId] || null;
+  // Normalize material ID by extracting manufacturer and profile
+  // e.g., 'lysaght_kliplok_700_042_colorbond' -> 'lysaght-kliplok-700'
+  // e.g., 'lysaght_trimdek_042_colorbond' -> 'lysaght-trimdek'
+  
+  const normalized = materialId
+    .toLowerCase()
+    .replace(/_/g, '-')
+    .replace(/-\d+\.?\d*-(colorbond|zincalume|galvanized|zam).*$/, '') // Remove BMT and coating
+    .replace(/-\d+\.?\d*$/, ''); // Remove trailing numbers
+  
+  // Try exact match first
+  if (manufacturerDocs[normalized]) {
+    return manufacturerDocs[normalized];
+  }
+  
+  // Try to find by profile name (e.g., kliplok-700, trimdek, custom-orb)
+  for (const [key, doc] of Object.entries(manufacturerDocs)) {
+    if (normalized.includes(key) || key.includes(normalized)) {
+      return doc;
+    }
+  }
+  
+  return null;
 }
 
 /**

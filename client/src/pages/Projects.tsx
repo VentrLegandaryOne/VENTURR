@@ -1,10 +1,18 @@
 import { useAuth } from "@/_core/hooks/useAuth";
+import { ProjectsImportExport } from "./ProjectsImportExport";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, Folder, Loader2, Plus, Search } from "lucide-react";
+import { ArrowLeft, Folder, Loader2, Plus, Search, Download, Upload, FileText } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Select as SelectUI, SelectContent as SelectContentUI, SelectItem as SelectItemUI, SelectTrigger as SelectTriggerUI, SelectValue as SelectValueUI } from "@/components/ui/select";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
+import { toast } from "sonner";
+import type { ImportResult } from '../../../shared/importExportTypes';
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { getLoginUrl } from "@/const";
@@ -15,15 +23,23 @@ export default function Projects() {
   const [selectedOrg, setSelectedOrg] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [importDialogOpen, setImportDialogOpen] = useState(false);
+  const [importMode, setImportMode] = useState<'append' | 'replace'>('append');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [importResult, setImportResult] = useState<ImportResult | null>(null);
 
   const { data: organizations } = trpc.organizations.list.useQuery(undefined, {
     enabled: isAuthenticated,
   });
 
-  const { data: projects, isLoading } = trpc.projects.list.useQuery(
+  const { data: projects, isLoading, refetch } = trpc.projects.list.useQuery(
     { organizationId: selectedOrg! },
     { enabled: !!selectedOrg }
   );
+
+  const exportMutation = trpc.projects.export.useMutation();
+  const importMutation = trpc.projects.import.useMutation();
+  const downloadTemplateMutation = trpc.projects.downloadTemplate.useMutation();
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
@@ -100,6 +116,8 @@ export default function Projects() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
+        {/* Import/Export Section */}
+        {selectedOrg && <ProjectsImportExport organizationId={selectedOrg} />}
         {/* Filters */}
         <Card className="mb-6">
           <CardContent className="pt-6">

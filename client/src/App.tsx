@@ -4,19 +4,23 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
-import Import from "./pages/Import";
-import Export from "./pages/Export";
-import Dashboard from "./pages/Dashboard";
-import NewProject from "./pages/NewProject";
-import Projects from "./pages/Projects";
-import ProjectDetail from "./pages/ProjectDetail";
-import CalculatorEnhanced from "./pages/CalculatorEnhanced";
-import QuoteGenerator from "./pages/QuoteGenerator";
-import SiteMeasurement from "./pages/SiteMeasurement";
-import Profile from "./pages/Profile";
-import OrganizationSettings from "./pages/OrganizationSettings";
 import { lazy, Suspense } from "react";
+
+// Lazy load all route components for optimal bundle splitting
+const Home = lazy(() => import("./pages/Home"));
+const Import = lazy(() => import("./pages/Import"));
+const Export = lazy(() => import("./pages/Export"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const NewProject = lazy(() => import("./pages/NewProject"));
+const Projects = lazy(() => import("./pages/Projects"));
+const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
+const CalculatorEnhanced = lazy(() => import("./pages/CalculatorEnhanced"));
+const CalculatorEnhancedLabor = lazy(() => import("./pages/CalculatorEnhancedLabor"));
+const QuoteGenerator = lazy(() => import("./pages/QuoteGenerator"));
+const SiteMeasurement = lazy(() => import("./pages/SiteMeasurement"));
+const Profile = lazy(() => import("./pages/Profile"));
+const OrganizationSettings = lazy(() => import("./pages/OrganizationSettings"));
+const MaterialsLibrary = lazy(() => import("./pages/MaterialsLibrary"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -34,6 +38,7 @@ function Router() {
         <Route path={"/"} component={Home} />
       <Route path="/projects/:id/measure" component={SiteMeasurement} />
       <Route path="/projects/:id/calculator" component={CalculatorEnhanced} />
+      <Route path="/projects/:id/calculator-labor" component={CalculatorEnhancedLabor} />
       <Route path="/projects/:id/quote" component={QuoteGenerator} />
         <Route path={"/dashboard"} component={Dashboard} />
         <Route path={"/projects"} component={Projects} />
@@ -42,6 +47,7 @@ function Router() {
 
         <Route path={"/settings/profile"} component={Profile} />
         <Route path={"/settings/organization"} component={OrganizationSettings} />
+        <Route path={"/materials"} component={MaterialsLibrary} />
         <Route path={"/import"} component={Import} />
       <Route path={"/export"} component={Export} />
       <Route path={"/404"} component={NotFound} />

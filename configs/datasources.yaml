@@ -1,0 +1,339 @@
+# Venturr Dual-Intelligence Datasources Configuration
+# Version: 2.0.0
+# Last Updated: 2025-01-22
+
+datasources:
+  # Australian Building Standards
+  - id: hb39-2015
+    name: "HB-39:2015 Installation Code for Metal Roof & Wall Cladding"
+    type: pdf
+    source_uri: "https://normsplash.com.au/hb-39/hb-39-2015-installation-code-for-metal-roof-wall-cladding"
+    publisher: "Standards Australia"
+    jurisdiction: "Australia"
+    version: "2015"
+    effective_date: "2015-01-01"
+    collection: codes_hb39
+    update_cadence: "annually"
+    priority: critical
+    metadata:
+      code_type: "installation"
+      applies_to: ["roofing", "wall_cladding"]
+      key_sections:
+        - "3.2.1 - Fastener specifications"
+        - "3.2.2 - Fixing requirements"
+        - "4.1 - Coastal environments"
+        - "4.2 - Bushfire areas (BAL)"
+        - "5.1 - Installation procedures"
+    
+  - id: ncc-2022
+    name: "National Construction Code (NCC) 2022"
+    type: web
+    source_uri: "https://www.abcb.gov.au/ncc"
+    publisher: "Australian Building Codes Board"
+    jurisdiction: "Australia"
+    version: "NCC 2022"
+    effective_date: "2022-05-01"
+    collection: codes_ncc
+    update_cadence: "annually"
+    priority: critical
+    metadata:
+      code_type: "building"
+      key_sections:
+        - "J1.5 - Roof and ceiling construction"
+        - "Section B - Structure"
+        - "Section C - Fire resistance"
+        - "Section J - Energy efficiency"
+    
+  - id: safework-nsw
+    name: "SafeWork NSW - Managing the Risk of Falls"
+    type: pdf
+    source_uri: "https://www.safework.nsw.gov.au/__data/assets/pdf_file/0004/50070/Managing-the-risk-of-falls-at-workplaces-COP.pdf"
+    publisher: "SafeWork NSW"
+    jurisdiction: "NSW"
+    version: "August 2019"
+    effective_date: "2019-08-01"
+    collection: codes_safework
+    update_cadence: "as_updated"
+    priority: high
+    metadata:
+      code_type: "safety"
+      applies_to: ["roof_work", "height_work"]
+    
+  - id: nsw-building-commission
+    name: "NSW Building Commission - Compliance & Resources"
+    type: web
+    source_uri: "https://www.nsw.gov.au/housing-and-construction/building-and-renovating/building-professionals"
+    publisher: "NSW Government"
+    jurisdiction: "NSW"
+    version: "current"
+    effective_date: "2020-01-01"
+    collection: codes_ncc
+    update_cadence: "monthly"
+    priority: medium
+    metadata:
+      code_type: "compliance"
+  
+  # Supplier Manuals - Lysaght
+  - id: lysaght-roofing-manual
+    name: "LYSAGHT Roofing & Walling Installation Manual"
+    type: pdf
+    source_uri: "https://www.bluescopedistribution.com.au/resources/installation-manuals"
+    publisher: "BlueScope Steel"
+    jurisdiction: "Australia"
+    version: "current"
+    effective_date: "2024-01-01"
+    collection: supplier_manuals
+    update_cadence: "quarterly"
+    priority: high
+    metadata:
+      supplier: "Lysaght"
+      product_families:
+        - "Klip-Lok 700"
+        - "Trimdek"
+        - "Custom Orb"
+        - "Spandek"
+      key_sections:
+        - "9.1 - Clip spacing guide"
+        - "9.2 - Fastener specifications"
+        - "10.1 - Coastal installations"
+        - "10.2 - Bushfire areas"
+    
+  - id: lysaght-kliplok-700
+    name: "Lysaght Klip-Lok 700 Hi-Tensile Technical Bulletin"
+    type: pdf
+    source_uri: "https://www.bluescopedistribution.com.au/products/klip-lok-700"
+    publisher: "BlueScope Steel"
+    version: "current"
+    collection: supplier_manuals
+    priority: high
+    metadata:
+      supplier: "Lysaght"
+      product: "Klip-Lok 700"
+      profile_type: "concealed_fix"
+  
+  # Supplier Manuals - Stramit
+  - id: stramit-longspan-manual
+    name: "Stramit Longspan Technical Manual"
+    type: pdf
+    source_uri: "https://www.stramit.com.au/resources/technical-manuals"
+    publisher: "Stramit"
+    jurisdiction: "Australia"
+    version: "November 2023"
+    effective_date: "2023-11-01"
+    collection: supplier_manuals
+    update_cadence: "quarterly"
+    priority: high
+    metadata:
+      supplier: "Stramit"
+      product_families:
+        - "Monoclad®"
+        - "Speed Deck Ultra®"
+        - "Speed Deck 500®"
+        - "Megaclad®"
+  
+  # Supplier Manuals - Metroll
+  - id: metroll-resources
+    name: "Metroll Resources & Brochures"
+    type: web
+    source_uri: "https://www.metroll.com.au/resources"
+    publisher: "Metroll"
+    jurisdiction: "Australia"
+    version: "current"
+    collection: supplier_manuals
+    update_cadence: "quarterly"
+    priority: high
+    metadata:
+      supplier: "Metroll"
+      product_families:
+        - "Metlok 700"
+        - "Metdek 700"
+        - "Metrib"
+        - "Hi-Deck 650"
+  
+  # Supplier Manuals - Matrix Steel
+  - id: matrix-steel-guide
+    name: "Matrix Steel Roofing & Walling Brochure"
+    type: pdf
+    source_uri: "https://www.matrixsteel.com.au/products"
+    publisher: "Matrix Steel"
+    jurisdiction: "Australia"
+    version: "current"
+    collection: supplier_manuals
+    update_cadence: "quarterly"
+    priority: medium
+    metadata:
+      supplier: "Matrix Steel"
+      product_type: "roofing_walling"
+  
+  # Supplier Manuals - No.1 Roofing
+  - id: no1-roofing-supplies
+    name: "No.1 Metal Roofing Supplies Product Guide"
+    type: web
+    source_uri: "https://www.no1metalroofingsupplies.com.au"
+    publisher: "No.1 Metal Roofing Supplies"
+    jurisdiction: "Australia"
+    version: "current"
+    collection: supplier_manuals
+    update_cadence: "monthly"
+    priority: medium
+    metadata:
+      supplier: "No.1 Roofing"
+  
+  # Internal Documentation - Venturr
+  - id: venturr-ops-procedures
+    name: "Venturr Operational Procedures"
+    type: internal
+    source_uri: "file:///docs/venturr-ops"
+    publisher: "Venturr"
+    version: "1.0"
+    collection: venturr_ops
+    update_cadence: "monthly"
+    priority: high
+    metadata:
+      doc_type: "operational"
+      sections:
+        - "Quote generation workflow"
+        - "Compliance checking procedures"
+        - "Material selection guidelines"
+        - "Environmental risk assessment"
+  
+  # Internal Documentation - ThomCo
+  - id: thomco-procedures
+    name: "ThomCo Roofing Internal SOPs"
+    type: internal
+    source_uri: "file:///docs/thomco-procedures"
+    publisher: "ThomCo Roofing"
+    version: "2024.1"
+    collection: thomco_procedures
+    update_cadence: "monthly"
+    priority: high
+    metadata:
+      doc_type: "sop"
+      sections:
+        - "Site measurement procedures"
+        - "Material ordering workflow"
+        - "Installation best practices"
+        - "Quality control checklists"
+        - "Safety protocols"
+  
+  # FAQ & Knowledge Base
+  - id: venturr-faq
+    name: "Venturr FAQ & Knowledge Base"
+    type: internal
+    source_uri: "file:///docs/faq"
+    publisher: "Venturr"
+    version: "current"
+    collection: faq
+    update_cadence: "weekly"
+    priority: medium
+    metadata:
+      doc_type: "faq"
+      categories:
+        - "compliance"
+        - "materials"
+        - "installation"
+        - "pricing"
+        - "troubleshooting"
+  
+  # Prompt Templates
+  - id: venturr-prompts
+    name: "Venturr Prompt Templates"
+    type: internal
+    source_uri: "file:///manus_blocks"
+    publisher: "Venturr"
+    version: "current"
+    collection: prompts
+    update_cadence: "weekly"
+    priority: medium
+    metadata:
+      doc_type: "prompts"
+      templates:
+        - "Attribution-First Compliance Answer"
+        - "BOM Normalization (supplier-aware)"
+        - "Takeoff → Scope writer"
+        - "Risk surface (BAL/coastal) explainer with sources"
+
+# Ingestion Configuration
+ingestion:
+  chunk_size: 800  # tokens
+  chunk_overlap: 100  # tokens
+  embedding_model: "text-embedding-3-small"
+  embedding_dimensions: 1536
+  batch_size: 100
+  max_retries: 3
+  retry_delay: 5  # seconds
+  
+  # Clause-aware chunking
+  clause_patterns:
+    - pattern: '^\d+\.\d+\.\d+\s+'  # e.g., "3.2.1 "
+      type: "clause_id"
+    - pattern: '^Section\s+[A-Z]\s+'  # e.g., "Section J "
+      type: "section_header"
+    - pattern: '^Part\s+\d+\s+'  # e.g., "Part 3 "
+      type: "part_header"
+  
+  # Metadata extraction
+  metadata_extractors:
+    - type: "clause_id"
+      regex: '(\d+\.\d+\.\d+)'
+    - type: "product_code"
+      regex: '([A-Z0-9-]+(?:-\d+)?(?:-[A-Z]+)?)'
+    - type: "standard_reference"
+      regex: '(AS[/A-Z0-9\s:.-]+)'
+  
+  # De-duplication
+  deduplication:
+    enabled: true
+    hash_algorithm: "sha256"
+    fields: ["content", "source_uri", "clause_id"]
+
+# Vector Store Configuration
+vector_store:
+  provider: "pgvector"
+  connection_string: "${DATABASE_URL}"
+  collections:
+    codes_hb39:
+      dimensions: 1536
+      index_type: "ivfflat"
+      lists: 100
+    codes_ncc:
+      dimensions: 1536
+      index_type: "ivfflat"
+      lists: 100
+    codes_safework:
+      dimensions: 1536
+      index_type: "ivfflat"
+      lists: 50
+    supplier_manuals:
+      dimensions: 1536
+      index_type: "ivfflat"
+      lists: 200
+    venturr_ops:
+      dimensions: 1536
+      index_type: "ivfflat"
+      lists: 50
+    thomco_procedures:
+      dimensions: 1536
+      index_type: "ivfflat"
+      lists: 50
+    faq:
+      dimensions: 1536
+      index_type: "ivfflat"
+      lists: 50
+    prompts:
+      dimensions: 1536
+      index_type: "ivfflat"
+      lists: 20
+
+# Retrieval Configuration
+retrieval:
+  default_top_k: 5
+  max_top_k: 20
+  similarity_threshold: 0.7
+  rerank_enabled: true
+  rerank_top_k: 3
+  hybrid_search:
+    enabled: true
+    vector_weight: 0.7
+    keyword_weight: 0.3
+

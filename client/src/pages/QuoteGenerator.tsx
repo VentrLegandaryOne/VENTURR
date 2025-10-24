@@ -37,6 +37,12 @@ export default function QuoteGenerator() {
     { enabled: !!projectId }
   );
 
+  // Query labor calculations for this project
+  const { data: laborCalculations } = trpc.takeoffs.list.useQuery(
+    { projectId: projectId! },
+    { enabled: !!projectId }
+  );
+
   const createQuoteMutation = trpc.quotes.create.useMutation({
     onSuccess: () => {
       toast.success("Quote created successfully");
@@ -88,7 +94,60 @@ Validity: 30 days from quote date`,
       const latestTakeoff = takeoffs[0];
       try {
         const calculations = JSON.parse(latestTakeoff.calculations || "{}");
-        if (calculations.grandTotal) {
+        
+        // Check if this is a labor calculator result (has laborDetails)
+        if (calculations.laborDetails) {
+          // Create detailed line items from labor calculator
+          const items: LineItem[] = [];
+          
+          // Materials line item
+          if (calculations.materialCost) {
+            items.push({
+              id: nanoid(),
+              description: `Materials - ${latestTakeoff.roofType} (${latestTakeoff.roofArea}m²)`,
+              quantity: "1",
+              unitPrice: calculations.materialCost.toFixed(2),
+              total: calculations.materialCost,
+            });
+          }
+          
+          // Labor installation line item
+          if (calculations.laborDetails.installationHours) {
+            const installCost = (calculations.laborDetails.installationHours || 0) * calculations.laborDetails.hourlyRate;
+            items.push({
+              id: nanoid(),
+              description: `Labor - Installation (${calculations.laborDetails.installationHours.toFixed(1)} hrs @ $${calculations.laborDetails.hourlyRate.toFixed(2)}/hr)`,
+              quantity: "1",
+              unitPrice: installCost.toFixed(2),
+              total: installCost,
+            });
+          }
+          
+          // Labor removal line item (if applicable)
+          if (calculations.laborDetails.removalHours && calculations.laborDetails.removalHours > 0) {
+            const removalCost = calculations.laborDetails.removalHours * calculations.laborDetails.hourlyRate;
+            items.push({
+              id: nanoid(),
+              description: `Labor - Existing Roof Removal (${calculations.laborDetails.removalHours.toFixed(1)} hrs @ $${calculations.laborDetails.hourlyRate.toFixed(2)}/hr)`,
+              quantity: "1",
+              unitPrice: removalCost.toFixed(2),
+              total: removalCost,
+            });
+          }
+          
+          setLineItems(items);
+          
+          // Add project details to notes
+          const projectNotes = `Project Details:
+- Roof Area: ${latestTakeoff.roofArea}m²
+- Crew: ${calculations.laborDetails.crew}
+- Region: ${calculations.laborDetails.region}
+- Estimated Duration: ${calculations.laborDetails.daysRequired} days${calculations.laborDetails.weatherDelayDays ? ` (includes ${calculations.laborDetails.weatherDelayDays} day weather buffer)` : ''}
+- Labor Rate: $${calculations.laborDetails.hourlyRate.toFixed(2)}/hr (includes all on-costs)`;
+          
+          setFormData(prev => ({ ...prev, notes: projectNotes }));
+        } else if (calculations.grandTotal) {
+          // Fallback to simple single line item for basic takeoffs
           setLineItems([
             {
               id: nanoid(),

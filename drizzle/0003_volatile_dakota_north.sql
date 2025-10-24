@@ -1,0 +1,20 @@
+CREATE TABLE `materials` (
+	`id` varchar(64) NOT NULL,
+	`organizationId` varchar(64) NOT NULL,
+	`name` varchar(255) NOT NULL,
+	`category` varchar(100) NOT NULL,
+	`manufacturer` varchar(100) NOT NULL,
+	`profile` varchar(100) NOT NULL,
+	`thickness` varchar(50) NOT NULL,
+	`coating` varchar(100) NOT NULL,
+	`pricePerUnit` varchar(20) NOT NULL,
+	`unit` varchar(20) NOT NULL,
+	`coverWidth` varchar(20),
+	`minPitch` varchar(20),
+	`maxSpan` varchar(20),
+	`description` text,
+	`createdBy` varchar(64) NOT NULL,
+	`createdAt` timestamp DEFAULT (now()),
+	`updatedAt` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `materials_id` PRIMARY KEY(`id`)
+);
