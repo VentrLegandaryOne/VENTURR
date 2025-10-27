@@ -5,7 +5,7 @@
 ### P0 BLOCKERS (Must Fix Before Launch)
 
 #### 1. Implement Mapbox Satellite Imagery Integration
-- [ ] Install Mapbox GL JS and dependencies
+- [x] Install Mapbox GL JS and dependencies
 - [ ] Add Mapbox API key to environment variables
 - [ ] Implement geocoding service (address → coordinates)
 - [ ] Load satellite tiles on Site Measurement page
