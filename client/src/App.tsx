@@ -18,6 +18,8 @@ const CalculatorEnhanced = lazy(() => import("./pages/CalculatorEnhanced"));
 const CalculatorEnhancedLabor = lazy(() => import("./pages/CalculatorEnhancedLabor"));
 const QuoteGenerator = lazy(() => import("./pages/QuoteGenerator"));
 const SiteMeasurement = lazy(() => import("./pages/SiteMeasurement"));
+const MapboxSiteMeasurement = lazy(() => import("./pages/MapboxSiteMeasurement"));
+const LeafletSiteMeasurement = lazy(() => import("./pages/LeafletSiteMeasurement"));
 const Profile = lazy(() => import("./pages/Profile"));
 const OrganizationSettings = lazy(() => import("./pages/OrganizationSettings"));
 const MaterialsLibrary = lazy(() => import("./pages/MaterialsLibrary"));
@@ -36,7 +38,8 @@ function Router() {
     <Suspense fallback={<LoadingFallback />}>
       <Switch>
         <Route path={"/"} component={Home} />
-      <Route path="/projects/:id/measure" component={SiteMeasurement} />
+      <Route path="/projects/:id/measure" component={LeafletSiteMeasurement} />
+      <Route path="/projects/:id/measure-legacy" component={SiteMeasurement} />
       <Route path="/projects/:id/calculator" component={CalculatorEnhanced} />
       <Route path="/projects/:id/calculator-labor" component={CalculatorEnhancedLabor} />
       <Route path="/projects/:id/quote" component={QuoteGenerator} />

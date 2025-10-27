@@ -53,6 +53,9 @@ export default defineConfig({
       "localhost",
       "127.0.0.1",
     ],
+    headers: {
+      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://api.mapbox.com https://*.manus.im blob:; worker-src 'self' blob:; child-src 'self' blob:; img-src 'self' data: blob: https://api.mapbox.com https://*.tiles.mapbox.com https://*.manus.im; style-src 'self' 'unsafe-inline' https://api.mapbox.com; connect-src 'self' https://api.mapbox.com https://events.mapbox.com https://*.tiles.mapbox.com https://*.manus.im wss://*.manus.im;"
+    },
     fs: {
       strict: true,
       deny: ["**/.*"],

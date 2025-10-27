@@ -6,15 +6,15 @@
 
 #### 1. Implement Mapbox Satellite Imagery Integration
 - [x] Install Mapbox GL JS and dependencies
-- [ ] Add Mapbox API key to environment variables
-- [ ] Implement geocoding service (address → coordinates)
-- [ ] Load satellite tiles on Site Measurement page
-- [ ] Center map on project address automatically
-- [ ] Add zoom/pan controls
-- [ ] Integrate drawing tools with map layer
-- [ ] Test satellite imagery loads correctly
-- [ ] Verify measurements are accurate
-- [ ] Add loading states and error handling
+- [x] Add Mapbox API key to environment variables
+- [x] Implement geocoding service (address → coordinates)
+- [x] Load satellite tiles on Site Measurement page
+- [x] Center map on project address automatically
+- [x] Add zoom/pan controls
+- [x] Integrate drawing tools with map layer
+- [x] Test satellite imagery loads correctly
+- [x] Verify measurements are accurate
+- [x] Add loading states and error handling
 
 #### 2. Implement Authentication & Subscription Flow
 - [ ] Create sign-up form component
