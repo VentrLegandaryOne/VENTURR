@@ -1,0 +1,9 @@
+{
+  "query": "\nDROP TABLE IF EXISTS clients;\nDROP TABLE IF EXISTS measurements;\nDROP TABLE IF EXISTS quotes;\nDROP TABLE IF EXISTS takeoffs;\nDROP TABLE IF EXISTS projects;\nDROP TABLE IF EXISTS organizations;\nDROP TABLE IF EXISTS materials;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user ppKHuL65KzpGoH5.root --database CmtkUf68f75TUkPsPvYSPJ --execute \nDROP TABLE IF EXISTS clients;\nDROP TABLE IF EXISTS measurements;\nDROP TABLE IF EXISTS quotes;\nDROP TABLE IF EXISTS takeoffs;\nDROP TABLE IF EXISTS projects;\nDROP TABLE IF EXISTS organizations;\nDROP TABLE IF EXISTS materials;\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 5017
+}
