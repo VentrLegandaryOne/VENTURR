@@ -4,7 +4,7 @@ import { QuickProjectModal } from "@/components/QuickProjectModal";
 import { SubscriptionStatus } from "@/components/SubscriptionStatus";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
-import { Folder, Plus, Ruler, Calculator, FileText, TrendingUp } from "lucide-react";
+import { Folder, Plus, Ruler, Calculator, FileText, TrendingUp, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { getLoginUrl } from "@/const";
@@ -91,6 +91,10 @@ export default function Dashboard() {
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-slate-600">Welcome, {user?.name || user?.email}</span>
+              <Button variant="outline" size="sm" onClick={() => setLocation("/settings")}>
+                <Settings className="w-4 h-4 mr-2" />
+                Settings
+              </Button>
               <Button variant="outline" size="sm" onClick={() => setLocation("/dashboard")}>
                 Home
               </Button>

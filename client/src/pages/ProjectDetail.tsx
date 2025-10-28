@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, Calculator, FileText, Loader2, Ruler, Edit } from "lucide-react";
+import { ArrowLeft, Calculator, FileText, Loader2, Ruler, Edit, Shield } from "lucide-react";
 import { useEffect } from "react";
 import { useLocation, useRoute } from "wouter";
 import { getLoginUrl } from "@/const";
@@ -149,6 +149,14 @@ export default function ProjectDetail() {
               </CardHeader>
               <CardContent>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <Button
+                    variant="outline"
+                    className="h-auto py-4 flex flex-col items-center space-y-2"
+                    onClick={() => setLocation(`/projects/${projectId}/compliance`)}
+                  >
+                    <Shield className="w-6 h-6 text-purple-500" />
+                    <span>Compliance</span>
+                  </Button>
                   <Button
                     variant="outline"
                     className="h-auto py-4 flex flex-col items-center space-y-2"
