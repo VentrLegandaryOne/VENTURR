@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { AddressInput, formatAddress } from "@/components/AddressInput";
 import { trpc } from "@/lib/trpc";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -33,6 +34,13 @@ export default function NewProject() {
     clientPhone: "",
     propertyType: "residential" as "residential" | "commercial" | "industrial",
   });
+
+  const [addressComponents, setAddressComponents] = useState<{
+    street?: string;
+    city?: string;
+    state?: string;
+    postcode?: string;
+  }>({});
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
@@ -65,10 +73,11 @@ export default function NewProject() {
         return;
       }
 
-      // Create project
+      // Create project with formatted address
       const result = await createProjectMutation.mutateAsync({
         organizationId: orgId,
         ...formData,
+        address: formatAddress(addressComponents),
       });
 
       toast.success("Project created successfully!");
@@ -149,13 +158,11 @@ export default function NewProject() {
 
               {/* Address */}
               <div className="space-y-2">
-                <Label htmlFor="address">Property Address</Label>
-                <Textarea
-                  id="address"
-                  placeholder="123 Main Street, Sydney NSW 2000"
-                  value={formData.address}
-                  onChange={(e) => handleChange("address", e.target.value)}
-                  rows={2}
+                <h3 className="text-lg font-semibold mb-2">Property Address</h3>
+                <AddressInput
+                  value={addressComponents}
+                  onChange={setAddressComponents}
+                  required={false}
                 />
               </div>
 

@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { AddressInput } from "@/components/AddressInput";
 import {
   Dialog,
   DialogContent,
@@ -390,42 +391,23 @@ export default function Clients() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="address">Address</Label>
-              <Input
-                id="address"
-                value={formData.address}
-                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                placeholder="123 Main Street"
+              <Label>Address</Label>
+              <AddressInput
+                value={{
+                  street: formData.address,
+                  city: formData.city,
+                  state: formData.state,
+                  postcode: formData.postcode,
+                }}
+                onChange={(addr) => setFormData({
+                  ...formData,
+                  address: addr.street || "",
+                  city: addr.city || "",
+                  state: addr.state || "",
+                  postcode: addr.postcode || "",
+                })}
+                required={false}
               />
-            </div>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="city">City</Label>
-                <Input
-                  id="city"
-                  value={formData.city}
-                  onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                  placeholder="Sydney"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="state">State</Label>
-                <Input
-                  id="state"
-                  value={formData.state}
-                  onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                  placeholder="NSW"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="postcode">Postcode</Label>
-                <Input
-                  id="postcode"
-                  value={formData.postcode}
-                  onChange={(e) => setFormData({ ...formData, postcode: e.target.value })}
-                  placeholder="2000"
-                />
-              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="notes">Notes</Label>
@@ -501,42 +483,23 @@ export default function Clients() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="edit-address">Address</Label>
-              <Input
-                id="edit-address"
-                value={formData.address}
-                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                placeholder="123 Main Street"
+              <Label>Address</Label>
+              <AddressInput
+                value={{
+                  street: formData.address,
+                  city: formData.city,
+                  state: formData.state,
+                  postcode: formData.postcode,
+                }}
+                onChange={(addr) => setFormData({
+                  ...formData,
+                  address: addr.street || "",
+                  city: addr.city || "",
+                  state: addr.state || "",
+                  postcode: addr.postcode || "",
+                })}
+                required={false}
               />
-            </div>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="edit-city">City</Label>
-                <Input
-                  id="edit-city"
-                  value={formData.city}
-                  onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                  placeholder="Sydney"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="edit-state">State</Label>
-                <Input
-                  id="edit-state"
-                  value={formData.state}
-                  onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                  placeholder="NSW"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="edit-postcode">Postcode</Label>
-                <Input
-                  id="edit-postcode"
-                  value={formData.postcode}
-                  onChange={(e) => setFormData({ ...formData, postcode: e.target.value })}
-                  placeholder="2000"
-                />
-              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="edit-notes">Notes</Label>

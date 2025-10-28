@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { ValidatedInput } from "@/components/ValidatedInput";
 import { trpc } from "@/lib/trpc";
 import { ArrowLeft, Building2, FileText, Image, Loader2, Save, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -218,28 +219,24 @@ Warranty:
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="businessName">Business Name *</Label>
-                      <Input
-                        id="businessName"
-                        value={businessSettings.businessName}
-                        onChange={(e) =>
-                          setBusinessSettings({ ...businessSettings, businessName: e.target.value })
-                        }
-                        placeholder="ThomCo Roofing"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="abn">ABN</Label>
-                      <Input
-                        id="abn"
-                        value={businessSettings.abn}
-                        onChange={(e) =>
-                          setBusinessSettings({ ...businessSettings, abn: e.target.value })
-                        }
-                        placeholder="XX XXX XXX XXX"
-                      />
-                    </div>
+                    <ValidatedInput
+                      label="Business Name"
+                      value={businessSettings.businessName}
+                      onChange={(value) =>
+                        setBusinessSettings({ ...businessSettings, businessName: value })
+                      }
+                      required
+                      placeholder="ThomCo Roofing"
+                    />
+                    <ValidatedInput
+                      label="ABN"
+                      type="abn"
+                      value={businessSettings.abn}
+                      onChange={(value) =>
+                        setBusinessSettings({ ...businessSettings, abn: value })
+                      }
+                      placeholder="12 345 678 901"
+                    />
                   </div>
 
                   <div className="space-y-2">
@@ -256,44 +253,35 @@ Warranty:
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Phone</Label>
-                      <Input
-                        id="phone"
-                        type="tel"
-                        value={businessSettings.phone}
-                        onChange={(e) =>
-                          setBusinessSettings({ ...businessSettings, phone: e.target.value })
-                        }
-                        placeholder="0400 000 000"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={businessSettings.email}
-                        onChange={(e) =>
-                          setBusinessSettings({ ...businessSettings, email: e.target.value })
-                        }
-                        placeholder="info@business.com.au"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="website">Website</Label>
-                    <Input
-                      id="website"
-                      type="url"
-                      value={businessSettings.website}
-                      onChange={(e) =>
-                        setBusinessSettings({ ...businessSettings, website: e.target.value })
+                    <ValidatedInput
+                      label="Phone"
+                      type="phone"
+                      value={businessSettings.phone}
+                      onChange={(value) =>
+                        setBusinessSettings({ ...businessSettings, phone: value })
                       }
-                      placeholder="https://www.business.com.au"
+                      placeholder="0400 000 000"
+                    />
+                    <ValidatedInput
+                      label="Email"
+                      type="email"
+                      value={businessSettings.email}
+                      onChange={(value) =>
+                        setBusinessSettings({ ...businessSettings, email: value })
+                      }
+                      placeholder="info@business.com.au"
                     />
                   </div>
+
+                  <ValidatedInput
+                    label="Website"
+                    type="url"
+                    value={businessSettings.website}
+                    onChange={(value) =>
+                      setBusinessSettings({ ...businessSettings, website: value })
+                    }
+                    placeholder="https://www.business.com.au"
+                  />
                 </CardContent>
               </Card>
             )}

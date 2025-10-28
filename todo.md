@@ -351,3 +351,53 @@
 - [ ] Export clients to CSV/Excel
 - [ ] Import clients from CSV/Excel
 
+
+
+
+### Address Autocomplete Integration
+- [x] Create AddressInput component with structured fields
+- [x] Add Australian state dropdown
+- [x] Add postcode validation (4 digits)
+- [x] Integrate AddressInput in NewProject form
+- [x] Add address formatting helper functions
+- [x] Integrate AddressInput in Clients form (Create and Edit dialogs)
+- [ ] Integrate AddressInput in Settings form
+- [ ] Add Google Places API integration (future enhancement)
+- [ ] Add address autocomplete suggestions
+
+
+
+
+### Smart Life Inspired Enhancements
+- [ ] Add photo annotation tool to Site Measurement
+- [ ] Upload site photos to projects
+- [ ] Annotate photos with measurements and notes
+- [ ] Add roof structure templates (gable, hip, flat, shed, etc.)
+- [ ] Implement snap-to-grid for precise drawing
+- [ ] Add undo/redo functionality to drawing tool
+- [ ] Export measurement drawings as PNG
+- [ ] Export measurement drawings as PDF
+- [ ] Add measurement statistics dashboard
+- [ ] Create visual analytics for project measurements
+- [ ] Add area/perimeter visualization overlays
+- [ ] Implement drawing layer management
+
+
+
+
+### Form Validation Enhancement
+- [x] Create validation utility functions (email, phone, ABN, etc.)
+- [x] Add email validation
+- [x] Add Australian phone number validation and auto-formatting
+- [x] Add ABN validation (11 digits with checksum algorithm)
+- [x] Add required field indicators (*) to forms
+- [x] Implement real-time validation feedback
+- [x] Create ValidatedInput component with visual indicators
+- [x] Add touch-based validation (errors only after interaction)
+- [x] Integrate validation into Settings form
+- [ ] Integrate validation into Clients form
+- [ ] Integrate validation into NewProject form
+- [ ] Add form-level error summaries
+- [ ] Add success feedback for form submissions
+- [ ] Prevent duplicate submissions with loading states
+
