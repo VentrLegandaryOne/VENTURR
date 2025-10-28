@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { geocodeAddress, type GeocodingResult } from "@/lib/mapbox-geocoding";
 import { toast as toastFn } from "sonner";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { trpc } from "@/lib/trpc";
 import L from "leaflet";
 import 'leaflet-geometryutil';
 import "leaflet-draw";
@@ -48,27 +48,23 @@ export default function LeafletSiteMeasurement() {
   const { isAuthenticated, loading: authLoading } = useAuth();
 
   // Fetch project data
-  const { data: project } = useQuery<any>({
-    queryKey: [`/api/projects/${projectId}`],
-    enabled: !!projectId && isAuthenticated,
-  });
+  const { data: project } = trpc.projects.get.useQuery(
+    { id: projectId! },
+    { enabled: !!projectId && isAuthenticated }
+  );
 
-  const createMeasurementMutation = useMutation({
-    mutationFn: async (data: { projectId: string; measurementData?: string; drawingData?: string; notes?: string }) => {
-      const response = await fetch("/api/trpc/measurements.create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-        credentials: "include",
-      });
-      if (!response.ok) throw new Error("Failed to create measurement");
-      return response.json();
-    },
+  // Fetch existing measurements
+  const { data: existingMeasurement } = trpc.measurements.get.useQuery(
+    { projectId: projectId! },
+    { enabled: !!projectId && isAuthenticated }
+  );
+
+  const saveMeasurementMutation = trpc.measurements.save.useMutation({
     onSuccess: () => {
-      toast({ title: "Success", description: "Measurement saved successfully" });
-      if (projectId) {
-        setLocation(`/projects/${projectId}`);
-      }
+      toast({ title: "Success", description: "Measurements saved successfully" });
+    },
+    onError: () => {
+      toast({ title: "Error", description: "Failed to save measurements", variant: "destructive" });
     },
   });
 
@@ -92,6 +88,26 @@ export default function LeafletSiteMeasurement() {
       setLocation("/");
     }
   }, [authLoading, isAuthenticated, setLocation]);
+
+  // Load existing measurements
+  useEffect(() => {
+    if (existingMeasurement && existingMeasurement.measurementData) {
+      try {
+        const data = JSON.parse(existingMeasurement.measurementData);
+        if (data.measurements) {
+          setMeasurements(data.measurements);
+        }
+        if (data.address) {
+          setCurrentAddress(data.address);
+        }
+      } catch (error) {
+        console.error("Failed to parse existing measurements:", error);
+      }
+    }
+    if (existingMeasurement && existingMeasurement.notes) {
+      setGeneralNotes(existingMeasurement.notes);
+    }
+  }, [existingMeasurement]);
 
   // Initialize map
   useEffect(() => {
@@ -184,7 +200,29 @@ export default function LeafletSiteMeasurement() {
         notes: "",
       };
 
-      setMeasurements(prev => [...prev, measurement]);
+      setMeasurements(prev => {
+        const updated = [...prev, measurement];
+        // Auto-save after drawing (debounced)
+        setTimeout(() => {
+          if (projectId && drawnItemsRef.current) {
+            const totalArea = updated
+              .filter(m => m.area)
+              .reduce((sum, m) => sum + (m.area || 0), 0);
+            
+            saveMeasurementMutation.mutate({
+              projectId,
+              measurementData: JSON.stringify({
+                measurements: updated,
+                address: currentAddress,
+                totalArea,
+              }),
+              drawingData: JSON.stringify(drawnItemsRef.current.toGeoJSON()),
+              notes: generalNotes,
+            });
+          }
+        }, 1000);
+        return updated;
+      });
     });
 
     mapRef.current = map;
@@ -242,7 +280,7 @@ export default function LeafletSiteMeasurement() {
       .reduce((sum, m) => sum + (m.area || 0), 0);
 
     try {
-      await createMeasurementMutation.mutateAsync({
+      await saveMeasurementMutation.mutateAsync({
         projectId,
         measurementData: JSON.stringify({
           measurements,
@@ -252,8 +290,9 @@ export default function LeafletSiteMeasurement() {
         drawingData: JSON.stringify(drawnItemsRef.current.toGeoJSON()),
         notes: generalNotes,
       });
+      toast({ title: "Success", description: "Measurements saved successfully" });
     } catch (error) {
-      toast({ title: "Error", description: "Failed to save measurement", variant: "destructive" });
+      toast({ title: "Error", description: "Failed to save measurements", variant: "destructive" });
       console.error(error);
     }
   };

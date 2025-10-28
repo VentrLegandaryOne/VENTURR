@@ -319,9 +319,9 @@
 - [x] Create measurements database table/schema (already exists)
 - [x] Create measurements tRPC router (save/get/list/delete)
 - [x] Register measurements router in main routers
-- [ ] Update LeafletSiteMeasurement to use tRPC measurements router
-- [ ] Add auto-save functionality when measurements are drawn
-- [ ] Load existing measurements when page opens
+- [x] Update LeafletSiteMeasurement to use tRPC measurements router
+- [x] Add auto-save functionality when measurements are drawn (1s debounce)
+- [x] Load existing measurements when page opens
 - [ ] Auto-load measurements in Takeoff Calculator
 - [ ] Add measurement history/versions
 - [ ] Allow manual override/refinement of auto-loaded data
