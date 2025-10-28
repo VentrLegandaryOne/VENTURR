@@ -91,7 +91,7 @@ export default function Dashboard() {
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-slate-600">Welcome, {user?.name || user?.email}</span>
-              <Button variant="outline" size="sm" onClick={() => setLocation("/")}>
+              <Button variant="outline" size="sm" onClick={() => setLocation("/dashboard")}>
                 Home
               </Button>
             </div>

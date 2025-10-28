@@ -155,9 +155,18 @@ interface QuotePDFProps {
     clientEmail?: string;
     clientPhone?: string;
   };
+  business?: {
+    name: string;
+    abn?: string;
+    address?: string;
+    phone?: string;
+    email?: string;
+    tagline?: string;
+    logoUrl?: string;
+  };
 }
 
-const QuotePDF = ({ quote, project }: QuotePDFProps) => {
+const QuotePDF = ({ quote, project, business }: QuotePDFProps) => {
   const lineItems: LineItem[] = quote.items ? JSON.parse(quote.items) : [];
   const today = new Date().toLocaleDateString('en-AU');
 
@@ -166,9 +175,11 @@ const QuotePDF = ({ quote, project }: QuotePDFProps) => {
       <Page size="A4" style={styles.page}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.logo}>ThomCo Roofing</Text>
-          <Text style={styles.companyInfo}>Professional Roofing Solutions</Text>
-          <Text style={styles.companyInfo}>ABN: XX XXX XXX XXX</Text>
+          <Text style={styles.logo}>{business?.name || 'Venturr'}</Text>
+          <Text style={styles.companyInfo}>{business?.tagline || 'Professional Trade Solutions'}</Text>
+          {business?.abn && <Text style={styles.companyInfo}>ABN: {business.abn}</Text>}
+          {business?.phone && <Text style={styles.companyInfo}>Phone: {business.phone}</Text>}
+          {business?.email && <Text style={styles.companyInfo}>Email: {business.email}</Text>}
         </View>
 
         {/* Title */}
@@ -280,7 +291,7 @@ const QuotePDF = ({ quote, project }: QuotePDFProps) => {
 
         {/* Footer */}
         <View style={styles.footer}>
-          <Text>ThomCo Roofing | Professional Roofing Solutions</Text>
+          <Text>{business?.name || 'Venturr'} | {business?.tagline || 'Professional Trade Solutions'}</Text>
           <Text>This quotation is valid for 30 days from the date of issue</Text>
         </View>
       </Page>
@@ -288,13 +299,13 @@ const QuotePDF = ({ quote, project }: QuotePDFProps) => {
   );
 };
 
-export const generateQuotePDF = async (quote: QuotePDFProps['quote'], project: QuotePDFProps['project']) => {
-  const blob = await pdf(<QuotePDF quote={quote} project={project} />).toBlob();
+export const generateQuotePDF = async (quote: QuotePDFProps['quote'], project: QuotePDFProps['project'], business?: QuotePDFProps['business']) => {
+  const blob = await pdf(<QuotePDF quote={quote} project={project} business={business} />).toBlob();
   return blob;
 };
 
-export const downloadQuotePDF = async (quote: QuotePDFProps['quote'], project: QuotePDFProps['project'], filename: string) => {
-  const blob = await generateQuotePDF(quote, project);
+export const downloadQuotePDF = async (quote: QuotePDFProps['quote'], project: QuotePDFProps['project'], business: QuotePDFProps['business'] | undefined, filename: string) => {
+  const blob = await generateQuotePDF(quote, project, business);
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;

@@ -213,3 +213,99 @@
 - [ ] Add template selection during project creation
 - [ ] Implement skip/dismiss onboarding option
 
+
+
+
+### CRITICAL DESIGN & UX IMPROVEMENTS (User Feedback 2025-10-28)
+
+#### Navigation & Flow Issues
+- [x] Fix Home button to navigate to Dashboard (not homepage)
+- [ ] Ensure intuitive flow - no repeated actions or double-ups
+- [ ] Implement smart context awareness for navigation
+
+#### Compliance Section Overhaul
+- [ ] Move Installation Notes into Compliance section
+- [ ] Add comprehensive metal roofing compliance codes
+- [ ] Integrate AS 1562.1:2018 standards
+- [ ] Add AS/NZS 1170.2:2021 wind load calculations
+- [ ] Include AS 3959:2018 bushfire requirements
+- [ ] Add NCC 2022 Building Code compliance
+- [ ] Create AI-powered compliance document generation
+- [ ] Add financial structures for metal roofing companies
+
+#### Takeoff Calculator Improvements
+- [ ] Make measurement flow intuitive and linear
+- [ ] Auto-populate fields from previous steps
+- [ ] Remove redundant data entry
+- [ ] Add qualitative testing for all features
+- [ ] Ensure each feature references previous data
+- [ ] Implement smart defaults based on project type
+
+#### Site Measurement Tool Enhancement
+- [ ] Auto-extract measurements from satellite drawings
+- [ ] Auto-fill measurement boxes from drawing data
+- [ ] Save measurements to project automatically
+- [ ] Pass measurements down the workflow intuitively
+- [ ] Ensure measurements are to scale and accurate
+- [ ] Train platform to recognize measurement patterns
+
+#### Quote Generator Complete Redesign
+- [x] Fix blank PDF preview issue
+- [x] Populate PDF with all quote data automatically
+- [x] Add professional header with company branding
+- [x] Include custom logo upload functionality
+- [x] Add business name personalization
+- [x] Update PDF generator to use Settings data
+- [ ] Create multiple PDF template options
+- [ ] Add itemized breakdown with materials/labor
+- [ ] Include compliance documentation references
+- [ ] Add terms and conditions section
+- [ ] Implement digital signature capability
+
+#### Settings & Personalization Dashboard
+- [x] Create comprehensive Settings page
+- [x] Add company logo upload
+- [x] Add business name configuration
+- [x] Add business address and contact details
+- [x] Add ABN/ACN configuration
+- [x] Add default markup percentages
+- [x] Add default labor rates
+- [x] Add custom branding colors
+- [x] Add tagline configuration
+- [x] Add quote template customization
+
+#### Google-Level Design & Polish
+- [ ] Implement consistent design system
+- [ ] Add micro-interactions and animations
+- [ ] Improve typography hierarchy
+- [ ] Enhance color palette for psychology
+- [ ] Add loading states and skeletons
+- [ ] Implement smooth transitions
+- [ ] Add empty states with helpful guidance
+- [ ] Create immersive user experience
+- [ ] Add contextual help tooltips
+- [ ] Implement progressive disclosure
+- [ ] Add success/error feedback animations
+- [ ] Optimize for visual hierarchy
+
+#### Complete Venturr Branding
+- [ ] Design professional logo suite
+- [ ] Create brand guidelines document
+- [ ] Implement consistent color scheme
+- [ ] Add branded illustrations
+- [ ] Create icon library
+- [ ] Design marketing materials
+- [ ] Add brand personality to copy
+- [ ] Implement voice and tone guidelines
+
+#### Quality Assurance & Testing
+- [ ] Run quantitative testing on all features
+- [ ] Conduct qualitative user testing
+- [ ] Test all workflows end-to-end
+- [ ] Verify no duplicate actions
+- [ ] Ensure data flows logically
+- [ ] Test on multiple devices
+- [ ] Verify accessibility standards
+- [ ] Performance optimization
+- [ ] Cross-browser testing
+
