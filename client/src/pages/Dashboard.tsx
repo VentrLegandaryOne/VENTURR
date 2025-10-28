@@ -1,6 +1,7 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { QuickProjectModal } from "@/components/QuickProjectModal";
+import { SubscriptionStatus } from "@/components/SubscriptionStatus";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
 import { Folder, Plus, Ruler, Calculator, FileText, TrendingUp } from "lucide-react";
@@ -100,6 +101,11 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
+        {/* Subscription Status */}
+        <div className="mb-8">
+          <SubscriptionStatus />
+        </div>
+
         {/* Stats */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           {stats.map((stat, index) => (

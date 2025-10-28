@@ -232,7 +232,8 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-slate-900 mb-4">Simple, Transparent Pricing</h2>
-            <p className="text-xl text-slate-600">Choose the plan that fits your business</p>
+            <p className="text-xl text-slate-600 mb-2">Choose the plan that fits your business</p>
+            <p className="text-lg text-blue-600 font-semibold">14-day free trial • No credit card required</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {pricingPlans.map((plan, index) => (
@@ -262,9 +263,9 @@ export default function Home() {
                   <Button 
                     className={`w-full mt-6 ${plan.popular ? 'bg-blue-600 hover:bg-blue-700' : ''}`}
                     variant={plan.popular ? 'default' : 'outline'}
-                    onClick={handleGetStarted}
+                    onClick={() => setLocation('/pricing')}
                   >
-                    Get Started
+                    Start Free Trial
                   </Button>
                 </CardContent>
               </Card>

@@ -20,11 +20,20 @@
 - [ ] Create sign-up form component
 - [ ] Add email/password validation
 - [ ] Implement email verification flow
-- [ ] Integrate Stripe Checkout for subscriptions
-- [ ] Add subscription plan selection (Starter/Pro/Enterprise)
-- [ ] Implement 14-day trial period management
+- [x] Integrate Stripe Checkout for subscriptions
+- [x] Add subscription plan selection (Starter/Pro/Growth/Enterprise)
+- [x] Implement 14-day trial period management
+- [x] Create tRPC subscriptions router
+- [x] Add Stripe service module with safety checks
+- [ ] Create Stripe webhook handler
+- [ ] Fix rate limiting issue for Stripe Checkout in dev environment
+- [ ] Test complete Stripe Checkout flow in production
 - [ ] Add access control middleware
 - [ ] Protect routes based on subscription status
+- [x] Create pricing page component
+- [x] Add subscription status display
+- [x] Update home page with trial messaging
+- [x] Add subscription widget to dashboard
 - [ ] Add "Upgrade" prompts for free users
 - [ ] Test complete sign-up to payment flow
 
