@@ -66,6 +66,14 @@ export default function CalculatorEnhanced() {
     { enabled: !!projectId }
   );
 
+  // Fetch saved measurements
+  const { data: savedMeasurement } = trpc.measurements.get.useQuery(
+    { projectId: projectId! },
+    { enabled: !!projectId }
+  );
+
+  const [measurementLoaded, setMeasurementLoaded] = useState(false);
+
   const createTakeoffMutation = trpc.takeoffs.create.useMutation({
     onSuccess: () => {
       toast.success("Calculation saved successfully");
@@ -129,6 +137,31 @@ export default function CalculatorEnhanced() {
       }));
     }
   }, [project]);
+
+  // Auto-load measurements from Site Measurement tool
+  useEffect(() => {
+    if (savedMeasurement && savedMeasurement.measurementData && !measurementLoaded) {
+      try {
+        const data = JSON.parse(savedMeasurement.measurementData);
+        if (data.totalArea) {
+          // Calculate approximate dimensions from total area
+          // Assuming roughly square roof for initial estimate
+          const side = Math.sqrt(data.totalArea);
+          setFormData(prev => ({
+            ...prev,
+            roofLength: side.toFixed(2),
+            roofWidth: side.toFixed(2),
+          }));
+          setMeasurementLoaded(true);
+          toast.success("Measurements loaded from Site Measurement tool", {
+            description: `Total area: ${data.totalArea.toFixed(2)} m²`,
+          });
+        }
+      } catch (error) {
+        console.error("Failed to parse measurement data:", error);
+      }
+    }
+  }, [savedMeasurement, measurementLoaded]);
 
   // Run environmental assessment when factors change
   useEffect(() => {
@@ -383,8 +416,20 @@ export default function CalculatorEnhanced() {
               <div className="space-y-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Roof Dimensions</CardTitle>
-                    <CardDescription>Enter the roof measurements</CardDescription>
+                    <CardTitle className="flex items-center justify-between">
+                      <span>Roof Dimensions</span>
+                      {measurementLoaded && (
+                        <Badge variant="secondary" className="ml-2">
+                          <CheckCircle2 className="w-3 h-3 mr-1" />
+                          Auto-loaded
+                        </Badge>
+                      )}
+                    </CardTitle>
+                    <CardDescription>
+                      {measurementLoaded 
+                        ? "Measurements loaded from Site Measurement tool" 
+                        : "Enter the roof measurements"}
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">

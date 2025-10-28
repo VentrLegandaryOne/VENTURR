@@ -322,7 +322,10 @@
 - [x] Update LeafletSiteMeasurement to use tRPC measurements router
 - [x] Add auto-save functionality when measurements are drawn (1s debounce)
 - [x] Load existing measurements when page opens
-- [ ] Auto-load measurements in Takeoff Calculator
+- [x] Auto-load measurements in Takeoff Calculator
+- [x] Add visual indicator (badge) showing auto-loaded data
+- [x] Display toast notification when measurements load
+- [x] Calculate roof dimensions from total area
 - [ ] Add measurement history/versions
 - [ ] Allow manual override/refinement of auto-loaded data
 - [ ] Display measurement source (manual vs auto-extracted)
