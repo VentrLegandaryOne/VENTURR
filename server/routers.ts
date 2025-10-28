@@ -2,6 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { subscriptionsRouter } from "./routers/subscriptions";
+import { measurementsRouter } from "./routers/measurements";
 import { sendQuoteEmail } from "./emailService";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
@@ -26,6 +27,7 @@ import { nanoid } from "nanoid";
 export const appRouter = router({
   system: systemRouter,
   subscriptions: subscriptionsRouter,
+  measurements: measurementsRouter,
 
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

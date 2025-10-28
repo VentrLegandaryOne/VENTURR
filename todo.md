@@ -312,3 +312,19 @@
 - [ ] Performance optimization
 - [ ] Cross-browser testing
 
+
+
+
+### Measurement Auto-Population Workflow
+- [x] Create measurements database table/schema (already exists)
+- [x] Create measurements tRPC router (save/get/list/delete)
+- [x] Register measurements router in main routers
+- [ ] Update LeafletSiteMeasurement to use tRPC measurements router
+- [ ] Add auto-save functionality when measurements are drawn
+- [ ] Load existing measurements when page opens
+- [ ] Auto-load measurements in Takeoff Calculator
+- [ ] Add measurement history/versions
+- [ ] Allow manual override/refinement of auto-loaded data
+- [ ] Display measurement source (manual vs auto-extracted)
+- [ ] Add measurement validation and error checking
+
