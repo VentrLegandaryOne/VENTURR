@@ -331,3 +331,23 @@
 - [ ] Display measurement source (manual vs auto-extracted)
 - [ ] Add measurement validation and error checking
 
+
+
+
+### Client CRM System
+- [x] Create clients database table/schema
+- [x] Create clients tRPC router (CRUD operations)
+- [x] Build Clients page with list view
+- [x] Add client creation form
+- [x] Add client edit functionality
+- [x] Add client search and filtering
+- [x] Add client statistics dashboard
+- [x] Add Clients button to Dashboard
+- [x] Add client notes field
+- [ ] Add client detail view with project history
+- [ ] Link clients to projects (foreign key)
+- [ ] Add client contact history timeline
+- [ ] Add client tags functionality
+- [ ] Export clients to CSV/Excel
+- [ ] Import clients from CSV/Excel
+

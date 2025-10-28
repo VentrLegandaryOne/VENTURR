@@ -26,6 +26,7 @@ const MaterialsLibrary = lazy(() => import("./pages/MaterialsLibrary"));
 const Pricing = lazy(() => import("./pages/Pricing"));
 const Settings = lazy(() => import("./pages/Settings"));
 const Compliance = lazy(() => import("./pages/Compliance"));
+const Clients = lazy(() => import("./pages/Clients"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -43,6 +44,7 @@ function Router() {
         <Route path={"/"} component={Home} />
       <Route path={"/pricing"} component={Pricing} />
       <Route path={"/settings"} component={Settings} />
+      <Route path={"/clients"} component={Clients} />
       <Route path="/projects/:id/compliance" component={Compliance} />
       <Route path="/projects/:id/measure" component={LeafletSiteMeasurement} />
       <Route path="/projects/:id/measure-legacy" component={SiteMeasurement} />

@@ -3,6 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { subscriptionsRouter } from "./routers/subscriptions";
 import { measurementsRouter } from "./routers/measurements";
+import { clientsRouter } from "./routers/clients";
 import { sendQuoteEmail } from "./emailService";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
@@ -28,6 +29,7 @@ export const appRouter = router({
   system: systemRouter,
   subscriptions: subscriptionsRouter,
   measurements: measurementsRouter,
+  clients: clientsRouter,
 
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
