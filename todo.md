@@ -256,10 +256,13 @@
 - [x] Include custom logo upload functionality
 - [x] Add business name personalization
 - [x] Update PDF generator to use Settings data
+- [x] Add print CSS for browser preview
+- [x] Create print-friendly quote markup
+- [x] Integrate business settings in QuoteGenerator
 - [ ] Create multiple PDF template options
 - [ ] Add itemized breakdown with materials/labor
 - [ ] Include compliance documentation references
-- [ ] Add terms and conditions section
+- [x] Add terms and conditions section
 - [ ] Implement digital signature capability
 
 #### Settings & Personalization Dashboard

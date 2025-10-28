@@ -8,6 +8,7 @@ import App from "./App";
 import { getLoginUrl } from "./const";
 import "./index.css";
 import "./styles/mobile.css";
+import "./styles/print.css";
 
 const queryClient = new QueryClient();
 

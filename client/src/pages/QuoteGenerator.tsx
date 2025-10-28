@@ -32,6 +32,13 @@ export default function QuoteGenerator() {
     { enabled: !!projectId }
   );
 
+  const { data: organizations } = trpc.organizations.list.useQuery(undefined, {
+    enabled: isAuthenticated,
+  });
+
+  const selectedOrg = organizations?.[0];
+  const businessSettings = selectedOrg?.metadata ? JSON.parse(selectedOrg.metadata) : {};
+
   const { data: takeoffs } = trpc.takeoffs.list.useQuery(
     { projectId: projectId! },
     { enabled: !!projectId }
@@ -231,6 +238,15 @@ Validity: 30 days from quote date`,
         clientName: project.clientName || undefined,
         clientEmail: project.clientEmail || undefined,
         clientPhone: project.clientPhone || undefined,
+      },
+      {
+        name: businessSettings.businessName || selectedOrg?.name || 'Venturr',
+        abn: businessSettings.abn,
+        address: businessSettings.address,
+        phone: businessSettings.phone,
+        email: businessSettings.email,
+        tagline: businessSettings.tagline || 'Professional Trade Solutions',
+        logoUrl: businessSettings.logoUrl,
       },
       filename
     );
@@ -474,20 +490,136 @@ Validity: 30 days from quote date`,
         </Card>
       </main>
 
-      {/* Print Styles */}
-      <style>{`
-        @media print {
-          body * {
-            visibility: hidden;
-          }
-          .print\\:block, .print\\:block * {
-            visibility: visible;
-          }
-          .print\\:hidden {
-            display: none !important;
-          }
-        }
-      `}</style>
+      {/* Print-Only Version */}
+      <div className="hidden print:block quote-print-container">
+        {/* Header */}
+        <div className="quote-header">
+          <div className="quote-logo">{businessSettings.businessName || selectedOrg?.name || 'Venturr'}</div>
+          <div className="quote-company-info">{businessSettings.tagline || 'Professional Trade Solutions'}</div>
+          {businessSettings.abn && <div className="quote-company-info">ABN: {businessSettings.abn}</div>}
+          {businessSettings.phone && <div className="quote-company-info">Phone: {businessSettings.phone}</div>}
+          {businessSettings.email && <div className="quote-company-info">Email: {businessSettings.email}</div>}
+        </div>
+
+        {/* Title */}
+        <div className="quote-title">QUOTATION</div>
+
+        {/* Quote Details */}
+        <div className="quote-section">
+          <div className="quote-row">
+            <div className="quote-label">Quote Number:</div>
+            <div className="quote-value">VEN-{Date.now()}</div>
+          </div>
+          <div className="quote-row">
+            <div className="quote-label">Date:</div>
+            <div className="quote-value">{new Date().toLocaleDateString('en-AU')}</div>
+          </div>
+          <div className="quote-row">
+            <div className="quote-label">Valid Until:</div>
+            <div className="quote-value">{new Date(formData.validUntil).toLocaleDateString('en-AU')}</div>
+          </div>
+        </div>
+
+        {/* Project Details */}
+        {project && (
+          <div className="quote-section">
+            <div className="quote-section-title">Project Details</div>
+            <div className="quote-row">
+              <div className="quote-label">Project:</div>
+              <div className="quote-value">{project.title}</div>
+            </div>
+            {project.address && (
+              <div className="quote-row">
+                <div className="quote-label">Address:</div>
+                <div className="quote-value">{project.address}</div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Client Details */}
+        {project?.clientName && (
+          <div className="quote-section">
+            <div className="quote-section-title">Client Details</div>
+            <div className="quote-row">
+              <div className="quote-label">Name:</div>
+              <div className="quote-value">{project.clientName}</div>
+            </div>
+            {project.clientEmail && (
+              <div className="quote-row">
+                <div className="quote-label">Email:</div>
+                <div className="quote-value">{project.clientEmail}</div>
+              </div>
+            )}
+            {project.clientPhone && (
+              <div className="quote-row">
+                <div className="quote-label">Phone:</div>
+                <div className="quote-value">{project.clientPhone}</div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Line Items Table */}
+        <table className="quote-table">
+          <thead>
+            <tr>
+              <th style={{width: '50%'}}>Description</th>
+              <th style={{width: '15%'}} className="text-right">Qty</th>
+              <th style={{width: '15%'}} className="text-right">Unit Price</th>
+              <th style={{width: '20%'}} className="text-right">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {lineItems.map((item) => (
+              <tr key={item.id}>
+                <td>{item.description}</td>
+                <td className="text-right">{item.quantity}</td>
+                <td className="text-right">${parseFloat(item.unitPrice).toFixed(2)}</td>
+                <td className="text-right">${item.total.toFixed(2)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Totals */}
+        <div className="quote-totals">
+          <div className="quote-total-row">
+            <div>Subtotal:</div>
+            <div>${subtotal.toFixed(2)}</div>
+          </div>
+          <div className="quote-total-row">
+            <div>GST (10%):</div>
+            <div>${gst.toFixed(2)}</div>
+          </div>
+          <div className="quote-grand-total">
+            <div>TOTAL:</div>
+            <div>${total.toFixed(2)}</div>
+          </div>
+        </div>
+
+        {/* Terms & Conditions */}
+        {formData.terms && (
+          <div className="quote-terms">
+            <div className="quote-terms-title">Terms & Conditions</div>
+            <div className="quote-terms-text">{formData.terms}</div>
+          </div>
+        )}
+
+        {/* Notes */}
+        {formData.notes && (
+          <div className="quote-section">
+            <div className="quote-section-title">Additional Notes</div>
+            <div className="quote-terms-text">{formData.notes}</div>
+          </div>
+        )}
+
+        {/* Footer */}
+        <div className="quote-footer">
+          <div>{businessSettings.businessName || selectedOrg?.name || 'Venturr'} | {businessSettings.tagline || 'Professional Trade Solutions'}</div>
+          <div>This quotation is valid for 30 days from the date of issue</div>
+        </div>
+      </div>
     </div>
   );
 }
