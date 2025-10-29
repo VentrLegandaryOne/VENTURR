@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, Download, FileText, Loader2, Plus, Save, Trash2, Eye } from "lucide-react";
+import { ArrowLeft, Download, FileText, Loader2, Plus, Save, Trash2, Eye, Sparkles, DollarSign, CheckCircle, AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation, useRoute } from "wouter";
 import { getLoginUrl } from "@/const";
@@ -89,6 +89,9 @@ Validity: 30 days from quote date`,
     notes: "",
   });
 
+  const [showPreview, setShowPreview] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
       window.location.href = getLoginUrl();
@@ -99,79 +102,26 @@ Validity: 30 days from quote date`,
   useEffect(() => {
     if (takeoffs && takeoffs.length > 0) {
       const latestTakeoff = takeoffs[0];
-      try {
-        const calculations = JSON.parse(latestTakeoff.calculations || "{}");
-        
-        // Check if this is a labor calculator result (has laborDetails)
-        if (calculations.laborDetails) {
-          // Create detailed line items from labor calculator
-          const items: LineItem[] = [];
-          
-          // Materials line item
-          if (calculations.materialCost) {
-            items.push({
-              id: nanoid(),
-              description: `Materials - ${latestTakeoff.roofType} (${latestTakeoff.roofArea}m²)`,
-              quantity: "1",
-              unitPrice: calculations.materialCost.toFixed(2),
-              total: calculations.materialCost,
-            });
-          }
-          
-          // Labor installation line item
-          if (calculations.laborDetails.installationHours) {
-            const installCost = (calculations.laborDetails.installationHours || 0) * calculations.laborDetails.hourlyRate;
-            items.push({
-              id: nanoid(),
-              description: `Labor - Installation (${calculations.laborDetails.installationHours.toFixed(1)} hrs @ $${calculations.laborDetails.hourlyRate.toFixed(2)}/hr)`,
-              quantity: "1",
-              unitPrice: installCost.toFixed(2),
-              total: installCost,
-            });
-          }
-          
-          // Labor removal line item (if applicable)
-          if (calculations.laborDetails.removalHours && calculations.laborDetails.removalHours > 0) {
-            const removalCost = calculations.laborDetails.removalHours * calculations.laborDetails.hourlyRate;
-            items.push({
-              id: nanoid(),
-              description: `Labor - Existing Roof Removal (${calculations.laborDetails.removalHours.toFixed(1)} hrs @ $${calculations.laborDetails.hourlyRate.toFixed(2)}/hr)`,
-              quantity: "1",
-              unitPrice: removalCost.toFixed(2),
-              total: removalCost,
-            });
-          }
-          
-          setLineItems(items);
-          
-          // Add project details to notes
-          const projectNotes = `Project Details:
-- Roof Area: ${latestTakeoff.roofArea}m²
-- Crew: ${calculations.laborDetails.crew}
-- Region: ${calculations.laborDetails.region}
-- Estimated Duration: ${calculations.laborDetails.daysRequired} days${calculations.laborDetails.weatherDelayDays ? ` (includes ${calculations.laborDetails.weatherDelayDays} day weather buffer)` : ''}
-- Labor Rate: $${calculations.laborDetails.hourlyRate.toFixed(2)}/hr (includes all on-costs)`;
-          
-          setFormData(prev => ({ ...prev, notes: projectNotes }));
-        } else if (calculations.grandTotal) {
-          // Fallback to simple single line item for basic takeoffs
+      if (latestTakeoff.calculationData) {
+        try {
+          const data = JSON.parse(latestTakeoff.calculationData);
           setLineItems([
             {
               id: nanoid(),
-              description: `Roof Replacement - ${latestTakeoff.roofType} (${latestTakeoff.roofArea}m²)`,
+              description: "Roof Replacement - Materials & Labor",
               quantity: "1",
-              unitPrice: calculations.grandTotal.toFixed(2),
-              total: calculations.grandTotal,
+              unitPrice: data.grandTotal?.toString() || "0",
+              total: data.grandTotal || 0,
             },
           ]);
+        } catch (error) {
+          console.error("Failed to parse takeoff data:", error);
         }
-      } catch (e) {
-        console.error("Failed to parse takeoff calculations", e);
       }
     }
   }, [takeoffs]);
 
-  const addLineItem = () => {
+  const handleAddLineItem = () => {
     setLineItems([
       ...lineItems,
       {
@@ -184,440 +134,340 @@ Validity: 30 days from quote date`,
     ]);
   };
 
-  const removeLineItem = (id: string) => {
-    setLineItems(lineItems.filter(item => item.id !== id));
+  const handleRemoveLineItem = (id: string) => {
+    setLineItems(lineItems.filter((item) => item.id !== id));
   };
 
-  const updateLineItem = (id: string, field: keyof LineItem, value: string) => {
+  const handleUpdateLineItem = (id: string, field: keyof LineItem, value: string) => {
     setLineItems(
-      lineItems.map(item => {
-        if (item.id === id) {
-          const updated = { ...item, [field]: value };
-          if (field === "quantity" || field === "unitPrice") {
-            const qty = parseFloat(updated.quantity) || 0;
-            const price = parseFloat(updated.unitPrice) || 0;
-            updated.total = qty * price;
-          }
-          return updated;
+      lineItems.map((item) => {
+        if (item.id !== id) return item;
+        const updated = { ...item, [field]: value };
+        if (field === "quantity" || field === "unitPrice") {
+          const qty = parseFloat(updated.quantity) || 0;
+          const price = parseFloat(updated.unitPrice) || 0;
+          updated.total = qty * price;
         }
-        return item;
+        return updated;
       })
     );
   };
 
-  const calculateTotals = () => {
-    const subtotal = lineItems.reduce((sum, item) => sum + item.total, 0);
-    const gst = subtotal * 0.1;
-    const total = subtotal + gst;
-    return { subtotal, gst, total };
-  };
-
-  const { subtotal, gst, total } = calculateTotals();
-
-  const handleDownloadPDF = async () => {
-    if (!project) return;
-    
-    const quoteNumber = `VEN-${Date.now()}`;
-    const { subtotal, gst, total } = calculateTotals();
-    const filename = `Quote-${quoteNumber}-${project.title.replace(/\s+/g, '-')}.pdf`;
-    
-    await downloadQuotePDF(
-      {
-        quoteNumber,
-        validUntil: formData.validUntil,
-        subtotal: subtotal.toFixed(2),
-        gst: gst.toFixed(2),
-        total: total.toFixed(2),
-        terms: formData.terms,
-        notes: formData.notes,
-        items: JSON.stringify(lineItems),
-      },
-      {
-        title: project.title,
-        address: project.address || undefined,
-        clientName: project.clientName || undefined,
-        clientEmail: project.clientEmail || undefined,
-        clientPhone: project.clientPhone || undefined,
-      },
-      {
-        name: businessSettings.businessName || selectedOrg?.name || 'Venturr',
-        abn: businessSettings.abn,
-        address: businessSettings.address,
-        phone: businessSettings.phone,
-        email: businessSettings.email,
-        tagline: businessSettings.tagline || 'Professional Trade Solutions',
-        logoUrl: businessSettings.logoUrl,
-      },
-      filename
-    );
-    toast.success("PDF downloaded successfully");
-  };
+  const subtotal = lineItems.reduce((sum, item) => sum + item.total, 0);
+  const gst = subtotal * 0.1;
+  const total = subtotal + gst;
 
   const handleSave = async () => {
-    if (!projectId) return;
-
-    if (lineItems.length === 0) {
+    if (!projectId || lineItems.length === 0) {
       toast.error("Please add at least one line item");
       return;
     }
 
-    const quoteNumber = `Q-${Date.now().toString().slice(-8)}`;
-
-    await createQuoteMutation.mutateAsync({
-      projectId,
-      quoteNumber,
-      subtotal: subtotal.toFixed(2),
-      gst: gst.toFixed(2),
-      total: total.toFixed(2),
-      validUntil: formData.validUntil,
-      terms: formData.terms,
-      notes: formData.notes,
-      items: JSON.stringify(lineItems),
-    });
-  };
-
-  const handlePreview = () => {
-    // Open print dialog for browser-based PDF
-    window.print();
+    setIsSaving(true);
+    try {
+      await createQuoteMutation.mutateAsync({
+        projectId,
+        quoteData: JSON.stringify({
+          lineItems,
+          subtotal,
+          gst,
+          total,
+          validUntil: formData.validUntil,
+          terms: formData.terms,
+          notes: formData.notes,
+        }),
+        totalAmount: total,
+      });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-orange-50">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-700">Loading quote generator...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/30 to-blue-50">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 print:hidden">
+      <header className="bg-white/80 backdrop-blur-lg border-b border-slate-200/50 shadow-sm sticky top-0 z-40">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setLocation(projectId ? `/projects/${projectId}` : "/dashboard")}
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setLocation(`/projects/${projectId}`)}
+                className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
               >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                {projectId ? "Back to Project" : "Back to Dashboard"}
-              </Button>
-              <h1 className="text-2xl font-bold text-slate-900">Quote Generator</h1>
+                <ArrowLeft className="w-5 h-5 text-slate-600" />
+              </button>
+              <div>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-700 bg-clip-text text-transparent">
+                  Quote Generator
+                </h1>
+                <p className="text-sm text-slate-500">Create professional quotes for your clients</p>
+              </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" onClick={handlePreview}>
+            <div className="flex items-center gap-3">
+              <Button
+                onClick={() => setShowPreview(!showPreview)}
+                variant="outline"
+                className="hover:border-purple-300 hover:bg-purple-50"
+              >
                 <Eye className="w-4 h-4 mr-2" />
                 Preview
               </Button>
               <Button
-                variant="outline"
-                onClick={handleDownloadPDF}
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Download PDF
-              </Button>
-              <Button
                 onClick={handleSave}
-                disabled={createQuoteMutation.isPending}
-                className="bg-blue-600 hover:bg-blue-700"
+                disabled={isSaving}
+                className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 shadow-lg shadow-green-500/30"
               >
-                {createQuoteMutation.isPending ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                {isSaving ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Saving...
+                  </>
                 ) : (
-                  <Save className="w-4 h-4 mr-2" />
+                  <>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Quote
+                  </>
                 )}
-                Save Quote
               </Button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-8 max-w-5xl">
-        {/* Quote Header */}
-        <Card className="mb-6">
-          <CardHeader>
-            <div className="flex items-start justify-between">
-              <div>
-                <CardTitle className="text-2xl mb-2">Quotation</CardTitle>
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Editor Panel */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Quote Header */}
+            <Card className="shadow-lg border-purple-200/50 overflow-hidden">
+              <div className="h-1 bg-gradient-to-r from-purple-500 to-purple-600"></div>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-purple-600" />
+                  Quote Details
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-sm font-medium">Quote Number</Label>
+                    <Input
+                      disabled
+                      value={`QT-${Date.now().toString().slice(-6)}`}
+                      className="mt-2 bg-slate-50"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium">Valid Until</Label>
+                    <Input
+                      type="date"
+                      value={formData.validUntil}
+                      onChange={(e) => setFormData({ ...formData, validUntil: e.target.value })}
+                      className="mt-2"
+                    />
+                  </div>
+                </div>
+
                 {project && (
-                  <div className="space-y-1 text-sm text-slate-600">
-                    <div className="font-semibold">{project.title}</div>
-                    <div>{project.address}</div>
-                    {project.clientName && <div>Attention: {project.clientName}</div>}
+                  <div className="p-4 rounded-lg bg-gradient-to-br from-purple-50 to-blue-50 border border-purple-200">
+                    <p className="text-xs text-purple-600 font-medium mb-2">Project</p>
+                    <p className="font-semibold text-slate-900">{project.title}</p>
+                    {project.address && (
+                      <p className="text-sm text-slate-600 mt-1">{project.address}</p>
+                    )}
                   </div>
                 )}
-              </div>
-              <div className="text-right text-sm">
-                <div className="font-semibold">ThomCo Roofing</div>
-                <div className="text-slate-600">Professional Roofing Solutions</div>
-                <div className="text-slate-600 mt-2">Date: {new Date().toLocaleDateString()}</div>
-              </div>
-            </div>
-          </CardHeader>
-        </Card>
+              </CardContent>
+            </Card>
 
-        {/* Line Items */}
-        <Card className="mb-6">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle>Line Items</CardTitle>
-                <CardDescription>Add items to the quote</CardDescription>
-              </div>
-              <Button onClick={addLineItem} size="sm" variant="outline">
-                <Plus className="w-4 h-4 mr-2" />
-                Add Item
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {lineItems.map((item, index) => (
-                <div key={item.id} className="flex gap-4 items-start p-4 border rounded-lg">
-                  <div className="flex-1 space-y-4">
-                    <div>
-                      <Label htmlFor={`desc-${item.id}`}>Description</Label>
-                      <Input
-                        id={`desc-${item.id}`}
-                        placeholder="Item description"
-                        value={item.description}
-                        onChange={(e) => updateLineItem(item.id, "description", e.target.value)}
-                      />
-                    </div>
-                    <div className="grid grid-cols-3 gap-4">
-                      <div>
-                        <Label htmlFor={`qty-${item.id}`}>Quantity</Label>
-                        <Input
-                          id={`qty-${item.id}`}
-                          type="number"
-                          step="0.01"
-                          value={item.quantity}
-                          onChange={(e) => updateLineItem(item.id, "quantity", e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor={`price-${item.id}`}>Unit Price ($)</Label>
-                        <Input
-                          id={`price-${item.id}`}
-                          type="number"
-                          step="0.01"
-                          value={item.unitPrice}
-                          onChange={(e) => updateLineItem(item.id, "unitPrice", e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <Label>Total</Label>
-                        <div className="h-10 flex items-center font-semibold">
-                          ${item.total.toFixed(2)}
+            {/* Line Items */}
+            <Card className="shadow-lg border-blue-200/50 overflow-hidden">
+              <div className="h-1 bg-gradient-to-r from-blue-500 to-blue-600"></div>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-blue-600" />
+                  Line Items
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  {lineItems.map((item, index) => (
+                    <div
+                      key={item.id}
+                      className="p-4 rounded-lg border border-slate-200 hover:border-blue-300 hover:bg-blue-50/50 transition-all"
+                    >
+                      <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-3">
+                        <div className="md:col-span-2">
+                          <Label className="text-xs font-medium text-slate-500">Description</Label>
+                          <Input
+                            placeholder="e.g., Roof replacement materials"
+                            value={item.description}
+                            onChange={(e) => handleUpdateLineItem(item.id, "description", e.target.value)}
+                            className="mt-1"
+                          />
                         </div>
+                        <div>
+                          <Label className="text-xs font-medium text-slate-500">Qty</Label>
+                          <Input
+                            type="number"
+                            placeholder="1"
+                            value={item.quantity}
+                            onChange={(e) => handleUpdateLineItem(item.id, "quantity", e.target.value)}
+                            className="mt-1"
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-xs font-medium text-slate-500">Unit Price</Label>
+                          <Input
+                            type="number"
+                            placeholder="0.00"
+                            value={item.unitPrice}
+                            onChange={(e) => handleUpdateLineItem(item.id, "unitPrice", e.target.value)}
+                            className="mt-1"
+                          />
+                        </div>
+                        <div className="flex flex-col">
+                          <Label className="text-xs font-medium text-slate-500">Total</Label>
+                          <div className="mt-1 p-2 rounded bg-slate-50 text-sm font-semibold text-slate-900">
+                            ${item.total.toFixed(2)}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex justify-end">
+                        <button
+                          onClick={() => handleRemoveLineItem(item.id)}
+                          className="p-1 text-red-600 hover:bg-red-100 rounded transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <Button
+                  onClick={handleAddLineItem}
+                  variant="outline"
+                  className="w-full border-blue-300 hover:bg-blue-50"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Line Item
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Terms & Conditions */}
+            <Card className="shadow-lg border-green-200/50 overflow-hidden">
+              <div className="h-1 bg-gradient-to-r from-green-500 to-green-600"></div>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">Terms & Conditions</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Textarea
+                  placeholder="Enter terms and conditions..."
+                  value={formData.terms}
+                  onChange={(e) => setFormData({ ...formData, terms: e.target.value })}
+                  className="min-h-32"
+                />
+              </CardContent>
+            </Card>
+
+            {/* Additional Notes */}
+            <Card className="shadow-lg border-orange-200/50 overflow-hidden">
+              <div className="h-1 bg-gradient-to-r from-orange-500 to-orange-600"></div>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">Additional Notes</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Textarea
+                  placeholder="Add any additional notes for the client..."
+                  value={formData.notes}
+                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  className="min-h-24"
+                />
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Summary Panel */}
+          <div className="lg:col-span-1">
+            <div className="space-y-4 sticky top-24">
+              {/* Total Summary */}
+              <Card className="shadow-xl border-0 overflow-hidden bg-gradient-to-br from-purple-600 to-purple-700 text-white">
+                <CardContent className="pt-6">
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-purple-100 text-sm">Quote Total</p>
+                      <p className="text-4xl font-bold">${total.toLocaleString('en-AU', { maximumFractionDigits: 2 })}</p>
+                    </div>
+                    <div className="space-y-2 text-sm border-t border-purple-400/30 pt-4">
+                      <div className="flex justify-between">
+                        <span className="text-purple-100">Subtotal:</span>
+                        <span className="font-semibold">${subtotal.toLocaleString('en-AU', { maximumFractionDigits: 2 })}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-purple-100">GST (10%):</span>
+                        <span className="font-semibold">${gst.toLocaleString('en-AU', { maximumFractionDigits: 2 })}</span>
                       </div>
                     </div>
                   </div>
-                  {lineItems.length > 1 && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeLineItem(item.id)}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  )}
-                </div>
-              ))}
-            </div>
+                </CardContent>
+              </Card>
 
-            {/* Totals */}
-            <div className="mt-6 pt-6 border-t">
-              <div className="max-w-sm ml-auto space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">Subtotal:</span>
-                  <span className="font-semibold">${subtotal.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">GST (10%):</span>
-                  <span className="font-semibold">${gst.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-lg font-bold pt-2 border-t">
-                  <span>Total:</span>
-                  <span className="text-green-600">${total.toFixed(2)}</span>
-                </div>
+              {/* Quick Stats */}
+              <Card className="shadow-lg border-slate-200">
+                <CardContent className="pt-6">
+                  <div className="space-y-3">
+                    <div className="p-3 rounded-lg bg-blue-50 border border-blue-200">
+                      <p className="text-xs text-blue-600 font-medium">Line Items</p>
+                      <p className="text-2xl font-bold text-blue-900">{lineItems.length}</p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-purple-50 border border-purple-200">
+                      <p className="text-xs text-purple-600 font-medium">Valid Until</p>
+                      <p className="text-sm font-semibold text-purple-900">{formData.validUntil}</p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-green-50 border border-green-200">
+                      <p className="text-xs text-green-600 font-medium">Status</p>
+                      <p className="text-sm font-semibold text-green-900 flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4" />
+                        Ready to Save
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Action Buttons */}
+              <div className="space-y-2">
+                <Button
+                  onClick={() => downloadQuotePDF(lineItems, subtotal, gst, total, project?.title || "Quote")}
+                  variant="outline"
+                  className="w-full border-blue-300 hover:bg-blue-50"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download PDF
+                </Button>
+                <Button
+                  onClick={() => setLocation(`/projects/${projectId}`)}
+                  variant="outline"
+                  className="w-full"
+                >
+                  Back to Project
+                </Button>
               </div>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Terms and Conditions */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle>Terms & Conditions</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="validUntil">Valid Until</Label>
-              <Input
-                id="validUntil"
-                type="date"
-                value={formData.validUntil}
-                onChange={(e) => setFormData({ ...formData, validUntil: e.target.value })}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="terms">Terms & Conditions</Label>
-              <Textarea
-                id="terms"
-                rows={10}
-                value={formData.terms}
-                onChange={(e) => setFormData({ ...formData, terms: e.target.value })}
-                className="font-mono text-sm"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="notes">Additional Notes</Label>
-              <Textarea
-                id="notes"
-                rows={3}
-                placeholder="Any additional notes or special conditions..."
-                value={formData.notes}
-                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              />
-            </div>
-          </CardContent>
-        </Card>
-      </main>
-
-      {/* Print-Only Version */}
-      <div className="hidden print:block quote-print-container">
-        {/* Header */}
-        <div className="quote-header">
-          <div className="quote-logo">{businessSettings.businessName || selectedOrg?.name || 'Venturr'}</div>
-          <div className="quote-company-info">{businessSettings.tagline || 'Professional Trade Solutions'}</div>
-          {businessSettings.abn && <div className="quote-company-info">ABN: {businessSettings.abn}</div>}
-          {businessSettings.phone && <div className="quote-company-info">Phone: {businessSettings.phone}</div>}
-          {businessSettings.email && <div className="quote-company-info">Email: {businessSettings.email}</div>}
-        </div>
-
-        {/* Title */}
-        <div className="quote-title">QUOTATION</div>
-
-        {/* Quote Details */}
-        <div className="quote-section">
-          <div className="quote-row">
-            <div className="quote-label">Quote Number:</div>
-            <div className="quote-value">VEN-{Date.now()}</div>
           </div>
-          <div className="quote-row">
-            <div className="quote-label">Date:</div>
-            <div className="quote-value">{new Date().toLocaleDateString('en-AU')}</div>
-          </div>
-          <div className="quote-row">
-            <div className="quote-label">Valid Until:</div>
-            <div className="quote-value">{new Date(formData.validUntil).toLocaleDateString('en-AU')}</div>
-          </div>
-        </div>
-
-        {/* Project Details */}
-        {project && (
-          <div className="quote-section">
-            <div className="quote-section-title">Project Details</div>
-            <div className="quote-row">
-              <div className="quote-label">Project:</div>
-              <div className="quote-value">{project.title}</div>
-            </div>
-            {project.address && (
-              <div className="quote-row">
-                <div className="quote-label">Address:</div>
-                <div className="quote-value">{project.address}</div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Client Details */}
-        {project?.clientName && (
-          <div className="quote-section">
-            <div className="quote-section-title">Client Details</div>
-            <div className="quote-row">
-              <div className="quote-label">Name:</div>
-              <div className="quote-value">{project.clientName}</div>
-            </div>
-            {project.clientEmail && (
-              <div className="quote-row">
-                <div className="quote-label">Email:</div>
-                <div className="quote-value">{project.clientEmail}</div>
-              </div>
-            )}
-            {project.clientPhone && (
-              <div className="quote-row">
-                <div className="quote-label">Phone:</div>
-                <div className="quote-value">{project.clientPhone}</div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Line Items Table */}
-        <table className="quote-table">
-          <thead>
-            <tr>
-              <th style={{width: '50%'}}>Description</th>
-              <th style={{width: '15%'}} className="text-right">Qty</th>
-              <th style={{width: '15%'}} className="text-right">Unit Price</th>
-              <th style={{width: '20%'}} className="text-right">Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lineItems.map((item) => (
-              <tr key={item.id}>
-                <td>{item.description}</td>
-                <td className="text-right">{item.quantity}</td>
-                <td className="text-right">${parseFloat(item.unitPrice).toFixed(2)}</td>
-                <td className="text-right">${item.total.toFixed(2)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {/* Totals */}
-        <div className="quote-totals">
-          <div className="quote-total-row">
-            <div>Subtotal:</div>
-            <div>${subtotal.toFixed(2)}</div>
-          </div>
-          <div className="quote-total-row">
-            <div>GST (10%):</div>
-            <div>${gst.toFixed(2)}</div>
-          </div>
-          <div className="quote-grand-total">
-            <div>TOTAL:</div>
-            <div>${total.toFixed(2)}</div>
-          </div>
-        </div>
-
-        {/* Terms & Conditions */}
-        {formData.terms && (
-          <div className="quote-terms">
-            <div className="quote-terms-title">Terms & Conditions</div>
-            <div className="quote-terms-text">{formData.terms}</div>
-          </div>
-        )}
-
-        {/* Notes */}
-        {formData.notes && (
-          <div className="quote-section">
-            <div className="quote-section-title">Additional Notes</div>
-            <div className="quote-terms-text">{formData.notes}</div>
-          </div>
-        )}
-
-        {/* Footer */}
-        <div className="quote-footer">
-          <div>{businessSettings.businessName || selectedOrg?.name || 'Venturr'} | {businessSettings.tagline || 'Professional Trade Solutions'}</div>
-          <div>This quotation is valid for 30 days from the date of issue</div>
         </div>
       </div>
     </div>
