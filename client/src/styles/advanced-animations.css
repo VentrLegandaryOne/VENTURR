@@ -1,0 +1,664 @@
+/* ============================================================================
+   ADVANCED ANIMATIONS & MICRO-INTERACTIONS
+   Professional Motion Design for Venturr Platform
+   ============================================================================ */
+
+/* ============================================================================
+   PAGE TRANSITIONS
+   ============================================================================ */
+
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes page-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes page-slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes page-slide-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-transition-fade {
+  animation: page-fade-in 400ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.page-transition-slide-right {
+  animation: page-slide-in-right 400ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.page-transition-slide-left {
+  animation: page-slide-in-left 400ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.page-transition-slide-up {
+  animation: page-slide-in-up 400ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ============================================================================
+   BUTTON INTERACTIONS
+   ============================================================================ */
+
+@keyframes button-press {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes button-ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.btn-interactive {
+  position: relative;
+  overflow: hidden;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-interactive:active {
+  animation: button-press 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-interactive::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.btn-interactive:active::before {
+  animation: button-ripple 600ms ease-out;
+}
+
+/* ============================================================================
+   CARD INTERACTIONS
+   ============================================================================ */
+
+@keyframes card-hover-lift {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes card-border-glow {
+  0%, 100% {
+    border-color: rgba(30, 64, 175, 0.3);
+    box-shadow: 0 0 20px rgba(30, 64, 175, 0.2);
+  }
+  50% {
+    border-color: rgba(30, 64, 175, 0.6);
+    box-shadow: 0 0 30px rgba(30, 64, 175, 0.4);
+  }
+}
+
+.card-interactive {
+  transition: all 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+.card-interactive:hover {
+  animation: card-hover-lift 300ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.card-interactive.glow {
+  animation: card-border-glow 2s ease-in-out infinite;
+}
+
+/* ============================================================================
+   INPUT FOCUS ANIMATIONS
+   ============================================================================ */
+
+@keyframes input-focus-expand {
+  from {
+    box-shadow: 0 0 0 0 rgba(30, 64, 175, 0.4);
+  }
+  to {
+    box-shadow: 0 0 0 8px rgba(30, 64, 175, 0);
+  }
+}
+
+@keyframes input-label-float {
+  from {
+    transform: translateY(0);
+    font-size: 1rem;
+  }
+  to {
+    transform: translateY(-24px);
+    font-size: 0.75rem;
+  }
+}
+
+.input-interactive:focus {
+  animation: input-focus-expand 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-label-float {
+  animation: input-label-float 300ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ============================================================================
+   NOTIFICATION ANIMATIONS
+   ============================================================================ */
+
+@keyframes notification-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes notification-slide-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes notification-bounce {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+.notification-enter {
+  animation: notification-slide-in 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.notification-exit {
+  animation: notification-slide-out 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notification-attention {
+  animation: notification-bounce 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ============================================================================
+   MODAL ANIMATIONS
+   ============================================================================ */
+
+@keyframes modal-backdrop-fade {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+@keyframes modal-content-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modal-content-slide {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-backdrop-enter {
+  animation: modal-backdrop-fade 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-content-scale {
+  animation: modal-content-scale 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-content-slide {
+  animation: modal-content-slide 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ============================================================================
+   DROPDOWN ANIMATIONS
+   ============================================================================ */
+
+@keyframes dropdown-open {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dropdown-close {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.dropdown-enter {
+  animation: dropdown-open 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dropdown-exit {
+  animation: dropdown-close 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================================
+   LOADING ANIMATIONS
+   ============================================================================ */
+
+@keyframes skeleton-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes dots-bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.skeleton-pulse {
+  animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.05) 0%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
+  background-size: 1000px 100%;
+  animation: skeleton-shimmer 2s infinite;
+}
+
+.dots-bounce span {
+  animation: dots-bounce 1.4s infinite ease-in-out both;
+}
+
+.dots-bounce span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.dots-bounce span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+/* ============================================================================
+   PROGRESS ANIMATIONS
+   ============================================================================ */
+
+@keyframes progress-fill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: var(--progress-value, 0%);
+  }
+}
+
+@keyframes progress-shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.progress-fill {
+  animation: progress-fill 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.progress-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  background-size: 1000px 100%;
+  animation: progress-shimmer 2s infinite;
+}
+
+/* ============================================================================
+   SCROLL ANIMATIONS
+   ============================================================================ */
+
+@keyframes fade-in-on-scroll {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-on-scroll {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.fade-in-on-scroll {
+  animation: fade-in-on-scroll 600ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  opacity: 0;
+}
+
+.slide-in-on-scroll {
+  animation: slide-in-on-scroll 600ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  opacity: 0;
+}
+
+/* ============================================================================
+   ICON ANIMATIONS
+   ============================================================================ */
+
+@keyframes icon-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes icon-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes icon-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+@keyframes icon-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+.icon-rotate {
+  animation: icon-rotate 2s linear infinite;
+}
+
+.icon-bounce {
+  animation: icon-bounce 1s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+}
+
+.icon-pulse {
+  animation: icon-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.icon-shake {
+  animation: icon-shake 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ============================================================================
+   TEXT ANIMATIONS
+   ============================================================================ */
+
+@keyframes text-gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes text-typewriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.text-gradient-animate {
+  background: linear-gradient(
+    90deg,
+    #1E40AF,
+    #EA580C,
+    #10B981,
+    #1E40AF
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: text-gradient-shift 3s ease infinite;
+}
+
+.text-typewriter {
+  overflow: hidden;
+  border-right: 2px solid #1E40AF;
+  white-space: nowrap;
+  animation: text-typewriter 3.5s steps(40, end) 1s 1 normal both;
+}
+
+/* ============================================================================
+   CELEBRATION ANIMATIONS
+   ============================================================================ */
+
+@keyframes confetti-fall {
+  to {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes success-checkmark {
+  0% {
+    transform: scale(0) rotate(-45deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+@keyframes success-circle {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+.confetti {
+  animation: confetti-fall 3s ease-in forwards;
+}
+
+.success-checkmark {
+  animation: success-checkmark 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.success-circle {
+  animation: success-circle 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ============================================================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  @keyframes page-slide-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .card-interactive:hover {
+    animation: card-hover-lift 300ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    transform: translateY(-4px);
+  }
+}
+
+/* ============================================================================
+   ACCESSIBILITY - REDUCED MOTION
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================================
+   DARK MODE ADJUSTMENTS
+   ============================================================================ */
+
+@media (prefers-color-scheme: dark) {
+  @keyframes modal-backdrop-fade {
+    from {
+      opacity: 0;
+      backdrop-filter: blur(0px);
+    }
+    to {
+      opacity: 1;
+      backdrop-filter: blur(8px);
+    }
+  }
+
+  .text-typewriter {
+    border-right-color: #3B82F6;
+  }
+}
+
