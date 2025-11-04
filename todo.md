@@ -531,3 +531,34 @@
 - [ ] Add high contrast mode support
 - [ ] Test color contrast ratios
 
+
+
+
+## CRITICAL FEATURES FOR LAUNCH (November 2025)
+
+### Real-Time Collaboration on Interactive Map
+- [ ] Implement WebSocket connection for live updates
+- [ ] Add multi-user cursor tracking
+- [ ] Implement drawing synchronization
+- [ ] Add user presence indicators
+- [ ] Add conflict resolution for simultaneous edits
+- [ ] Test with multiple concurrent users
+
+### Commenting & Feedback System for Quote Generator
+- [ ] Create comments database table
+- [ ] Build comment UI component
+- [ ] Implement comment threading
+- [ ] Add user mentions (@username)
+- [ ] Add email notifications for comments
+- [ ] Add comment history and editing
+- [ ] Test comment workflow
+
+### PDF Export for Takeoff Calculator
+- [ ] Integrate PDF generation library (pdfkit or similar)
+- [ ] Create professional PDF template
+- [ ] Add company branding to PDF
+- [ ] Include all calculations and materials
+- [ ] Add cost breakdown sections
+- [ ] Test PDF generation and download
+- [ ] Optimize file size
+

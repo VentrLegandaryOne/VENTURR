@@ -36,6 +36,20 @@
       "when": 1761656597619,
       "tag": "0004_cooing_landau",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1761906607315,
+      "tag": "0005_flat_patch",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1762236429046,
+      "tag": "0006_tricky_imperial_guard",
+      "breakpoints": true
     }
   ]
 }
