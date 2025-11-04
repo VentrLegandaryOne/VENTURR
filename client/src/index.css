@@ -1,10 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "./styles/design-system.css";
-@import "./styles/venturr-design-system.css";
-@import "./styles/immersive-effects.css";
-@import "./styles/color-coded-components.css";
-@import "./styles/advanced-animations.css";
 
 @custom-variant dark (&:is(.dark *));
 

@@ -133,26 +133,6 @@ export const measurements = mysqlTable("measurements", {
 export type Measurement = typeof measurements.$inferSelect;
 export type InsertMeasurement = typeof measurements.$inferInsert;
 
-// Audit logs for compliance and debugging
-export const auditLogs = mysqlTable("auditLogs", {
-  id: varchar("id", { length: 64 }).primaryKey(),
-  userId: varchar("userId", { length: 64 }).notNull(),
-  organizationId: varchar("organizationId", { length: 64 }),
-  action: varchar("action", { length: 100 }).notNull(),
-  resourceType: varchar("resourceType", { length: 100 }).notNull(),
-  resourceId: varchar("resourceId", { length: 64 }).notNull(),
-  changes: text("changes"),
-  metadata: text("metadata"),
-  ipAddress: varchar("ipAddress", { length: 50 }),
-  userAgent: text("userAgent"),
-  status: mysqlEnum("status", ["success", "failure"]).default("success").notNull(),
-  errorMessage: text("errorMessage"),
-  createdAt: timestamp("createdAt").defaultNow(),
-});
-
-export type AuditLog = typeof auditLogs.$inferSelect;
-export type InsertAuditLog = typeof auditLogs.$inferInsert;
-
 
 // Materials library
 export const materials = mysqlTable("materials", {
