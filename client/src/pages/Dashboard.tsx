@@ -150,16 +150,19 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-orange-50/30">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-orange-50/30 relative">
+      {/* Futuristic Chequered Background */}
+      <div className="background-glow fixed inset-0 z-0" />
+      
       {/* Animated Background Pattern */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-30">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-30 z-0">
         <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
         <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-green-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
 
       {/* Header */}
-      <header className="relative bg-white/80 backdrop-blur-lg border-b border-slate-200/50 shadow-sm">
+      <header className="relative z-10 bg-white/80 backdrop-blur-lg border-b border-slate-200/50 shadow-lg shadow-blue-500/10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -192,29 +195,32 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8 relative">
+      <div className="container mx-auto px-4 py-8 relative z-2">
         {/* Subscription Status */}
         <div className="mb-8">
           <SubscriptionStatus />
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-fadeInUp">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
               <div
                 key={stat.title}
-                className="group relative bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 cursor-pointer overflow-hidden"
+                className="group relative bg-white/95 backdrop-blur rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 cursor-pointer overflow-hidden border border-white/20 hover:border-blue-200/50"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 {/* Gradient Background on Hover */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
+                <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}></div>
+                
+                {/* Glow Effect */}
+                <div className={`absolute -inset-1 bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-20 blur transition-opacity duration-300 -z-10`}></div>
                 
                 {/* Content */}
                 <div className="relative">
                   <div className="flex items-center justify-between mb-4">
-                    <div className={`${stat.iconBg} p-3 rounded-xl shadow-sm group-hover:shadow-md transition-shadow`}>
+                    <div className={`${stat.iconBg} p-3 rounded-xl shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-300`}>
                       <Icon className={`w-6 h-6 ${stat.iconColor}`} />
                     </div>
                     <div className={`text-3xl font-bold bg-gradient-to-br ${stat.gradient} bg-clip-text text-transparent`}>
@@ -225,7 +231,7 @@ export default function Dashboard() {
                 </div>
 
                 {/* Decorative Element */}
-                <div className="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                <div className="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full opacity-20 group-hover:opacity-40 transition-opacity"></div>
               </div>
             );
           })}
@@ -250,19 +256,22 @@ export default function Dashboard() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fadeInUp" style={{ animationDelay: '200ms' }}>
             {quickActions.map((action, index) => {
               const Icon = action.icon;
               return (
                 <button
                   key={action.title}
                   onClick={action.action}
-                  className="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 text-left overflow-hidden"
-                  style={{ animationDelay: `${index * 100}ms` }}
+                  className="group relative bg-white/95 backdrop-blur rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 text-left overflow-hidden border border-white/20 hover:border-blue-200/50 hover:shadow-blue-500/20"
+                  style={{ animationDelay: `${200 + index * 100}ms` }}
                 >
                   {/* Gradient Border on Hover */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${action.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
-                  <div className="absolute inset-[2px] bg-white rounded-2xl"></div>
+                  <div className={`absolute inset-0 bg-gradient-to-br ${action.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}></div>
+                  <div className="absolute inset-[2px] bg-white/95 rounded-2xl"></div>
+
+                  {/* Glow Effect */}
+                  <div className={`absolute -inset-1 bg-gradient-to-br ${action.gradient} opacity-0 group-hover:opacity-30 blur transition-opacity duration-300 -z-10`}></div>
 
                   {/* Content */}
                   <div className="relative">
@@ -275,7 +284,7 @@ export default function Dashboard() {
 
                   {/* Arrow Indicator */}
                   <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
                       <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
@@ -303,15 +312,17 @@ export default function Dashboard() {
           </div>
 
           {projects && projects.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fadeInUp" style={{ animationDelay: '400ms' }}>
               {projects.slice(0, 6).map((project, index) => (
                 <div
                   key={project.id}
                   onClick={() => setLocation(`/projects/${project.id}`)}
-                  className="group bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer border border-slate-100 hover:border-blue-200"
-                  style={{ animationDelay: `${index * 50}ms` }}
+                  className="group relative bg-white/95 backdrop-blur rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer border border-white/30 hover:border-blue-200/50 hover:shadow-blue-500/20 overflow-hidden"
+                  style={{ animationDelay: `${400 + index * 50}ms` }}
                 >
-                  <div className="flex items-start justify-between mb-3">
+                  {/* Glow Effect */}
+                  <div className="absolute -inset-1 bg-gradient-to-br from-blue-500 to-purple-500 opacity-0 group-hover:opacity-20 blur transition-opacity duration-300 -z-10"></div>
+                  <div className="relative flex items-start justify-between mb-3">
                     <div className="flex-1">
                       <h3 className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-1">{project.title}</h3>
                       <p className="text-sm text-slate-500 mt-1 line-clamp-1">{project.address || "No address"}</p>
@@ -333,8 +344,8 @@ export default function Dashboard() {
               ))}
             </div>
           ) : (
-            <div className="bg-white rounded-2xl p-12 text-center shadow-lg border border-slate-100">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="bg-white/95 backdrop-blur rounded-2xl p-12 text-center shadow-lg border border-white/30 hover:shadow-blue-500/20 transition-all animate-fadeInUp" style={{ animationDelay: '400ms' }}>
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/20">
                 <Folder className="w-10 h-10 text-blue-600" />
               </div>
               <h3 className="text-xl font-semibold text-slate-900 mb-2">No projects yet</h3>

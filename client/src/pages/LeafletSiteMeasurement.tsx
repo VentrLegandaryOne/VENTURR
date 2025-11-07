@@ -313,9 +313,12 @@ export default function LeafletSiteMeasurement() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex flex-col relative">
+      {/* Futuristic Chequered Background */}
+      <div className="background-glow fixed inset-0 z-0" />
+      
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-lg border-b border-slate-200/50 shadow-sm">
+      <header className="relative z-10 bg-white/80 backdrop-blur-lg border-b border-slate-200/50 shadow-lg shadow-blue-500/10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -352,33 +355,33 @@ export default function LeafletSiteMeasurement() {
       </header>
 
       {/* Main Content */}
-      <div className="flex-1 flex gap-4 p-4 overflow-hidden">
+      <div className="flex-1 flex gap-4 p-4 overflow-hidden relative z-2">
         {/* Map Container */}
-        <div className="flex-1 flex flex-col gap-4">
+        <div className="flex-1 flex flex-col gap-4 animate-fadeInUp">
           {/* Map */}
           <div
             ref={mapContainerRef}
-            className="flex-1 rounded-2xl shadow-lg border border-slate-200 overflow-hidden"
+            className="flex-1 rounded-2xl shadow-xl border border-white/30 overflow-hidden hover:shadow-2xl hover:shadow-blue-500/20 transition-all"
             style={{ minHeight: "400px" }}
           />
 
           {/* Map Controls */}
-          <div className="flex gap-2 justify-center">
+          <div className="flex gap-2 justify-center animate-slideInUp">
             <button
               onClick={() => mapRef.current?.zoomIn()}
-              className="p-3 bg-white rounded-lg shadow-md hover:shadow-lg hover:bg-blue-50 transition-all"
+              className="p-3 bg-white/95 backdrop-blur rounded-lg shadow-md hover:shadow-lg hover:bg-blue-50 hover:shadow-blue-500/20 transition-all border border-white/20 hover:border-blue-200/50"
             >
               <ZoomIn className="w-5 h-5 text-blue-600" />
             </button>
             <button
               onClick={() => mapRef.current?.zoomOut()}
-              className="p-3 bg-white rounded-lg shadow-md hover:shadow-lg hover:bg-blue-50 transition-all"
+              className="p-3 bg-white/95 backdrop-blur rounded-lg shadow-md hover:shadow-lg hover:bg-blue-50 hover:shadow-blue-500/20 transition-all border border-white/20 hover:border-blue-200/50"
             >
               <ZoomOut className="w-5 h-5 text-blue-600" />
             </button>
             <button
               onClick={() => mapRef.current?.locate()}
-              className="p-3 bg-white rounded-lg shadow-md hover:shadow-lg hover:bg-orange-50 transition-all"
+              className="p-3 bg-white/95 backdrop-blur rounded-lg shadow-md hover:shadow-lg hover:bg-orange-50 hover:shadow-orange-500/20 transition-all border border-white/20 hover:border-orange-200/50"
             >
               <Navigation className="w-5 h-5 text-orange-600" />
             </button>
@@ -387,9 +390,9 @@ export default function LeafletSiteMeasurement() {
 
         {/* Sidebar */}
         {showSidebar && (
-          <div className="w-96 flex flex-col gap-4 overflow-y-auto">
+          <div className="w-96 flex flex-col gap-4 overflow-y-auto animate-slideInRight">
             {/* Address Search */}
-            <Card className="shadow-lg border-blue-200/50">
+            <Card className="shadow-lg border-blue-200/50 bg-white/95 backdrop-blur hover:shadow-xl hover:shadow-blue-500/10 transition-all">
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <MapPin className="w-5 h-5 text-blue-600" />
@@ -442,7 +445,7 @@ export default function LeafletSiteMeasurement() {
             </Card>
 
             {/* Measurements Summary */}
-            <Card className="shadow-lg border-orange-200/50">
+            <Card className="shadow-lg border-orange-200/50 bg-white/95 backdrop-blur hover:shadow-xl hover:shadow-orange-500/10 transition-all">
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <BarChart3 className="w-5 h-5 text-orange-600" />

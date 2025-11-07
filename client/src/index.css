@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 @import "./styles/design-system.css";
 @import "./styles/wcag-aaa-colors.css";
+@import "./styles/futuristic-background.css";
 
 @custom-variant dark (&:is(.dark *));
 
