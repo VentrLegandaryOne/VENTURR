@@ -34,6 +34,9 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
   
+  // Trust proxy for rate limiting behind reverse proxy
+  app.set('trust proxy', 1);
+  
   // Security middleware
   app.use(helmet({
     contentSecurityPolicy: {
