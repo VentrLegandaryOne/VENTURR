@@ -189,7 +189,11 @@ export default function Export() {
   };
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-lime-50 relative">
+      {/* Futuristic Chequered Background */}
+      <div className="background-glow fixed inset-0 z-0" />
+      
+      <div className="container mx-auto py-8 relative z-2 animate-fadeInUp">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Export Data</h1>
         <p className="text-muted-foreground mt-2">
@@ -365,6 +369,7 @@ export default function Export() {
             </CardContent>
           </Card>
         </div>
+      </div>
       </div>
     </div>
   );

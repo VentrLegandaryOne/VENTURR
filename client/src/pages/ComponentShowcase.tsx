@@ -203,7 +203,11 @@ export default function ComponentsShowcase() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-violet-50 text-foreground relative">
+      {/* Futuristic Chequered Background */}
+      <div className="background-glow fixed inset-0 z-0" />
+      
+      <div className="relative z-2">
       <main className="container max-w-6xl mx-auto">
         <div className="space-y-2 justify-between flex">
           <h2 className="text-3xl font-bold tracking-tight mb-6">

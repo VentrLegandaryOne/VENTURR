@@ -11,7 +11,11 @@ export default function NotFound() {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-red-50 relative">
+      {/* Futuristic Chequered Background */}
+      <div className="background-glow fixed inset-0 z-0" />
+      
+      <div className="relative z-2">
       <Card className="w-full max-w-lg mx-4 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
         <CardContent className="pt-8 pb-8 text-center">
           <div className="flex justify-center mb-6">
@@ -47,6 +51,7 @@ export default function NotFound() {
           </div>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }

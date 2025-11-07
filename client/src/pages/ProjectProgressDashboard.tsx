@@ -55,7 +55,11 @@ export default function ProjectProgressDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 p-8 relative">
+      {/* Futuristic Chequered Background */}
+      <div className="background-glow fixed inset-0 z-0" />
+      
+      <div className="relative z-2">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">

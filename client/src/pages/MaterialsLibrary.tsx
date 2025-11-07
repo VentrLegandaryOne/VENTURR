@@ -172,7 +172,11 @@ export default function MaterialsLibrary() {
   };
   
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-amber-50 relative">
+      {/* Futuristic Chequered Background */}
+      <div className="background-glow fixed inset-0 z-0" />
+      
+      <div className="container mx-auto p-6 space-y-6 relative z-2 animate-fadeInUp">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Materials Library</h1>
@@ -384,6 +388,7 @@ export default function MaterialsLibrary() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 }

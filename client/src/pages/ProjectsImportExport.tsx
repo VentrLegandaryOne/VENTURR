@@ -137,7 +137,7 @@ export function ProjectsImportExport({ organizationId }: { organizationId: strin
   };
   
   return (
-    <div className="space-y-4 mb-6">
+    <div className="space-y-4 mb-6 animate-fadeInUp">
       {/* Export Section */}
       <Card>
         <CardHeader>

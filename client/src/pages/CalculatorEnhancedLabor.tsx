@@ -204,9 +204,12 @@ export default function CalculatorEnhancedLabor() {
   const materials = getMaterialsByCategory(formData.materialType);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50/30 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50/30 to-blue-50 relative">
+      {/* Futuristic Chequered Background */}
+      <div className="background-glow fixed inset-0 z-0" />
+      
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-lg border-b border-slate-200/50 shadow-sm sticky top-0 z-40">
+      <header className="relative z-40 bg-white/80 backdrop-blur-lg border-b border-slate-200/50 shadow-lg shadow-orange-500/10 sticky top-0">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -246,12 +249,12 @@ export default function CalculatorEnhancedLabor() {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="container mx-auto px-4 py-8 relative z-2">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fadeInUp">
           {/* Input Panel */}
           <div className="lg:col-span-2 space-y-6">
             {/* Roof Dimensions */}
-            <Card className="shadow-lg border-blue-200/50 overflow-hidden">
+            <Card className="shadow-lg border-blue-200/50 overflow-hidden bg-white/95 backdrop-blur hover:shadow-xl hover:shadow-blue-500/10 transition-all animate-fadeInUp">
               <div className="h-1 bg-gradient-to-r from-blue-500 to-blue-600"></div>
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
@@ -477,7 +480,7 @@ export default function CalculatorEnhancedLabor() {
           </div>
 
           {/* Results Panel */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 animate-slideInRight" style={{ animationDelay: '100ms' }}>
             {result ? (
               <div className="space-y-4 sticky top-24">
                 {/* Total Cost Summary */}

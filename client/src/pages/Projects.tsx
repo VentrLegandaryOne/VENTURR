@@ -94,9 +94,12 @@ export default function Projects() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 relative">
+      {/* Futuristic Chequered Background */}
+      <div className="background-glow fixed inset-0 z-0" />
+      
       {/* Header */}
-      <header className="bg-white border-b border-slate-200">
+      <header className="relative z-40 bg-white/80 backdrop-blur-lg border-b border-slate-200/50 shadow-lg shadow-blue-500/10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -115,11 +118,11 @@ export default function Projects() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8 relative z-2">
         {/* Import/Export Section */}
         {selectedOrg && <ProjectsImportExport organizationId={selectedOrg} />}
         {/* Filters */}
-        <Card className="mb-6">
+        <Card className="mb-6 bg-white/95 backdrop-blur border-slate-200/50 shadow-lg hover:shadow-xl hover:shadow-blue-500/10 transition-all animate-fadeInUp">
           <CardContent className="pt-6">
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1 relative">
