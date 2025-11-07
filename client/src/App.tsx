@@ -27,6 +27,7 @@ const Pricing = lazy(() => import("./pages/Pricing"));
 const Settings = lazy(() => import("./pages/Settings"));
 const Compliance = lazy(() => import("./pages/Compliance"));
 const Clients = lazy(() => import("./pages/Clients"));
+const AdminMonitoring = lazy(() => import("./pages/AdminMonitoring"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -56,14 +57,14 @@ function Router() {
         <Route path={"/projects/new"} component={NewProject} />
         <Route path={"/projects/:id"} component={ProjectDetail} />
 
-        <Route path={"/settings/profile"} component={Profile} />
-        <Route path={"/settings/organization"} component={OrganizationSettings} />
-        <Route path={"/materials"} component={MaterialsLibrary} />
-        <Route path={"/import"} component={Import} />
-      <Route path={"/export"} component={Export} />
-      <Route path={"/404"} component={NotFound} />
-        <Route component={NotFound} />
-      </Switch>
+        <Route path={"//settings/profile"} component={Profile} />
+        <Route path={"//settings/organization"} component={OrganizationSettings} />
+        <Route path={"//materials"} component={MaterialsLibrary} />
+        <Route path={"//import"} component={Import} />
+      <Route path={"//export"} component={Export} />
+      <Route path={"//admin/monitoring"} component={AdminMonitoring} />
+      <Route path={"//404"} component={NotFound} />
+        <Route component={NotFound} /> </Switch>
     </Suspense>
   );
 }

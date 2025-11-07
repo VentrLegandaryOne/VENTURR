@@ -1,17 +1,17 @@
-import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, Download, FileText, Loader2, Plus, Save, Trash2, Eye, Sparkles, DollarSign, CheckCircle, AlertCircle } from "lucide-react";
+import { ArrowLeft, Download, FileText, Loader2, Plus, Save, Trash2, Eye, Sparkles, DollarSign, CheckCircle, AlertCircle, Wand2, Brain } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation, useRoute } from "wouter";
 import { getLoginUrl } from "@/const";
 import { toast } from "sonner";
 import { nanoid } from "nanoid";
 import { downloadQuotePDF } from "@/lib/pdfGenerator";
+import { useAuth } from "@/_core/hooks/useAuth";
 
 interface LineItem {
   id: string;
@@ -91,6 +91,8 @@ Validity: 30 days from quote date`,
 
   const [showPreview, setShowPreview] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isGeneratingQuote, setIsGeneratingQuote] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
@@ -157,6 +159,49 @@ Validity: 30 days from quote date`,
   const gst = subtotal * 0.1;
   const total = subtotal + gst;
 
+  // Generate intelligent quote using LLM
+  const handleGenerateSmartQuote = async () => {
+    if (!projectId || !takeoffs || takeoffs.length === 0) {
+      toast.error("No takeoff data available. Please complete site measurements first.");
+      return;
+    }
+
+    setIsGeneratingQuote(true);
+    try {
+      // Call LLM quoting endpoint
+      const response = await fetch('/api/trpc/quotes.generateSmartQuote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          projectId,
+          takeoffData: takeoffs[0],
+          businessSettings,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to generate quote');
+      const result = await response.json();
+
+      // Update line items with generated data
+      if (result.itemizedBreakdown && Array.isArray(result.itemizedBreakdown)) {
+        const generatedItems = result.itemizedBreakdown.map((item: any) => ({
+          id: nanoid(),
+          description: item.item,
+          quantity: item.quantity.toString(),
+          unitPrice: item.unitPrice.toString(),
+          total: item.total,
+        }));
+        setLineItems(generatedItems);
+        toast.success("Quote generated successfully using AI!");
+      }
+    } catch (error) {
+      console.error('Quote generation error:', error);
+      toast.error("Failed to generate quote. Please try again.");
+    } finally {
+      setIsGeneratingQuote(false);
+    }
+  };
+
   const handleSave = async () => {
     if (!projectId || lineItems.length === 0) {
       toast.error("Please add at least one line item");
@@ -218,6 +263,23 @@ Validity: 30 days from quote date`,
               </div>
             </div>
             <div className="flex items-center gap-3">
+              <Button
+                onClick={handleGenerateSmartQuote}
+                disabled={isGeneratingQuote || !takeoffs || takeoffs.length === 0}
+                className="bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 shadow-lg shadow-indigo-500/30"
+              >
+                {isGeneratingQuote ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Brain className="w-4 h-4 mr-2" />
+                    AI Generate Quote
+                  </>
+                )}
+              </Button>
               <Button
                 onClick={() => setShowPreview(!showPreview)}
                 variant="outline"
@@ -304,6 +366,15 @@ Validity: 30 days from quote date`,
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
+                {takeoffs && takeoffs.length > 0 && (
+                  <div className="p-3 rounded-lg bg-indigo-50 border border-indigo-200 mb-4 flex items-start gap-2">
+                    <Brain className="w-5 h-5 text-indigo-600 mt-0.5 flex-shrink-0" />
+                    <div className="text-sm text-indigo-700">
+                      <p className="font-medium">AI-Powered Quoting Available</p>
+                      <p className="text-xs mt-1">Click "AI Generate Quote" to automatically create an intelligent quote from your site measurements and materials.</p>
+                    </div>
+                  </div>
+                )}
                 <div className="space-y-3">
                   {lineItems.map((item, index) => (
                     <div
