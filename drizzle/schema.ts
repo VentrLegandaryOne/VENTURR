@@ -581,7 +581,91 @@ export const customerDocuments = mysqlTable("customerDocuments", {
 });
 
 export type CustomerDocument = typeof customerDocuments.$inferSelect;
-export type InsertCustomerDocument = typeof customerDocuments.$inferInsert;
+export type InsertCustomerDocument = typeof customerDocuments.$inferSelect;
+
+// Analytics & Reporting
+export const analyticsMetrics = mysqlTable("analyticsMetrics", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  metricType: varchar("metricType", { length: 50 }).notNull(),
+  metricName: varchar("metricName", { length: 255 }).notNull(),
+  metricValue: varchar("metricValue", { length: 50 }).notNull(),
+  period: varchar("period", { length: 20 }).notNull(),
+  periodDate: timestamp("periodDate").notNull(),
+  trend: varchar("trend", { length: 10 }),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type AnalyticsMetric = typeof analyticsMetrics.$inferSelect;
+export type InsertAnalyticsMetric = typeof analyticsMetrics.$inferInsert;
+
+// KPI Dashboard
+export const kpiDashboard = mysqlTable("kpiDashboard", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  totalRevenue: varchar("totalRevenue", { length: 20 }).default("0"),
+  totalProjects: varchar("totalProjects", { length: 20 }).default("0"),
+  activeProjects: varchar("activeProjects", { length: 20 }).default("0"),
+  averageProjectValue: varchar("averageProjectValue", { length: 20 }).default("0"),
+  profitMargin: varchar("profitMargin", { length: 10 }).default("0"),
+  laborCostPercentage: varchar("laborCostPercentage", { length: 10 }).default("0"),
+  materialCostPercentage: varchar("materialCostPercentage", { length: 10 }).default("0"),
+  customerSatisfaction: varchar("customerSatisfaction", { length: 5 }).default("0"),
+  lastUpdated: timestamp("lastUpdated").defaultNow().onUpdateNow(),
+});
+
+export type KPIDashboard = typeof kpiDashboard.$inferSelect;
+export type InsertKPIDashboard = typeof kpiDashboard.$inferInsert;
+
+// Revenue Trends
+export const revenueTrends = mysqlTable("revenueTrends", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  month: varchar("month", { length: 20 }).notNull(),
+  revenue: varchar("revenue", { length: 20 }).notNull(),
+  projectedRevenue: varchar("projectedRevenue", { length: 20 }),
+  costs: varchar("costs", { length: 20 }).notNull(),
+  profit: varchar("profit", { length: 20 }).notNull(),
+  projectCount: varchar("projectCount", { length: 20 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type RevenueTrend = typeof revenueTrends.$inferSelect;
+export type InsertRevenueTrend = typeof revenueTrends.$inferInsert;
+
+// Workflow Automation
+export const workflowAutomations = mysqlTable("workflowAutomations", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  description: text("description"),
+  trigger: varchar("trigger", { length: 50 }).notNull(),
+  triggerCondition: text("triggerCondition"),
+  action: varchar("action", { length: 50 }).notNull(),
+  actionData: text("actionData"),
+  isActive: varchar("isActive", { length: 5 }).default("true"),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow(),
+});
+
+export type WorkflowAutomation = typeof workflowAutomations.$inferSelect;
+export type InsertWorkflowAutomation = typeof workflowAutomations.$inferInsert;
+
+// Workflow Execution Logs
+export const workflowExecutionLogs = mysqlTable("workflowExecutionLogs", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  workflowId: varchar("workflowId", { length: 64 }).notNull(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  status: mysqlEnum("status", ["pending", "running", "success", "failed"]).default("pending"),
+  triggeredBy: varchar("triggeredBy", { length: 64 }),
+  executedAt: timestamp("executedAt"),
+  result: text("result"),
+  errorMessage: text("errorMessage"),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type WorkflowExecutionLog = typeof workflowExecutionLogs.$inferSelect;
+export type InsertWorkflowExecutionLog = typeof workflowExecutionLogs.$inferInsert;
 
 // Reorder Orders
 export const reorderOrders = mysqlTable("reorderOrders", {

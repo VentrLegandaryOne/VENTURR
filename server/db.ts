@@ -1,4 +1,4 @@
-import { eq, sum, and, or, lt, desc, gt } from "drizzle-orm";
+import { eq, sum, and, or, lt, desc, gt, gte, lte, ne } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { 
   InsertUser, 
@@ -54,7 +54,17 @@ import {
   customerInvoices,
   InsertCustomerInvoice,
   customerDocuments,
-  InsertCustomerDocument
+  InsertCustomerDocument,
+  analyticsMetrics,
+  InsertAnalyticsMetric,
+  kpiDashboard,
+  InsertKPIDashboard,
+  revenueTrends,
+  InsertRevenueTrend,
+  workflowAutomations,
+  InsertWorkflowAutomation,
+  workflowExecutionLogs,
+  InsertWorkflowExecutionLog
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -2042,5 +2052,516 @@ export async function sendInvoiceToCustomer(invoiceId: string): Promise<{ succes
     console.error("[Database] Failed to send invoice:", error);
     return { success: false };
   }
+}
+
+
+
+
+// ===== ANALYTICS & REPORTING FUNCTIONS =====
+
+/**
+ * Record analytics metric
+ */
+export async function recordAnalyticsMetric(
+  organizationId: string,
+  metricType: string,
+  metricName: string,
+  metricValue: number,
+  period: string = "daily"
+): Promise<{ success: boolean; metricId?: string }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const metricId = `metric_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const periodDate = new Date();
+
+    await db.insert(analyticsMetrics).values({
+      id: metricId,
+      organizationId,
+      metricType,
+      metricName,
+      metricValue: metricValue.toString(),
+      period,
+      periodDate,
+    });
+
+    return { success: true, metricId };
+  } catch (error) {
+    console.error("[Database] Failed to record metric:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Calculate and update KPI dashboard
+ */
+export async function updateKPIDashboard(organizationId: string): Promise<{ success: boolean }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    // Get all projects for organization
+    const projects = await db.select().from(projects as any)
+      .where(eq(projects.organizationId, organizationId));
+
+    // Calculate metrics
+    const totalRevenue = projects.reduce((sum, p) => sum + parseFloat(p.quoteAmount || "0"), 0);
+    const activeProjects = projects.filter(p => p.status === "in_progress").length;
+    const averageProjectValue = projects.length > 0 ? totalRevenue / projects.length : 0;
+
+    // Get profitability data
+    const profitability = await db.select().from(projectProfitability as any)
+      .where(eq(projectProfitability.organizationId, organizationId));
+
+    const totalProfit = profitability.reduce((sum, p) => sum + parseFloat(p.grossProfit || "0"), 0);
+    const profitMargin = totalRevenue > 0 ? ((totalProfit / totalRevenue) * 100).toFixed(2) : "0";
+
+    // Get cost breakdown
+    const costs = await db.select().from(projectCosts as any)
+      .where(eq(projectCosts.organizationId, organizationId));
+
+    const laborCosts = costs
+      .filter(c => c.costType === "labor")
+      .reduce((sum, c) => sum + parseFloat(c.amount || "0"), 0);
+    const materialCosts = costs
+      .filter(c => c.costType === "material")
+      .reduce((sum, c) => sum + parseFloat(c.amount || "0"), 0);
+    const totalCosts = costs.reduce((sum, c) => sum + parseFloat(c.amount || "0"), 0);
+
+    const laborCostPercentage = totalRevenue > 0 ? ((laborCosts / totalRevenue) * 100).toFixed(2) : "0";
+    const materialCostPercentage = totalRevenue > 0 ? ((materialCosts / totalRevenue) * 100).toFixed(2) : "0";
+
+    // Check if KPI exists
+    const existing = await db.select().from(kpiDashboard)
+      .where(eq(kpiDashboard.organizationId, organizationId)).limit(1);
+
+    if (existing.length > 0) {
+      await db.update(kpiDashboard)
+        .set({
+          totalRevenue: totalRevenue.toString(),
+          totalProjects: projects.length.toString(),
+          activeProjects: activeProjects.toString(),
+          averageProjectValue: averageProjectValue.toString(),
+          profitMargin: profitMargin,
+          laborCostPercentage: laborCostPercentage,
+          materialCostPercentage: materialCostPercentage,
+        })
+        .where(eq(kpiDashboard.organizationId, organizationId));
+    } else {
+      const kpiId = `kpi_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      await db.insert(kpiDashboard).values({
+        id: kpiId,
+        organizationId,
+        totalRevenue: totalRevenue.toString(),
+        totalProjects: projects.length.toString(),
+        activeProjects: activeProjects.toString(),
+        averageProjectValue: averageProjectValue.toString(),
+        profitMargin: profitMargin,
+        laborCostPercentage: laborCostPercentage,
+        materialCostPercentage: materialCostPercentage,
+      });
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("[Database] Failed to update KPI dashboard:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Get KPI dashboard data
+ */
+export async function getKPIDashboard(organizationId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const kpi = await db.select().from(kpiDashboard)
+    .where(eq(kpiDashboard.organizationId, organizationId)).limit(1);
+
+  return kpi.length > 0 ? kpi[0] : null;
+}
+
+/**
+ * Record revenue trend
+ */
+export async function recordRevenueTrend(
+  organizationId: string,
+  month: string,
+  revenue: number,
+  costs: number,
+  projectCount: number,
+  projectedRevenue?: number
+): Promise<{ success: boolean; trendId?: string }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const trendId = `trend_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const profit = revenue - costs;
+
+    await db.insert(revenueTrends).values({
+      id: trendId,
+      organizationId,
+      month,
+      revenue: revenue.toString(),
+      projectedRevenue: projectedRevenue?.toString(),
+      costs: costs.toString(),
+      profit: profit.toString(),
+      projectCount: projectCount.toString(),
+    });
+
+    return { success: true, trendId };
+  } catch (error) {
+    console.error("[Database] Failed to record revenue trend:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Get revenue trends for period
+ */
+export async function getRevenueTrends(organizationId: string, months: number = 12) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const trends = await db.select().from(revenueTrends)
+    .where(eq(revenueTrends.organizationId, organizationId))
+    .orderBy(desc(revenueTrends.createdAt))
+    .limit(months);
+
+  return trends.reverse();
+}
+
+/**
+ * Get analytics metrics by type
+ */
+export async function getAnalyticsMetricsByType(
+  organizationId: string,
+  metricType: string,
+  period: string = "daily"
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db.select().from(analyticsMetrics)
+    .where(and(
+      eq(analyticsMetrics.organizationId, organizationId),
+      eq(analyticsMetrics.metricType, metricType),
+      eq(analyticsMetrics.period, period)
+    ))
+    .orderBy(desc(analyticsMetrics.createdAt));
+}
+
+/**
+ * Calculate project profitability trend
+ */
+export async function calculateProfitabilityTrend(organizationId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const profitability = await db.select().from(projectProfitability as any)
+      .where(eq(projectProfitability.organizationId, organizationId));
+
+    const profitable = profitability.filter(p => p.status === "profitable").length;
+    const breakEven = profitability.filter(p => p.status === "break_even").length;
+    const loss = profitability.filter(p => p.status === "loss").length;
+    const total = profitability.length;
+
+    const profitablePercentage = total > 0 ? ((profitable / total) * 100).toFixed(2) : "0";
+    const lossPercentage = total > 0 ? ((loss / total) * 100).toFixed(2) : "0";
+
+    return {
+      profitable,
+      breakEven,
+      loss,
+      total,
+      profitablePercentage,
+      lossPercentage,
+    };
+  } catch (error) {
+    console.error("[Database] Failed to calculate profitability trend:", error);
+    return null;
+  }
+}
+
+/**
+ * Get top performing projects
+ */
+export async function getTopPerformingProjects(organizationId: string, limit: number = 10) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const profitability = await db.select().from(projectProfitability as any)
+      .where(eq(projectProfitability.organizationId, organizationId))
+      .orderBy(desc(projectProfitability.grossProfit))
+      .limit(limit);
+
+    return profitability;
+  } catch (error) {
+    console.error("[Database] Failed to get top projects:", error);
+    return [];
+  }
+}
+
+/**
+ * Get underperforming projects (losses)
+ */
+export async function getUnderperformingProjects(organizationId: string, limit: number = 10) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const profitability = await db.select().from(projectProfitability as any)
+      .where(eq(projectProfitability.organizationId, organizationId))
+      .orderBy(projectProfitability.grossProfit)
+      .limit(limit);
+
+    return profitability.filter(p => parseFloat(p.grossProfit || "0") < 0);
+  } catch (error) {
+    console.error("[Database] Failed to get underperforming projects:", error);
+    return [];
+  }
+}
+
+
+
+
+// ===== WORKFLOW AUTOMATION FUNCTIONS =====
+
+/**
+ * Create workflow automation
+ */
+export async function createWorkflowAutomation(
+  organizationId: string,
+  name: string,
+  trigger: string,
+  action: string,
+  triggerCondition?: string,
+  actionData?: string,
+  description?: string
+): Promise<{ success: boolean; workflowId?: string }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const workflowId = `wf_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    await db.insert(workflowAutomations).values({
+      id: workflowId,
+      organizationId,
+      name,
+      trigger,
+      action,
+      triggerCondition,
+      actionData,
+      description,
+    });
+
+    return { success: true, workflowId };
+  } catch (error) {
+    console.error("[Database] Failed to create workflow:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Get organization workflows
+ */
+export async function getOrganizationWorkflows(organizationId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db.select().from(workflowAutomations)
+    .where(eq(workflowAutomations.organizationId, organizationId))
+    .orderBy(desc(workflowAutomations.createdAt));
+}
+
+/**
+ * Get active workflows
+ */
+export async function getActiveWorkflows(organizationId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db.select().from(workflowAutomations)
+    .where(and(
+      eq(workflowAutomations.organizationId, organizationId),
+      eq(workflowAutomations.isActive, "true")
+    ));
+}
+
+/**
+ * Update workflow
+ */
+export async function updateWorkflow(
+  workflowId: string,
+  updates: Partial<InsertWorkflowAutomation>
+): Promise<{ success: boolean }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    await db.update(workflowAutomations)
+      .set(updates)
+      .where(eq(workflowAutomations.id, workflowId));
+
+    return { success: true };
+  } catch (error) {
+    console.error("[Database] Failed to update workflow:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Disable workflow
+ */
+export async function disableWorkflow(workflowId: string): Promise<{ success: boolean }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    await db.update(workflowAutomations)
+      .set({ isActive: "false" })
+      .where(eq(workflowAutomations.id, workflowId));
+
+    return { success: true };
+  } catch (error) {
+    console.error("[Database] Failed to disable workflow:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Log workflow execution
+ */
+export async function logWorkflowExecution(
+  workflowId: string,
+  organizationId: string,
+  status: "pending" | "running" | "success" | "failed",
+  triggeredBy?: string,
+  result?: string,
+  errorMessage?: string
+): Promise<{ success: boolean; logId?: string }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const logId = `wflog_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    await db.insert(workflowExecutionLogs).values({
+      id: logId,
+      workflowId,
+      organizationId,
+      status,
+      triggeredBy,
+      result,
+      errorMessage,
+      executedAt: new Date(),
+    });
+
+    return { success: true, logId };
+  } catch (error) {
+    console.error("[Database] Failed to log workflow execution:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Get workflow execution logs
+ */
+export async function getWorkflowExecutionLogs(workflowId: string, limit: number = 50) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db.select().from(workflowExecutionLogs)
+    .where(eq(workflowExecutionLogs.workflowId, workflowId))
+    .orderBy(desc(workflowExecutionLogs.createdAt))
+    .limit(limit);
+}
+
+/**
+ * Get failed workflow executions
+ */
+export async function getFailedWorkflowExecutions(organizationId: string, limit: number = 20) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db.select().from(workflowExecutionLogs)
+    .where(and(
+      eq(workflowExecutionLogs.organizationId, organizationId),
+      eq(workflowExecutionLogs.status, "failed")
+    ))
+    .orderBy(desc(workflowExecutionLogs.createdAt))
+    .limit(limit);
+}
+
+/**
+ * Get workflow statistics
+ */
+export async function getWorkflowStatistics(organizationId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const workflows = await getOrganizationWorkflows(organizationId);
+    const totalWorkflows = workflows.length;
+    const activeWorkflows = workflows.filter(w => w.isActive === "true").length;
+
+    const executionLogs = await db.select().from(workflowExecutionLogs)
+      .where(eq(workflowExecutionLogs.organizationId, organizationId));
+
+    const successCount = executionLogs.filter(l => l.status === "success").length;
+    const failedCount = executionLogs.filter(l => l.status === "failed").length;
+    const totalExecutions = executionLogs.length;
+    const successRate = totalExecutions > 0 ? ((successCount / totalExecutions) * 100).toFixed(2) : "0";
+
+    return {
+      totalWorkflows,
+      activeWorkflows,
+      totalExecutions,
+      successCount,
+      failedCount,
+      successRate,
+    };
+  } catch (error) {
+    console.error("[Database] Failed to get workflow statistics:", error);
+    return null;
+  }
+}
+
+/**
+ * Delete workflow
+ */
+export async function deleteWorkflow(workflowId: string): Promise<{ success: boolean }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    await db.delete(workflowAutomations)
+      .where(eq(workflowAutomations.id, workflowId));
+
+    return { success: true };
+  } catch (error) {
+    console.error("[Database] Failed to delete workflow:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Get workflows by trigger type
+ */
+export async function getWorkflowsByTrigger(organizationId: string, trigger: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db.select().from(workflowAutomations)
+    .where(and(
+      eq(workflowAutomations.organizationId, organizationId),
+      eq(workflowAutomations.trigger, trigger)
+    ));
 }
 

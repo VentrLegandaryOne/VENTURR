@@ -20,6 +20,8 @@ import { profitabilityRouter } from "./routers/profitabilityRouter";
 import { supplierRouter } from "./routers/supplierRouter";
 import { laborRouter } from "./routers/laborRouter";
 import { customerPortalRouter } from "./routers/customerPortalRouter";
+import { analyticsRouter } from "./routers/analyticsRouter";
+import { workflowRouter } from "./routers/workflowRouter";
 import { sendQuoteEmail } from "./emailService";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
@@ -62,6 +64,8 @@ export const appRouter = router({
   supplier: supplierRouter,
   labor: laborRouter,
   customerPortal: customerPortalRouter,
+  analytics: analyticsRouter,
+  workflow: workflowRouter,
 
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
