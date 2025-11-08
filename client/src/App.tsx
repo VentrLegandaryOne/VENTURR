@@ -46,6 +46,9 @@ const TeamChat = lazy(() => import("./pages/TeamChat"));
 const OnboardingFlow = lazy(() => import("./pages/OnboardingFlow"));
 const PerformanceMonitoring = lazy(() => import("./pages/PerformanceMonitoring"));
 const KnowledgeBase = lazy(() => import("./pages/KnowledgeBase"));
+const RealtimeDashboard = lazy(() => import("./pages/RealtimeDashboard"));
+const MobileAppUI = lazy(() => import("./pages/MobileAppUI"));
+const AdvancedReportingUI = lazy(() => import("./pages/AdvancedReportingUI"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -78,6 +81,9 @@ function Router() {
       <Route path={"/onboarding"} component={OnboardingFlow} />
       <Route path={"/monitoring"} component={PerformanceMonitoring} />
       <Route path={"/help"} component={KnowledgeBase} />
+      <Route path={"/dashboard/realtime"} component={RealtimeDashboard} />
+      <Route path={"/mobile"} component={MobileAppUI} />
+      <Route path={"/reports/advanced"} component={AdvancedReportingUI} />
       <Route path={"/settings"} component={Settings} />
       <Route path={"/clients"} component={Clients} />
       <Route path="/projects/:id/compliance" component={Compliance} />
