@@ -44,6 +44,8 @@ const NotificationPreferences = lazy(() => import("./pages/NotificationPreferenc
 const AdvancedSearch = lazy(() => import("./pages/AdvancedSearch"));
 const TeamChat = lazy(() => import("./pages/TeamChat"));
 const OnboardingFlow = lazy(() => import("./pages/OnboardingFlow"));
+const PerformanceMonitoring = lazy(() => import("./pages/PerformanceMonitoring"));
+const KnowledgeBase = lazy(() => import("./pages/KnowledgeBase"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -74,6 +76,8 @@ function Router() {
       <Route path={"/search"} component={AdvancedSearch} />
       <Route path={"/chat"} component={TeamChat} />
       <Route path={"/onboarding"} component={OnboardingFlow} />
+      <Route path={"/monitoring"} component={PerformanceMonitoring} />
+      <Route path={"/help"} component={KnowledgeBase} />
       <Route path={"/settings"} component={Settings} />
       <Route path={"/clients"} component={Clients} />
       <Route path="/projects/:id/compliance" component={Compliance} />
