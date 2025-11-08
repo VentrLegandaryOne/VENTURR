@@ -62,6 +62,9 @@ const ExecutiveReportingDashboard = lazy(() => import("./pages/ExecutiveReportin
 const AdvancedIntegrations = lazy(() => import("./pages/AdvancedIntegrations"));
 const AIForecastingSystem = lazy(() => import("./pages/AIForecastingSystem"));
 const WhiteLabelResellerPortal = lazy(() => import("./pages/WhiteLabelResellerPortal"));
+const AdvancedAnalyticsEngine = lazy(() => import("./pages/AdvancedAnalyticsEngine"));
+const MobileNativeAppsConfig = lazy(() => import("./pages/MobileNativeAppsConfig"));
+const EnterpriseSSOSAML = lazy(() => import("./pages/EnterpriseSSOSAML"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -129,6 +132,9 @@ function Router() {
       <Route path={"//integrations"} component={AdvancedIntegrations} />
       <Route path={"//forecasting"} component={AIForecastingSystem} />
       <Route path={"//reseller-portal"} component={WhiteLabelResellerPortal} />
+      <Route path={"//analytics-engine"} component={AdvancedAnalyticsEngine} />
+      <Route path={"//mobile-apps"} component={MobileNativeAppsConfig} />
+      <Route path={"//enterprise-sso"} component={EnterpriseSSOSAML} />
       <Route path={"//404"} component={NotFound} />
         <Route component={NotFound} /> </Switch>
     </Suspense>
