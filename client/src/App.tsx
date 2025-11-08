@@ -49,6 +49,9 @@ const KnowledgeBase = lazy(() => import("./pages/KnowledgeBase"));
 const RealtimeDashboard = lazy(() => import("./pages/RealtimeDashboard"));
 const MobileAppUI = lazy(() => import("./pages/MobileAppUI"));
 const AdvancedReportingUI = lazy(() => import("./pages/AdvancedReportingUI"));
+const ForecastingDashboard = lazy(() => import("./pages/ForecastingDashboard"));
+const DashboardCustomization = lazy(() => import("./pages/DashboardCustomization"));
+const WorkflowBuilder = lazy(() => import("./pages/WorkflowBuilder"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -84,6 +87,9 @@ function Router() {
       <Route path={"/dashboard/realtime"} component={RealtimeDashboard} />
       <Route path={"/mobile"} component={MobileAppUI} />
       <Route path={"/reports/advanced"} component={AdvancedReportingUI} />
+      <Route path={"/forecasting"} component={ForecastingDashboard} />
+      <Route path={"/customize-dashboard"} component={DashboardCustomization} />
+      <Route path={"/workflows"} component={WorkflowBuilder} />
       <Route path={"/settings"} component={Settings} />
       <Route path={"/clients"} component={Clients} />
       <Route path="/projects/:id/compliance" component={Compliance} />
