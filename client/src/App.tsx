@@ -65,6 +65,8 @@ const WhiteLabelResellerPortal = lazy(() => import("./pages/WhiteLabelResellerPo
 const AdvancedAnalyticsEngine = lazy(() => import("./pages/AdvancedAnalyticsEngine"));
 const MobileNativeAppsConfig = lazy(() => import("./pages/MobileNativeAppsConfig"));
 const EnterpriseSSOSAML = lazy(() => import("./pages/EnterpriseSSOSAML"));
+const AdvancedComplianceAudit = lazy(() => import("./pages/AdvancedComplianceAudit"));
+const RealtimeCollaborationSuite = lazy(() => import("./pages/RealtimeCollaborationSuite"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -135,6 +137,8 @@ function Router() {
       <Route path={"//analytics-engine"} component={AdvancedAnalyticsEngine} />
       <Route path={"//mobile-apps"} component={MobileNativeAppsConfig} />
       <Route path={"//enterprise-sso"} component={EnterpriseSSOSAML} />
+      <Route path={"//compliance-audit"} component={AdvancedComplianceAudit} />
+      <Route path={"//collaboration-suite"} component={RealtimeCollaborationSuite} />
       <Route path={"//404"} component={NotFound} />
         <Route component={NotFound} /> </Switch>
     </Suspense>
