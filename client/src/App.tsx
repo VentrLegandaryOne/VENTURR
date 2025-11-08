@@ -43,6 +43,7 @@ const AdvancedAnalyticsDashboard = lazy(() => import("./pages/AdvancedAnalyticsD
 const NotificationPreferences = lazy(() => import("./pages/NotificationPreferences"));
 const AdvancedSearch = lazy(() => import("./pages/AdvancedSearch"));
 const TeamChat = lazy(() => import("./pages/TeamChat"));
+const OnboardingFlow = lazy(() => import("./pages/OnboardingFlow"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -72,6 +73,7 @@ function Router() {
       <Route path={"/notifications/preferences"} component={NotificationPreferences} />
       <Route path={"/search"} component={AdvancedSearch} />
       <Route path={"/chat"} component={TeamChat} />
+      <Route path={"/onboarding"} component={OnboardingFlow} />
       <Route path={"/settings"} component={Settings} />
       <Route path={"/clients"} component={Clients} />
       <Route path="/projects/:id/compliance" component={Compliance} />
