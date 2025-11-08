@@ -9,6 +9,7 @@ import { advancedFeaturesRouter } from "./routers/advancedFeatures";
 import { paymentAndDocumentsRouter } from "./routers/paymentAndDocuments";
 import { clientAndSchedulingRouter } from "./routers/clientAndScheduling";
 import { authEmailAPIRouter } from "./routers/authEmailAPI";
+import { uiAndWebhooksRouter } from "./routers/uiAndWebhooks";
 import { sendQuoteEmail } from "./emailService";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
@@ -40,6 +41,7 @@ export const appRouter = router({
   paymentAndDocuments: paymentAndDocumentsRouter,
   clientAndScheduling: clientAndSchedulingRouter,
   authEmailAPI: authEmailAPIRouter,
+  uiAndWebhooks: uiAndWebhooksRouter,
 
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
