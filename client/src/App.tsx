@@ -37,6 +37,9 @@ const AdvancedAnalytics = lazy(() => import("./pages/AdvancedAnalytics"));
 const TeamCollaboration = lazy(() => import("./pages/TeamCollaboration"));
 const NotificationCenter = lazy(() => import("./components/NotificationCenter"));
 const LanguageSwitcher = lazy(() => import("./components/LanguageSwitcher"));
+const ClientPortalHome = lazy(() => import("./pages/ClientPortalHome"));
+const TeamCalendarGantt = lazy(() => import("./pages/TeamCalendarGantt"));
+const AdvancedAnalyticsDashboard = lazy(() => import("./pages/AdvancedAnalyticsDashboard"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -59,7 +62,10 @@ function Router() {
       <Route path={"/admin"} component={AdminDashboard} />
       <Route path={"/export"} component={ExportReports} />
       <Route path={"/analytics"} component={AdvancedAnalytics} />
+      <Route path={"/analytics-dashboard"} component={AdvancedAnalyticsDashboard} />
       <Route path={"/team"} component={TeamCollaboration} />
+      <Route path={"/team-calendar"} component={TeamCalendarGantt} />
+      <Route path={"/client-portal"} component={ClientPortalHome} />
       <Route path={"/settings"} component={Settings} />
       <Route path={"/clients"} component={Clients} />
       <Route path="/projects/:id/compliance" component={Compliance} />
