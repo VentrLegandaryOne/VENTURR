@@ -28,6 +28,9 @@ const Settings = lazy(() => import("./pages/Settings"));
 const Compliance = lazy(() => import("./pages/Compliance"));
 const Clients = lazy(() => import("./pages/Clients"));
 const AdminMonitoring = lazy(() => import("./pages/AdminMonitoring"));
+const Chatbot = lazy(() => import("./pages/Chatbot"));
+const Marketplace = lazy(() => import("./pages/Marketplace"));
+const PricingDashboard = lazy(() => import("./pages/PricingDashboard"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -44,6 +47,9 @@ function Router() {
       <Switch>
         <Route path={"/"} component={Home} />
       <Route path={"/pricing"} component={Pricing} />
+      <Route path={"/pricing-dashboard"} component={PricingDashboard} />
+      <Route path={"/chatbot"} component={Chatbot} />
+      <Route path={"/marketplace"} component={Marketplace} />
       <Route path={"/settings"} component={Settings} />
       <Route path={"/clients"} component={Clients} />
       <Route path="/projects/:id/compliance" component={Compliance} />

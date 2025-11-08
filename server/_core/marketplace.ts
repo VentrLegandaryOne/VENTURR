@@ -441,7 +441,8 @@ class MarketplaceSystem extends EventEmitter {
     let totalRating = 0;
     let ratingCount = 0;
 
-    for (const app of this.apps.values()) {
+    const appsArray = Array.from(this.apps.values());
+    for (const app of appsArray) {
       if (app.status === 'published') {
         categoryBreakdown[app.category] = (categoryBreakdown[app.category] || 0) + 1;
         totalRating += app.rating;
