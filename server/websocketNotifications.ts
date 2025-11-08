@@ -29,7 +29,7 @@ class NotificationManager {
   }
 
   private setupWebSocket() {
-    this.wss.on('connection', (ws: WebSocket, req) => {
+    this.wss.on('connection', (ws: WebSocket, req: any) => {
       const userId = this.extractUserId(req);
       if (!userId) {
         ws.close(1008, 'Unauthorized');
@@ -55,7 +55,7 @@ class NotificationManager {
         }
       });
 
-      ws.on('error', (error) => {
+      ws.on('error', (error: any) => {
         console.error('[WebSocket] Error:', error);
       });
     });

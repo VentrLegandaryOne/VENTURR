@@ -34,12 +34,21 @@ export default defineConfig({
             if (id.includes('@tanstack')) {
               return 'query-vendor';
             }
+            if (id.includes('@radix-ui') || id.includes('lucide-react')) {
+              return 'ui-vendor';
+            }
+            if (id.includes('leaflet') || id.includes('mapbox')) {
+              return 'maps-vendor';
+            }
+            if (id.includes('recharts') || id.includes('plotly')) {
+              return 'charts-vendor';
+            }
             return 'vendor';
           }
         },
       },
     },
-    chunkSizeWarningLimit: 500,
+    chunkSizeWarningLimit: 1000,
     minify: 'esbuild',
   },
   server: {
