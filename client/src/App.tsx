@@ -55,6 +55,9 @@ const WorkflowBuilder = lazy(() => import("./pages/WorkflowBuilder"));
 const AnalyticsExportSystem = lazy(() => import("./pages/AnalyticsExportSystem"));
 const PerformanceScorecard = lazy(() => import("./pages/PerformanceScorecard"));
 const FeedbackSurveySystem = lazy(() => import("./pages/FeedbackSurveySystem"));
+const InventoryManagement = lazy(() => import("./pages/InventoryManagement"));
+const CRMSystem = lazy(() => import("./pages/CRMSystem"));
+const ProjectTemplates = lazy(() => import("./pages/ProjectTemplates"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -96,6 +99,9 @@ function Router() {
       <Route path={"/reports/export"} component={AnalyticsExportSystem} />
       <Route path={"/performance"} component={PerformanceScorecard} />
       <Route path={"/feedback"} component={FeedbackSurveySystem} />
+      <Route path={"/inventory"} component={InventoryManagement} />
+      <Route path={"/crm"} component={CRMSystem} />
+      <Route path={"/templates"} component={ProjectTemplates} />
       <Route path={"/settings"} component={Settings} />
       <Route path={"/clients"} component={Clients} />
       <Route path="/projects/:id/compliance" component={Compliance} />
