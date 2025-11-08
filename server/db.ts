@@ -356,3 +356,245 @@ export async function deleteProjectDocument(docId: string) {
   
   await db.delete(projectDocuments).where(eq(projectDocuments.id, docId));
 }
+
+
+// INVENTORY MANAGEMENT QUERIES
+
+export async function createInventoryItem(item: InsertInventoryItem) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(inventoryItems).values(item);
+  return item;
+}
+
+export async function getInventoryItem(itemId: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(inventoryItems).where(eq(inventoryItems.id, itemId)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getOrganizationInventory(organizationId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(inventoryItems).where(eq(inventoryItems.organizationId, organizationId));
+}
+
+export async function updateInventoryItem(itemId: string, updates: Partial<InsertInventoryItem>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(inventoryItems).set(updates).where(eq(inventoryItems.id, itemId));
+}
+
+export async function recordStockMovement(movement: InsertStockMovement) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(stockMovements).values(movement);
+  return movement;
+}
+
+export async function getItemStockMovements(itemId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(stockMovements).where(eq(stockMovements.inventoryItemId, itemId));
+}
+
+export async function createStockAlert(alert: InsertStockAlert) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(stockAlerts).values(alert);
+  return alert;
+}
+
+export async function getActiveAlerts(organizationId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db
+    .select()
+    .from(stockAlerts)
+    .innerJoin(inventoryItems, eq(stockAlerts.inventoryItemId, inventoryItems.id))
+    .where(eq(inventoryItems.organizationId, organizationId));
+}
+
+export async function resolveStockAlert(alertId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(stockAlerts).set({ isResolved: "true", resolvedAt: new Date() }).where(eq(stockAlerts.id, alertId));
+}
+
+export async function createReorderOrder(order: InsertReorderOrder) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(reorderOrders).values(order);
+  return order;
+}
+
+export async function getOrganizationReorderOrders(organizationId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(reorderOrders).where(eq(reorderOrders.organizationId, organizationId));
+}
+
+export async function getPendingReorderOrders(organizationId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db
+    .select()
+    .from(reorderOrders)
+    .where(eq(reorderOrders.organizationId, organizationId));
+}
+
+export async function updateReorderOrder(orderId: string, updates: Partial<InsertReorderOrder>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(reorderOrders).set(updates).where(eq(reorderOrders.id, orderId));
+}
+
+
+
+// CRM QUERIES
+
+export async function createCrmClient(client: InsertCrmClient) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(crmClients).values(client);
+  return client;
+}
+
+export async function getCrmClient(clientId: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(crmClients).where(eq(crmClients.id, clientId)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getOrganizationClients(organizationId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(crmClients).where(eq(crmClients.organizationId, organizationId));
+}
+
+export async function updateCrmClient(clientId: string, updates: Partial<InsertCrmClient>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(crmClients).set(updates).where(eq(crmClients.id, clientId));
+}
+
+export async function recordClientCommunication(communication: InsertClientCommunication) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(clientCommunications).values(communication);
+  return communication;
+}
+
+export async function getClientCommunications(clientId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(clientCommunications).where(eq(clientCommunications.clientId, clientId));
+}
+
+// FINANCIAL QUERIES
+
+export async function createInvoice(invoice: InsertInvoice) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(invoices).values(invoice);
+  return invoice;
+}
+
+export async function getInvoice(invoiceId: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(invoices).where(eq(invoices.id, invoiceId)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getOrganizationInvoices(organizationId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(invoices).where(eq(invoices.organizationId, organizationId));
+}
+
+export async function updateInvoice(invoiceId: string, updates: Partial<InsertInvoice>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(invoices).set(updates).where(eq(invoices.id, invoiceId));
+}
+
+export async function createExpense(expense: InsertExpense) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(expenses).values(expense);
+  return expense;
+}
+
+export async function getOrganizationExpenses(organizationId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(expenses).where(eq(expenses.organizationId, organizationId));
+}
+
+export async function createFinancialReport(report: InsertFinancialReport) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(financialReports).values(report);
+  return report;
+}
+
+export async function getFinancialReports(organizationId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(financialReports).where(eq(financialReports.organizationId, organizationId));
+}
+
+// INTELLIGENT INSIGHTS
+
+export async function createIntelligentInsight(insight: InsertIntelligentInsight) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(intelligentInsights).values(insight);
+  return insight;
+}
+
+export async function getActiveInsights(organizationId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(intelligentInsights).where(eq(intelligentInsights.organizationId, organizationId)).where(eq(intelligentInsights.isResolved, "false"));
+}
+
+export async function resolveInsight(insightId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(intelligentInsights).set({ isResolved: "true", resolvedAt: new Date() }).where(eq(intelligentInsights.id, insightId));
+}
+

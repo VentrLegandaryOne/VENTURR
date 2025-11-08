@@ -11,6 +11,9 @@ import { clientAndSchedulingRouter } from "./routers/clientAndScheduling";
 import { authEmailAPIRouter } from "./routers/authEmailAPI";
 import { uiAndWebhooksRouter } from "./routers/uiAndWebhooks";
 import { projectRouter } from "./routers/projectRouter";
+import { inventoryRouter } from "./routers/inventoryRouter";
+import { crmRouter } from "./routers/crmRouter";
+import { financialRouter } from "./routers/financialRouter";
 import { sendQuoteEmail } from "./emailService";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
@@ -44,6 +47,9 @@ export const appRouter = router({
   authEmailAPI: authEmailAPIRouter,
   uiAndWebhooks: uiAndWebhooksRouter,
   project: projectRouter,
+  inventory: inventoryRouter,
+  crm: crmRouter,
+  financial: financialRouter,
 
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

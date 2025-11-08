@@ -258,3 +258,218 @@ export const projectDocuments = mysqlTable("projectDocuments", {
 export type ProjectDocument = typeof projectDocuments.$inferSelect;
 export type InsertProjectDocument = typeof projectDocuments.$inferInsert;
 
+// INVENTORY MANAGEMENT TABLES
+
+// Inventory Items
+export const inventoryItems = mysqlTable("inventoryItems", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  sku: varchar("sku", { length: 100 }).notNull().unique(),
+  category: varchar("category", { length: 100 }).notNull(),
+  description: text("description"),
+  unitPrice: varchar("unitPrice", { length: 20 }).notNull(),
+  costPrice: varchar("costPrice", { length: 20 }).notNull(),
+  currentStock: varchar("currentStock", { length: 20 }).default("0"),
+  minimumStock: varchar("minimumStock", { length: 20 }).default("10"),
+  maximumStock: varchar("maximumStock", { length: 20 }).default("1000"),
+  reorderPoint: varchar("reorderPoint", { length: 20 }).default("20"),
+  unit: varchar("unit", { length: 50 }).notNull(),
+  supplier: varchar("supplier", { length: 255 }),
+  lastRestockDate: timestamp("lastRestockDate"),
+  createdBy: varchar("createdBy", { length: 64 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow(),
+});
+
+export type InventoryItem = typeof inventoryItems.$inferSelect;
+export type InsertInventoryItem = typeof inventoryItems.$inferInsert;
+
+// Stock Movements (Transactions)
+export const stockMovements = mysqlTable("stockMovements", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  inventoryItemId: varchar("inventoryItemId", { length: 64 }).notNull(),
+  type: mysqlEnum("type", ["in", "out", "adjustment", "damage", "return"]).notNull(),
+  quantity: varchar("quantity", { length: 20 }).notNull(),
+  reason: varchar("reason", { length: 255 }),
+  reference: varchar("reference", { length: 100 }),
+  notes: text("notes"),
+  createdBy: varchar("createdBy", { length: 64 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type StockMovement = typeof stockMovements.$inferSelect;
+export type InsertStockMovement = typeof stockMovements.$inferInsert;
+
+// Stock Alerts
+export const stockAlerts = mysqlTable("stockAlerts", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  inventoryItemId: varchar("inventoryItemId", { length: 64 }).notNull(),
+  alertType: mysqlEnum("alertType", ["low_stock", "overstock", "expired", "reorder_needed"]).notNull(),
+  severity: mysqlEnum("severity", ["low", "medium", "high", "critical"]).default("medium"),
+  message: text("message").notNull(),
+  isResolved: varchar("isResolved", { length: 5 }).default("false"),
+  resolvedAt: timestamp("resolvedAt"),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type StockAlert = typeof stockAlerts.$inferSelect;
+export type InsertStockAlert = typeof stockAlerts.$inferInsert;
+
+// Reorder Orders
+export const reorderOrders = mysqlTable("reorderOrders", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  inventoryItemId: varchar("inventoryItemId", { length: 64 }).notNull(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  quantity: varchar("quantity", { length: 20 }).notNull(),
+  status: mysqlEnum("status", ["pending", "ordered", "received", "canceled"]).default("pending"),
+  orderDate: timestamp("orderDate").defaultNow(),
+  expectedDelivery: timestamp("expectedDelivery"),
+  actualDelivery: timestamp("actualDelivery"),
+  supplier: varchar("supplier", { length: 255 }),
+  cost: varchar("cost", { length: 20 }),
+  notes: text("notes"),
+  createdBy: varchar("createdBy", { length: 64 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type ReorderOrder = typeof reorderOrders.$inferSelect;
+export type InsertReorderOrder = typeof reorderOrders.$inferInsert;
+
+// CRM TABLES
+
+// Enhanced Clients with CRM tracking
+export const crmClients = mysqlTable("crmClients", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 320 }),
+  phone: varchar("phone", { length: 50 }),
+  company: varchar("company", { length: 255 }),
+  address: text("address"),
+  city: varchar("city", { length: 100 }),
+  state: varchar("state", { length: 100 }),
+  postcode: varchar("postcode", { length: 20 }),
+  clientType: mysqlEnum("clientType", ["residential", "commercial", "industrial", "government"]).default("residential"),
+  status: mysqlEnum("status", ["lead", "prospect", "active", "inactive", "vip"]).default("prospect"),
+  totalSpent: varchar("totalSpent", { length: 20 }).default("0"),
+  projectCount: varchar("projectCount", { length: 10 }).default("0"),
+  lastProjectDate: timestamp("lastProjectDate"),
+  preferredContactMethod: varchar("preferredContactMethod", { length: 50 }),
+  notes: text("notes"),
+  tags: text("tags"),
+  createdBy: varchar("createdBy", { length: 64 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow(),
+});
+
+export type CrmClient = typeof crmClients.$inferSelect;
+export type InsertCrmClient = typeof crmClients.$inferInsert;
+
+// Client Communication History
+export const clientCommunications = mysqlTable("clientCommunications", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  clientId: varchar("clientId", { length: 64 }).notNull(),
+  type: mysqlEnum("type", ["call", "email", "sms", "visit", "quote", "invoice", "note"]).notNull(),
+  subject: varchar("subject", { length: 255 }),
+  content: text("content"),
+  outcome: varchar("outcome", { length: 100 }),
+  nextFollowUp: timestamp("nextFollowUp"),
+  createdBy: varchar("createdBy", { length: 64 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type ClientCommunication = typeof clientCommunications.$inferSelect;
+export type InsertClientCommunication = typeof clientCommunications.$inferInsert;
+
+// FINANCIAL MANAGEMENT TABLES
+
+// Invoices
+export const invoices = mysqlTable("invoices", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  projectId: varchar("projectId", { length: 64 }),
+  clientId: varchar("clientId", { length: 64 }).notNull(),
+  invoiceNumber: varchar("invoiceNumber", { length: 50 }).notNull().unique(),
+  status: mysqlEnum("status", ["draft", "sent", "viewed", "paid", "overdue", "canceled"]).default("draft"),
+  subtotal: varchar("subtotal", { length: 20 }).notNull(),
+  tax: varchar("tax", { length: 20 }).default("0"),
+  total: varchar("total", { length: 20 }).notNull(),
+  amountPaid: varchar("amountPaid", { length: 20 }).default("0"),
+  dueDate: timestamp("dueDate"),
+  paidDate: timestamp("paidDate"),
+  currency: varchar("currency", { length: 3 }).default("AUD"),
+  notes: text("notes"),
+  items: text("items"),
+  createdBy: varchar("createdBy", { length: 64 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow(),
+});
+
+export type Invoice = typeof invoices.$inferSelect;
+export type InsertInvoice = typeof invoices.$inferInsert;
+
+// Expenses
+export const expenses = mysqlTable("expenses", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  projectId: varchar("projectId", { length: 64 }),
+  category: mysqlEnum("category", ["materials", "labor", "equipment", "travel", "other"]).notNull(),
+  description: varchar("description", { length: 255 }).notNull(),
+  amount: varchar("amount", { length: 20 }).notNull(),
+  currency: varchar("currency", { length: 3 }).default("AUD"),
+  date: timestamp("date").notNull(),
+  receipt: text("receipt"),
+  status: mysqlEnum("status", ["pending", "approved", "rejected"]).default("pending"),
+  createdBy: varchar("createdBy", { length: 64 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type Expense = typeof expenses.$inferSelect;
+export type InsertExpense = typeof expenses.$inferInsert;
+
+// Financial Reports
+export const financialReports = mysqlTable("financialReports", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  reportType: mysqlEnum("reportType", ["profit_loss", "cash_flow", "tax_summary", "project_profitability"]).notNull(),
+  period: varchar("period", { length: 50 }).notNull(),
+  totalRevenue: varchar("totalRevenue", { length: 20 }).default("0"),
+  totalExpenses: varchar("totalExpenses", { length: 20 }).default("0"),
+  netProfit: varchar("netProfit", { length: 20 }).default("0"),
+  taxAmount: varchar("taxAmount", { length: 20 }).default("0"),
+  data: text("data"),
+  generatedAt: timestamp("generatedAt").defaultNow(),
+});
+
+export type FinancialReport = typeof financialReports.$inferSelect;
+export type InsertFinancialReport = typeof financialReports.$inferInsert;
+
+// Intelligent Insights & Recommendations
+export const intelligentInsights = mysqlTable("intelligentInsights", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  insightType: mysqlEnum("insightType", [
+    "low_stock_warning",
+    "project_overbudget",
+    "overdue_invoice",
+    "high_profit_opportunity",
+    "team_utilization",
+    "cash_flow_warning",
+    "seasonal_trend",
+    "cost_optimization"
+  ]).notNull(),
+  severity: mysqlEnum("severity", ["info", "warning", "critical"]).default("info"),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description"),
+  recommendation: text("recommendation"),
+  metadata: text("metadata"),
+  isActionable: varchar("isActionable", { length: 5 }).default("true"),
+  isResolved: varchar("isResolved", { length: 5 }).default("false"),
+  createdAt: timestamp("createdAt").defaultNow(),
+  resolvedAt: timestamp("resolvedAt"),
+});
+
+export type IntelligentInsight = typeof intelligentInsights.$inferSelect;
+export type InsertIntelligentInsight = typeof intelligentInsights.$inferInsert;
+
