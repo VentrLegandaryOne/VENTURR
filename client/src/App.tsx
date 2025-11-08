@@ -59,6 +59,9 @@ const InventoryManagement = lazy(() => import("./pages/InventoryManagement"));
 const CRMSystem = lazy(() => import("./pages/CRMSystem"));
 const ProjectTemplates = lazy(() => import("./pages/ProjectTemplates"));
 const ExecutiveReportingDashboard = lazy(() => import("./pages/ExecutiveReportingDashboard"));
+const AdvancedIntegrations = lazy(() => import("./pages/AdvancedIntegrations"));
+const AIForecastingSystem = lazy(() => import("./pages/AIForecastingSystem"));
+const WhiteLabelResellerPortal = lazy(() => import("./pages/WhiteLabelResellerPortal"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -123,6 +126,9 @@ function Router() {
       <Route path={"//export"} component={Export} />
       <Route path={"//admin/monitoring"} component={AdminMonitoring} />
       <Route path={"//reporting"} component={ExecutiveReportingDashboard} />
+      <Route path={"//integrations"} component={AdvancedIntegrations} />
+      <Route path={"//forecasting"} component={AIForecastingSystem} />
+      <Route path={"//reseller-portal"} component={WhiteLabelResellerPortal} />
       <Route path={"//404"} component={NotFound} />
         <Route component={NotFound} /> </Switch>
     </Suspense>
