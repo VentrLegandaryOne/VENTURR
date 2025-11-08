@@ -6,6 +6,7 @@ import { measurementsRouter } from "./routers/measurements";
 import { clientsRouter } from "./routers/clients";
 import { quotesRouter } from "./routers/quotes";
 import { advancedFeaturesRouter } from "./routers/advancedFeatures";
+import { paymentAndDocumentsRouter } from "./routers/paymentAndDocuments";
 import { sendQuoteEmail } from "./emailService";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
@@ -34,6 +35,7 @@ export const appRouter = router({
   clients: clientsRouter,
   quotes: quotesRouter,
   advancedFeatures: advancedFeaturesRouter,
+  paymentAndDocuments: paymentAndDocumentsRouter,
 
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

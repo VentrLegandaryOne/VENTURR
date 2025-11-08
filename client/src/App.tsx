@@ -31,6 +31,12 @@ const AdminMonitoring = lazy(() => import("./pages/AdminMonitoring"));
 const Chatbot = lazy(() => import("./pages/Chatbot"));
 const Marketplace = lazy(() => import("./pages/Marketplace"));
 const PricingDashboard = lazy(() => import("./pages/PricingDashboard"));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const ExportReports = lazy(() => import("./pages/ExportReports"));
+const AdvancedAnalytics = lazy(() => import("./pages/AdvancedAnalytics"));
+const TeamCollaboration = lazy(() => import("./pages/TeamCollaboration"));
+const NotificationCenter = lazy(() => import("./components/NotificationCenter"));
+const LanguageSwitcher = lazy(() => import("./components/LanguageSwitcher"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -50,6 +56,10 @@ function Router() {
       <Route path={"/pricing-dashboard"} component={PricingDashboard} />
       <Route path={"/chatbot"} component={Chatbot} />
       <Route path={"/marketplace"} component={Marketplace} />
+      <Route path={"/admin"} component={AdminDashboard} />
+      <Route path={"/export"} component={ExportReports} />
+      <Route path={"/analytics"} component={AdvancedAnalytics} />
+      <Route path={"/team"} component={TeamCollaboration} />
       <Route path={"/settings"} component={Settings} />
       <Route path={"/clients"} component={Clients} />
       <Route path="/projects/:id/compliance" component={Compliance} />
@@ -90,6 +100,9 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Router />
+          <Suspense fallback={null}>
+            <NotificationCenter />
+          </Suspense>
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
