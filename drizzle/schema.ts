@@ -180,3 +180,81 @@ export const clients = mysqlTable("clients", {
 export type Client = typeof clients.$inferSelect;
 export type InsertClient = typeof clients.$inferInsert;
 
+// Project Tasks
+export const projectTasks = mysqlTable("projectTasks", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  projectId: varchar("projectId", { length: 64 }).notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description"),
+  status: mysqlEnum("status", ["todo", "in_progress", "review", "completed", "blocked"]).default("todo").notNull(),
+  priority: mysqlEnum("priority", ["low", "medium", "high", "critical"]).default("medium").notNull(),
+  assignedTo: varchar("assignedTo", { length: 64 }),
+  dueDate: timestamp("dueDate"),
+  completedAt: timestamp("completedAt"),
+  createdBy: varchar("createdBy", { length: 64 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow(),
+});
+
+export type ProjectTask = typeof projectTasks.$inferSelect;
+export type InsertProjectTask = typeof projectTasks.$inferInsert;
+
+// Project Team Members
+export const projectTeamMembers = mysqlTable("projectTeamMembers", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  projectId: varchar("projectId", { length: 64 }).notNull(),
+  userId: varchar("userId", { length: 64 }).notNull(),
+  role: mysqlEnum("role", ["lead", "worker", "supervisor", "inspector"]).default("worker").notNull(),
+  joinedAt: timestamp("joinedAt").defaultNow(),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type ProjectTeamMember = typeof projectTeamMembers.$inferSelect;
+export type InsertProjectTeamMember = typeof projectTeamMembers.$inferInsert;
+
+// Project Milestones
+export const projectMilestones = mysqlTable("projectMilestones", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  projectId: varchar("projectId", { length: 64 }).notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description"),
+  targetDate: timestamp("targetDate").notNull(),
+  completedDate: timestamp("completedDate"),
+  status: mysqlEnum("status", ["pending", "in_progress", "completed", "delayed"]).default("pending").notNull(),
+  progress: varchar("progress", { length: 3 }).default("0"),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow(),
+});
+
+export type ProjectMilestone = typeof projectMilestones.$inferSelect;
+export type InsertProjectMilestone = typeof projectMilestones.$inferInsert;
+
+// Project Budget
+export const projectBudgets = mysqlTable("projectBudgets", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  projectId: varchar("projectId", { length: 64 }).notNull(),
+  budgetedAmount: varchar("budgetedAmount", { length: 20 }).notNull(),
+  spentAmount: varchar("spentAmount", { length: 20 }).default("0"),
+  remainingAmount: varchar("remainingAmount", { length: 20 }).notNull(),
+  currency: varchar("currency", { length: 3 }).default("USD"),
+  lastUpdated: timestamp("lastUpdated").defaultNow().onUpdateNow(),
+});
+
+export type ProjectBudget = typeof projectBudgets.$inferSelect;
+export type InsertProjectBudget = typeof projectBudgets.$inferInsert;
+
+// Project Documents
+export const projectDocuments = mysqlTable("projectDocuments", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  projectId: varchar("projectId", { length: 64 }).notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  type: mysqlEnum("type", ["drawing", "specification", "permit", "report", "contract", "other"]).notNull(),
+  fileUrl: text("fileUrl").notNull(),
+  fileSize: varchar("fileSize", { length: 20 }),
+  uploadedBy: varchar("uploadedBy", { length: 64 }).notNull(),
+  uploadedAt: timestamp("uploadedAt").defaultNow(),
+});
+
+export type ProjectDocument = typeof projectDocuments.$inferSelect;
+export type InsertProjectDocument = typeof projectDocuments.$inferInsert;
+

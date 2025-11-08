@@ -13,7 +13,17 @@ import {
   quotes,
   InsertQuote,
   measurements,
-  InsertMeasurement
+  InsertMeasurement,
+  projectTasks,
+  InsertProjectTask,
+  projectTeamMembers,
+  InsertProjectTeamMember,
+  projectMilestones,
+  InsertProjectMilestone,
+  projectBudgets,
+  InsertProjectBudget,
+  projectDocuments,
+  InsertProjectDocument
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -221,4 +231,128 @@ export async function getProjectMeasurements(projectId: string) {
   if (!db) return [];
   
   return await db.select().from(measurements).where(eq(measurements.projectId, projectId));
+}
+
+// PROJECT TASK QUERIES
+export async function getProjectTasks(projectId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(projectTasks).where(eq(projectTasks.projectId, projectId));
+}
+
+export async function createProjectTask(task: InsertProjectTask) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(projectTasks).values(task);
+  return task;
+}
+
+export async function updateProjectTask(taskId: string, updates: Partial<InsertProjectTask>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(projectTasks).set(updates).where(eq(projectTasks.id, taskId));
+}
+
+export async function getProjectTask(taskId: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(projectTasks).where(eq(projectTasks.id, taskId)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+// PROJECT TEAM MEMBER QUERIES
+export async function getProjectTeamMembers(projectId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(projectTeamMembers).where(eq(projectTeamMembers.projectId, projectId));
+}
+
+export async function addProjectTeamMember(member: InsertProjectTeamMember) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(projectTeamMembers).values(member);
+  return member;
+}
+
+export async function removeProjectTeamMember(memberId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.delete(projectTeamMembers).where(eq(projectTeamMembers.id, memberId));
+}
+
+// PROJECT MILESTONE QUERIES
+export async function getProjectMilestones(projectId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(projectMilestones).where(eq(projectMilestones.projectId, projectId));
+}
+
+export async function createProjectMilestone(milestone: InsertProjectMilestone) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(projectMilestones).values(milestone);
+  return milestone;
+}
+
+export async function updateProjectMilestone(milestoneId: string, updates: Partial<InsertProjectMilestone>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(projectMilestones).set(updates).where(eq(projectMilestones.id, milestoneId));
+}
+
+// PROJECT BUDGET QUERIES
+export async function getProjectBudget(projectId: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(projectBudgets).where(eq(projectBudgets.projectId, projectId)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function createProjectBudget(budget: InsertProjectBudget) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(projectBudgets).values(budget);
+  return budget;
+}
+
+export async function updateProjectBudget(budgetId: string, updates: Partial<InsertProjectBudget>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(projectBudgets).set(updates).where(eq(projectBudgets.id, budgetId));
+}
+
+// PROJECT DOCUMENT QUERIES
+export async function getProjectDocuments(projectId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(projectDocuments).where(eq(projectDocuments.projectId, projectId));
+}
+
+export async function addProjectDocument(doc: InsertProjectDocument) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(projectDocuments).values(doc);
+  return doc;
+}
+
+export async function deleteProjectDocument(docId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.delete(projectDocuments).where(eq(projectDocuments.id, docId));
 }
