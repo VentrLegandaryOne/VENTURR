@@ -1378,6 +1378,7 @@ export default function ComponentsShowcase() {
           <p>Shadcn/ui Component Showcase</p>
         </div>
       </footer>
+      </div>
     </div>
   );
 }

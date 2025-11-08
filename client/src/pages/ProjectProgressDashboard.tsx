@@ -190,6 +190,7 @@ export default function ProjectProgressDashboard() {
           </div>
         </Card>
       </div>
+      </div>
     </div>
   );
 }
