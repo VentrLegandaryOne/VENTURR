@@ -14,6 +14,7 @@ import { projectRouter } from "./routers/projectRouter";
 import { inventoryRouter } from "./routers/inventoryRouter";
 import { crmRouter } from "./routers/crmRouter";
 import { financialRouter } from "./routers/financialRouter";
+import { materialAllocationRouter } from "./routers/materialAllocationRouter";
 import { sendQuoteEmail } from "./emailService";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
@@ -50,6 +51,7 @@ export const appRouter = router({
   inventory: inventoryRouter,
   crm: crmRouter,
   financial: financialRouter,
+  materialAllocation: materialAllocationRouter,
 
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

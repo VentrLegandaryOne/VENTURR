@@ -71,6 +71,13 @@
       "when": 1762603276214,
       "tag": "0009_wooden_photon",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1762603873983,
+      "tag": "0010_fearless_living_tribunal",
+      "breakpoints": true
     }
   ]
 }

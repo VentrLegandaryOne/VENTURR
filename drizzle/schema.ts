@@ -316,6 +316,25 @@ export const stockAlerts = mysqlTable("stockAlerts", {
 export type StockAlert = typeof stockAlerts.$inferSelect;
 export type InsertStockAlert = typeof stockAlerts.$inferInsert;
 
+// Material Allocations (Project-specific reservations)
+export const materialAllocations = mysqlTable("materialAllocations", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  projectId: varchar("projectId", { length: 64 }).notNull(),
+  inventoryItemId: varchar("inventoryItemId", { length: 64 }).notNull(),
+  allocatedQuantity: varchar("allocatedQuantity", { length: 20 }).notNull(),
+  usedQuantity: varchar("usedQuantity", { length: 20 }).default("0"),
+  status: mysqlEnum("status", ["reserved", "in_use", "completed", "returned"]).default("reserved").notNull(),
+  allocationDate: timestamp("allocationDate").defaultNow(),
+  completionDate: timestamp("completionDate"),
+  notes: text("notes"),
+  createdBy: varchar("createdBy", { length: 64 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow(),
+});
+
+export type MaterialAllocation = typeof materialAllocations.$inferSelect;
+export type InsertMaterialAllocation = typeof materialAllocations.$inferInsert;
+
 // Reorder Orders
 export const reorderOrders = mysqlTable("reorderOrders", {
   id: varchar("id", { length: 64 }).primaryKey(),

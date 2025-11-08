@@ -23,7 +23,10 @@ import {
   projectBudgets,
   InsertProjectBudget,
   projectDocuments,
-  InsertProjectDocument
+  InsertProjectDocument,
+  materialAllocations,
+  InsertMaterialAllocation,
+  inventoryItems
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -596,5 +599,213 @@ export async function resolveInsight(insightId: string) {
   if (!db) throw new Error("Database not available");
   
   await db.update(intelligentInsights).set({ isResolved: "true", resolvedAt: new Date() }).where(eq(intelligentInsights.id, insightId));
+}
+
+
+
+
+// ===== MATERIAL ALLOCATION FUNCTIONS =====
+
+/**
+ * Allocate materials to a project with conflict detection
+ * Checks available inventory and prevents over-allocation
+ */
+export async function allocateMaterialToProject(
+  projectId: string,
+  inventoryItemId: string,
+  quantity: number,
+  createdBy: string
+): Promise<{ success: boolean; message: string; allocation?: any }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    // Get current inventory item
+    const item = await db.select().from(inventoryItems).where(eq(inventoryItems.id, inventoryItemId)).limit(1);
+    if (item.length === 0) {
+      return { success: false, message: "Inventory item not found" };
+    }
+
+    const currentStock = parseInt(item[0].currentStock || "0");
+    
+    // Get total allocated quantity for this item across all projects
+    const allocations = await db.select().from(materialAllocations)
+      .where(eq(materialAllocations.inventoryItemId, inventoryItemId))
+      .where((col) => col.status !== "completed" && col.status !== "returned");
+    
+    const totalAllocated = allocations.reduce((sum, a) => sum + parseInt(a.allocatedQuantity || "0"), 0);
+    const availableForAllocation = currentStock - totalAllocated;
+
+    if (quantity > availableForAllocation) {
+      return {
+        success: false,
+        message: `Insufficient inventory. Requested: ${quantity}, Available: ${availableForAllocation}, Current Stock: ${currentStock}, Already Allocated: ${totalAllocated}`
+      };
+    }
+
+    // Create allocation record
+    const allocationId = `alloc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    await db.insert(materialAllocations).values({
+      id: allocationId,
+      projectId,
+      inventoryItemId,
+      allocatedQuantity: quantity.toString(),
+      usedQuantity: "0",
+      status: "reserved",
+      createdBy,
+    });
+
+    return {
+      success: true,
+      message: `Successfully allocated ${quantity} units to project`,
+      allocation: { id: allocationId, quantity, itemName: item[0].name }
+    };
+  } catch (error) {
+    console.error("[Database] Failed to allocate material:", error);
+    return { success: false, message: "Failed to allocate material" };
+  }
+}
+
+/**
+ * Get all allocations for a project
+ */
+export async function getProjectAllocations(projectId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db.select().from(materialAllocations)
+    .where(eq(materialAllocations.projectId, projectId));
+}
+
+/**
+ * Update material usage during project execution
+ */
+export async function updateMaterialUsage(
+  allocationId: string,
+  usedQuantity: number
+): Promise<{ success: boolean; message: string }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const allocation = await db.select().from(materialAllocations)
+      .where(eq(materialAllocations.id, allocationId)).limit(1);
+    
+    if (allocation.length === 0) {
+      return { success: false, message: "Allocation not found" };
+    }
+
+    const allocated = parseInt(allocation[0].allocatedQuantity || "0");
+    if (usedQuantity > allocated) {
+      return { success: false, message: `Cannot use more than allocated (${allocated} units)` };
+    }
+
+    await db.update(materialAllocations)
+      .set({ usedQuantity: usedQuantity.toString(), status: usedQuantity > 0 ? "in_use" : "reserved" })
+      .where(eq(materialAllocations.id, allocationId));
+
+    return { success: true, message: `Updated usage to ${usedQuantity} units` };
+  } catch (error) {
+    console.error("[Database] Failed to update material usage:", error);
+    return { success: false, message: "Failed to update material usage" };
+  }
+}
+
+/**
+ * Complete allocation and return unused materials
+ */
+export async function completeAllocation(
+  allocationId: string,
+  finalUsedQuantity: number
+): Promise<{ success: boolean; message: string; returnedQuantity?: number }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const allocation = await db.select().from(materialAllocations)
+      .where(eq(materialAllocations.id, allocationId)).limit(1);
+    
+    if (allocation.length === 0) {
+      return { success: false, message: "Allocation not found" };
+    }
+
+    const allocated = parseInt(allocation[0].allocatedQuantity || "0");
+    const returnedQuantity = allocated - finalUsedQuantity;
+
+    await db.update(materialAllocations)
+      .set({ 
+        usedQuantity: finalUsedQuantity.toString(), 
+        status: "completed",
+        completionDate: new Date()
+      })
+      .where(eq(materialAllocations.id, allocationId));
+
+    return { 
+      success: true, 
+      message: `Allocation completed. Used: ${finalUsedQuantity}, Returned: ${returnedQuantity}`,
+      returnedQuantity
+    };
+  } catch (error) {
+    console.error("[Database] Failed to complete allocation:", error);
+    return { success: false, message: "Failed to complete allocation" };
+  }
+}
+
+/**
+ * Get available inventory for allocation (not yet reserved)
+ */
+export async function getAvailableInventory(inventoryItemId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const item = await db.select().from(inventoryItems)
+    .where(eq(inventoryItems.id, inventoryItemId)).limit(1);
+  
+  if (item.length === 0) return null;
+
+  const allocations = await db.select().from(materialAllocations)
+    .where(eq(materialAllocations.inventoryItemId, inventoryItemId))
+    .where((col) => col.status !== "completed" && col.status !== "returned");
+  
+  const totalAllocated = allocations.reduce((sum, a) => sum + parseInt(a.allocatedQuantity || "0"), 0);
+  const currentStock = parseInt(item[0].currentStock || "0");
+  const available = currentStock - totalAllocated;
+
+  return {
+    itemId: inventoryItemId,
+    itemName: item[0].name,
+    currentStock,
+    totalAllocated,
+    available,
+    allocations: allocations.length
+  };
+}
+
+/**
+ * Check for allocation conflicts across projects
+ */
+export async function checkAllocationConflicts(organizationId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const items = await db.select().from(inventoryItems)
+    .where(eq(inventoryItems.organizationId, organizationId));
+
+  const conflicts = [];
+
+  for (const item of items) {
+    const available = await getAvailableInventory(item.id);
+    if (available && available.available < 0) {
+      conflicts.push({
+        itemId: item.id,
+        itemName: item.name,
+        shortage: Math.abs(available.available),
+        currentStock: available.currentStock,
+        totalAllocated: available.totalAllocated
+      });
+    }
+  }
+
+  return conflicts;
 }
 
