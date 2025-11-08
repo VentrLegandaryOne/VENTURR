@@ -667,6 +667,77 @@ export const workflowExecutionLogs = mysqlTable("workflowExecutionLogs", {
 export type WorkflowExecutionLog = typeof workflowExecutionLogs.$inferSelect;
 export type InsertWorkflowExecutionLog = typeof workflowExecutionLogs.$inferInsert;
 
+// Mobile Field App - Offline Data
+export const mobileOfflineQueue = mysqlTable("mobileOfflineQueue", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  userId: varchar("userId", { length: 64 }).notNull(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  dataType: varchar("dataType", { length: 50 }).notNull(),
+  actionType: varchar("actionType", { length: 20 }).notNull(),
+  payload: text("payload").notNull(),
+  status: mysqlEnum("status", ["pending", "synced", "failed"]).default("pending"),
+  syncedAt: timestamp("syncedAt"),
+  errorMessage: text("errorMessage"),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type MobileOfflineQueue = typeof mobileOfflineQueue.$inferSelect;
+export type InsertMobileOfflineQueue = typeof mobileOfflineQueue.$inferInsert;
+
+// Mobile Field Logs
+export const mobileFieldLogs = mysqlTable("mobileFieldLogs", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  userId: varchar("userId", { length: 64 }).notNull(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  projectId: varchar("projectId", { length: 64 }).notNull(),
+  logType: varchar("logType", { length: 50 }).notNull(),
+  description: text("description"),
+  photoUrl: text("photoUrl"),
+  gpsLocation: varchar("gpsLocation", { length: 255 }),
+  duration: varchar("duration", { length: 20 }),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type MobileFieldLog = typeof mobileFieldLogs.$inferSelect;
+export type InsertMobileFieldLog = typeof mobileFieldLogs.$inferInsert;
+
+// Notifications
+export const notifications = mysqlTable("notifications", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  userId: varchar("userId", { length: 64 }),
+  notificationType: varchar("notificationType", { length: 50 }).notNull(),
+  channel: varchar("channel", { length: 20 }).notNull(),
+  subject: varchar("subject", { length: 255 }),
+  message: text("message").notNull(),
+  status: mysqlEnum("status", ["pending", "sent", "failed", "delivered"]).default("pending"),
+  recipient: varchar("recipient", { length: 255 }).notNull(),
+  sentAt: timestamp("sentAt"),
+  deliveredAt: timestamp("deliveredAt"),
+  failureReason: text("failureReason"),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type Notification = typeof notifications.$inferSelect;
+export type InsertNotification = typeof notifications.$inferInsert;
+
+// Notification Templates
+export const notificationTemplates = mysqlTable("notificationTemplates", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  notificationType: varchar("notificationType", { length: 50 }).notNull(),
+  channel: varchar("channel", { length: 20 }).notNull(),
+  subject: varchar("subject", { length: 255 }),
+  template: text("template").notNull(),
+  variables: text("variables"),
+  isActive: varchar("isActive", { length: 5 }).default("true"),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type NotificationTemplate = typeof notificationTemplates.$inferSelect;
+export type InsertNotificationTemplate = typeof notificationTemplates.$inferInsert;
+
 // Reorder Orders
 export const reorderOrders = mysqlTable("reorderOrders", {
   id: varchar("id", { length: 64 }).primaryKey(),

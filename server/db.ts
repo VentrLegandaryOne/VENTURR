@@ -1,4 +1,4 @@
-import { eq, sum, and, or, lt, desc, gt, gte, lte, ne } from "drizzle-orm";
+import { eq, sum, and, or, lt, desc, gt, gte, lte, ne, isNull } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { 
   InsertUser, 
@@ -64,7 +64,15 @@ import {
   workflowAutomations,
   InsertWorkflowAutomation,
   workflowExecutionLogs,
-  InsertWorkflowExecutionLog
+  InsertWorkflowExecutionLog,
+  mobileOfflineQueue,
+  InsertMobileOfflineQueue,
+  mobileFieldLogs,
+  InsertMobileFieldLog,
+  notifications,
+  InsertNotification,
+  notificationTemplates,
+  InsertNotificationTemplate
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -2564,4 +2572,7 @@ export async function getWorkflowsByTrigger(organizationId: string, trigger: str
       eq(workflowAutomations.trigger, trigger)
     ));
 }
+
+
+
 
