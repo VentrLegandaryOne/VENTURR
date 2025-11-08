@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, sum, and } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { 
   InsertUser, 
@@ -26,7 +26,17 @@ import {
   InsertProjectDocument,
   materialAllocations,
   InsertMaterialAllocation,
-  inventoryItems
+  inventoryItems,
+  fieldActivityLogs,
+  InsertFieldActivityLog,
+  offlineDataQueue,
+  InsertOfflineDataQueue,
+  projectCosts,
+  InsertProjectCost,
+  projectBudgetTracking,
+  InsertProjectBudgetTracking,
+  projectProfitability,
+  InsertProjectProfitability
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -807,5 +817,438 @@ export async function checkAllocationConflicts(organizationId: string) {
   }
 
   return conflicts;
+}
+
+
+
+
+// ===== FIELD ACTIVITY TRACKING FUNCTIONS =====
+
+/**
+ * Log field activity (material usage, photos, GPS, issues)
+ */
+export async function logFieldActivity(
+  projectId: string,
+  activityType: "material_usage" | "task_completion" | "photo_capture" | "location_update" | "issue_report",
+  data: {
+    allocationId?: string;
+    description?: string;
+    quantity?: number;
+    latitude?: number;
+    longitude?: number;
+    photoUrl?: string;
+    offlineSync?: boolean;
+  },
+  createdBy: string
+): Promise<{ success: boolean; activityId?: string; message: string }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const activityId = `act_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    await db.insert(fieldActivityLogs).values({
+      id: activityId,
+      projectId,
+      allocationId: data.allocationId,
+      activityType,
+      description: data.description,
+      quantity: data.quantity?.toString(),
+      latitude: data.latitude?.toString(),
+      longitude: data.longitude?.toString(),
+      photoUrl: data.photoUrl,
+      offlineSync: data.offlineSync ? "true" : "false",
+      createdBy,
+    });
+
+    return { success: true, activityId, message: "Activity logged successfully" };
+  } catch (error) {
+    console.error("[Database] Failed to log field activity:", error);
+    return { success: false, message: "Failed to log activity" };
+  }
+}
+
+/**
+ * Get field activities for a project
+ */
+export async function getProjectFieldActivities(projectId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db.select().from(fieldActivityLogs)
+    .where(eq(fieldActivityLogs.projectId, projectId));
+}
+
+/**
+ * Queue offline data for sync
+ */
+export async function queueOfflineData(
+  userId: string,
+  projectId: string,
+  dataType: string,
+  payload: any
+): Promise<{ success: boolean; queueId?: string }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const queueId = `queue_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    await db.insert(offlineDataQueue).values({
+      id: queueId,
+      userId,
+      projectId,
+      dataType,
+      payload: JSON.stringify(payload),
+      status: "pending",
+    });
+
+    return { success: true, queueId };
+  } catch (error) {
+    console.error("[Database] Failed to queue offline data:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Get pending offline data for sync
+ */
+export async function getPendingOfflineData(userId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db.select().from(offlineDataQueue)
+    .where(eq(offlineDataQueue.userId, userId))
+    .where(eq(offlineDataQueue.status, "pending"));
+}
+
+/**
+ * Mark offline data as synced
+ */
+export async function markOfflineDataSynced(queueId: string): Promise<{ success: boolean }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    await db.update(offlineDataQueue)
+      .set({ status: "synced", syncedAt: new Date() })
+      .where(eq(offlineDataQueue.id, queueId));
+
+    return { success: true };
+  } catch (error) {
+    console.error("[Database] Failed to mark offline data synced:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Get real-time activity summary for project
+ */
+export async function getProjectActivitySummary(projectId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const activities = await db.select().from(fieldActivityLogs)
+    .where(eq(fieldActivityLogs.projectId, projectId));
+
+  const summary = {
+    totalActivities: activities.length,
+    materialUsageCount: activities.filter(a => a.activityType === "material_usage").length,
+    photosCount: activities.filter(a => a.activityType === "photo_capture").length,
+    issuesCount: activities.filter(a => a.activityType === "issue_report").length,
+    tasksCompleted: activities.filter(a => a.activityType === "task_completion").length,
+    lastUpdate: activities.length > 0 ? activities[activities.length - 1].createdAt : null,
+    offlineSyncPending: activities.filter(a => a.offlineSync === "true").length,
+  };
+
+  return summary;
+}
+
+
+
+
+// ===== PROJECT PROFITABILITY TRACKING FUNCTIONS =====
+
+/**
+ * Add project cost (material, labor, equipment, etc.)
+ */
+export async function addProjectCost(
+  projectId: string,
+  costType: "material" | "labor" | "equipment" | "subcontractor" | "other",
+  description: string,
+  amount: number,
+  data: {
+    quantity?: number;
+    unitPrice?: number;
+    allocationId?: string;
+  },
+  createdBy: string
+): Promise<{ success: boolean; costId?: string }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const costId = `cost_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    await db.insert(projectCosts).values({
+      id: costId,
+      projectId,
+      costType,
+      description,
+      amount: amount.toString(),
+      quantity: data.quantity?.toString(),
+      unitPrice: data.unitPrice?.toString(),
+      allocationId: data.allocationId,
+      status: "actual",
+      createdBy,
+    });
+
+    // Update project profitability
+    await updateProjectProfitability(projectId);
+
+    return { success: true, costId };
+  } catch (error) {
+    console.error("[Database] Failed to add project cost:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Get all costs for a project
+ */
+export async function getProjectCosts(projectId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db.select().from(projectCosts)
+    .where(eq(projectCosts.projectId, projectId));
+}
+
+/**
+ * Calculate total project costs
+ */
+export async function calculateProjectTotalCosts(projectId: string): Promise<number> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const costs = await getProjectCosts(projectId);
+  return costs.reduce((sum, cost) => sum + parseFloat(cost.amount || "0"), 0);
+}
+
+/**
+ * Update project budget tracking
+ */
+export async function updateProjectBudgetTracking(
+  projectId: string,
+  budgetedAmount: number
+): Promise<{ success: boolean }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const actualCosts = await calculateProjectTotalCosts(projectId);
+    const variance = budgetedAmount - actualCosts;
+    const variancePercentage = ((variance / budgetedAmount) * 100).toFixed(2);
+    
+    let status: "on_track" | "at_risk" | "over_budget" | "under_budget";
+    if (variance > 0 && parseFloat(variancePercentage) > 10) {
+      status = "under_budget";
+    } else if (variance > 0 && parseFloat(variancePercentage) <= 10) {
+      status = "on_track";
+    } else if (variance < 0 && Math.abs(parseFloat(variancePercentage)) <= 10) {
+      status = "at_risk";
+    } else {
+      status = "over_budget";
+    }
+
+    // Check if tracking exists
+    const existing = await db.select().from(projectBudgetTracking)
+      .where(eq(projectBudgetTracking.projectId, projectId)).limit(1);
+
+    if (existing.length > 0) {
+      await db.update(projectBudgetTracking)
+        .set({
+          budgetedAmount: budgetedAmount.toString(),
+          actualAmount: actualCosts.toString(),
+          variance: variance.toString(),
+          variancePercentage: variancePercentage,
+          status,
+        })
+        .where(eq(projectBudgetTracking.projectId, projectId));
+    } else {
+      const trackingId = `track_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      await db.insert(projectBudgetTracking).values({
+        id: trackingId,
+        projectId,
+        budgetedAmount: budgetedAmount.toString(),
+        actualAmount: actualCosts.toString(),
+        variance: variance.toString(),
+        variancePercentage: variancePercentage,
+        status,
+      });
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("[Database] Failed to update budget tracking:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Update project profitability
+ */
+export async function updateProjectProfitability(projectId: string): Promise<{ success: boolean }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    // Get project quote amount
+    const project = await getProject(projectId);
+    if (!project) {
+      return { success: false };
+    }
+
+    const quoteAmount = parseFloat(project.quoteAmount || "0");
+    const totalCosts = await calculateProjectTotalCosts(projectId);
+    const grossProfit = quoteAmount - totalCosts;
+    const profitMargin = quoteAmount > 0 ? ((grossProfit / quoteAmount) * 100).toFixed(2) : "0";
+    
+    let status: "profitable" | "break_even" | "loss";
+    if (grossProfit > 0) {
+      status = "profitable";
+    } else if (grossProfit === 0) {
+      status = "break_even";
+    } else {
+      status = "loss";
+    }
+
+    // Check if profitability record exists
+    const existing = await db.select().from(projectProfitability)
+      .where(eq(projectProfitability.projectId, projectId)).limit(1);
+
+    if (existing.length > 0) {
+      await db.update(projectProfitability)
+        .set({
+          quoteAmount: quoteAmount.toString(),
+          totalCosts: totalCosts.toString(),
+          grossProfit: grossProfit.toString(),
+          profitMargin: profitMargin,
+          status,
+        })
+        .where(eq(projectProfitability.projectId, projectId));
+    } else {
+      const profitId = `profit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      await db.insert(projectProfitability).values({
+        id: profitId,
+        projectId,
+        quoteAmount: quoteAmount.toString(),
+        totalCosts: totalCosts.toString(),
+        grossProfit: grossProfit.toString(),
+        profitMargin: profitMargin,
+        status,
+      });
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("[Database] Failed to update profitability:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Get project profitability summary
+ */
+export async function getProjectProfitabilitySummary(projectId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const profitability = await db.select().from(projectProfitability)
+    .where(eq(projectProfitability.projectId, projectId)).limit(1);
+
+  if (profitability.length === 0) {
+    return null;
+  }
+
+  return profitability[0];
+}
+
+/**
+ * Get budget tracking for project
+ */
+export async function getProjectBudgetTracking(projectId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const tracking = await db.select().from(projectBudgetTracking)
+    .where(eq(projectBudgetTracking.projectId, projectId)).limit(1);
+
+  return tracking.length > 0 ? tracking[0] : null;
+}
+
+/**
+ * Get cost breakdown by type for project
+ */
+export async function getProjectCostBreakdown(projectId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const costs = await getProjectCosts(projectId);
+  
+  const breakdown = {
+    material: 0,
+    labor: 0,
+    equipment: 0,
+    subcontractor: 0,
+    other: 0,
+    total: 0,
+  };
+
+  costs.forEach(cost => {
+    const amount = parseFloat(cost.amount || "0");
+    breakdown[cost.costType as keyof typeof breakdown] += amount;
+    breakdown.total += amount;
+  });
+
+  return breakdown;
+}
+
+/**
+ * Check for budget overruns and alert
+ */
+export async function checkBudgetAlerts(projectId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const budgetTracking = await getProjectBudgetTracking(projectId);
+  if (!budgetTracking) return [];
+
+  const alerts = [];
+
+  if (budgetTracking.status === "over_budget") {
+    alerts.push({
+      severity: "critical",
+      message: `Project is over budget by $${Math.abs(parseFloat(budgetTracking.variance || "0")).toFixed(2)}`,
+      variance: budgetTracking.variance,
+    });
+  } else if (budgetTracking.status === "at_risk") {
+    alerts.push({
+      severity: "warning",
+      message: `Project is approaching budget limit. ${Math.abs(parseFloat(budgetTracking.variancePercentage || "0")).toFixed(1)}% remaining`,
+      variance: budgetTracking.variance,
+    });
+  }
+
+  const profitability = await getProjectProfitabilitySummary(projectId);
+  if (profitability && profitability.status === "loss") {
+    alerts.push({
+      severity: "critical",
+      message: `Project is unprofitable. Loss: $${Math.abs(parseFloat(profitability.grossProfit || "0")).toFixed(2)}`,
+      grossProfit: profitability.grossProfit,
+    });
+  }
+
+  return alerts;
 }
 

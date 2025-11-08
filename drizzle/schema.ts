@@ -335,6 +335,94 @@ export const materialAllocations = mysqlTable("materialAllocations", {
 export type MaterialAllocation = typeof materialAllocations.$inferSelect;
 export type InsertMaterialAllocation = typeof materialAllocations.$inferInsert;
 
+// Field Activity Logs (Real-time tracking from job sites)
+export const fieldActivityLogs = mysqlTable("fieldActivityLogs", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  projectId: varchar("projectId", { length: 64 }).notNull(),
+  allocationId: varchar("allocationId", { length: 64 }),
+  activityType: mysqlEnum("activityType", ["material_usage", "task_completion", "photo_capture", "location_update", "issue_report"]).notNull(),
+  description: text("description"),
+  quantity: varchar("quantity", { length: 20 }),
+  latitude: varchar("latitude", { length: 20 }),
+  longitude: varchar("longitude", { length: 20 }),
+  photoUrl: text("photoUrl"),
+  offlineSync: varchar("offlineSync", { length: 5 }).default("false"),
+  syncedAt: timestamp("syncedAt"),
+  createdBy: varchar("createdBy", { length: 64 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type FieldActivityLog = typeof fieldActivityLogs.$inferSelect;
+export type InsertFieldActivityLog = typeof fieldActivityLogs.$inferInsert;
+
+// Offline Data Queue (For syncing when connection restored)
+export const offlineDataQueue = mysqlTable("offlineDataQueue", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  userId: varchar("userId", { length: 64 }).notNull(),
+  projectId: varchar("projectId", { length: 64 }).notNull(),
+  dataType: varchar("dataType", { length: 100 }).notNull(),
+  payload: text("payload").notNull(),
+  status: mysqlEnum("status", ["pending", "synced", "failed"]).default("pending"),
+  syncAttempts: varchar("syncAttempts", { length: 5 }).default("0"),
+  lastError: text("lastError"),
+  createdAt: timestamp("createdAt").defaultNow(),
+  syncedAt: timestamp("syncedAt"),
+});
+
+export type OfflineDataQueue = typeof offlineDataQueue.$inferSelect;
+export type InsertOfflineDataQueue = typeof offlineDataQueue.$inferInsert;
+
+// Project Cost Tracking (Real-time profitability)
+export const projectCosts = mysqlTable("projectCosts", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  projectId: varchar("projectId", { length: 64 }).notNull(),
+  costType: mysqlEnum("costType", ["material", "labor", "equipment", "subcontractor", "other"]).notNull(),
+  description: varchar("description", { length: 255 }).notNull(),
+  amount: varchar("amount", { length: 20 }).notNull(),
+  quantity: varchar("quantity", { length: 20 }),
+  unitPrice: varchar("unitPrice", { length: 20 }),
+  allocationId: varchar("allocationId", { length: 64 }),
+  invoiceId: varchar("invoiceId", { length: 64 }),
+  status: mysqlEnum("status", ["estimated", "actual", "invoiced", "paid"]).default("estimated"),
+  createdBy: varchar("createdBy", { length: 64 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow(),
+});
+
+export type ProjectCost = typeof projectCosts.$inferSelect;
+export type InsertProjectCost = typeof projectCosts.$inferInsert;
+
+// Project Budget Tracking
+export const projectBudgetTracking = mysqlTable("projectBudgetTracking", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  projectId: varchar("projectId", { length: 64 }).notNull(),
+  budgetedAmount: varchar("budgetedAmount", { length: 20 }).notNull(),
+  actualAmount: varchar("actualAmount", { length: 20 }).default("0"),
+  variance: varchar("variance", { length: 20 }).default("0"),
+  variancePercentage: varchar("variancePercentage", { length: 10 }).default("0"),
+  status: mysqlEnum("status", ["on_track", "at_risk", "over_budget", "under_budget"]).default("on_track"),
+  lastUpdated: timestamp("lastUpdated").defaultNow().onUpdateNow(),
+});
+
+export type ProjectBudgetTracking = typeof projectBudgetTracking.$inferSelect;
+export type InsertProjectBudgetTracking = typeof projectBudgetTracking.$inferInsert;
+
+// Project Profitability Summary
+export const projectProfitability = mysqlTable("projectProfitability", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  projectId: varchar("projectId", { length: 64 }).notNull(),
+  quoteAmount: varchar("quoteAmount", { length: 20 }).notNull(),
+  invoicedAmount: varchar("invoicedAmount", { length: 20 }).default("0"),
+  totalCosts: varchar("totalCosts", { length: 20 }).default("0"),
+  grossProfit: varchar("grossProfit", { length: 20 }).default("0"),
+  profitMargin: varchar("profitMargin", { length: 10 }).default("0"),
+  status: mysqlEnum("status", ["profitable", "break_even", "loss"]).default("profitable"),
+  lastCalculated: timestamp("lastCalculated").defaultNow().onUpdateNow(),
+});
+
+export type ProjectProfitability = typeof projectProfitability.$inferSelect;
+export type InsertProjectProfitability = typeof projectProfitability.$inferInsert;
+
 // Reorder Orders
 export const reorderOrders = mysqlTable("reorderOrders", {
   id: varchar("id", { length: 64 }).primaryKey(),
