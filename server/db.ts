@@ -1,4 +1,4 @@
-import { eq, sum, and } from "drizzle-orm";
+import { eq, sum, and, or, lt, desc, gt } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { 
   InsertUser, 
@@ -36,7 +36,25 @@ import {
   projectBudgetTracking,
   InsertProjectBudgetTracking,
   projectProfitability,
-  InsertProjectProfitability
+  InsertProjectProfitability,
+  suppliers,
+  InsertSupplier,
+  supplierPricing,
+  InsertSupplierPricing,
+  purchaseOrders,
+  InsertPurchaseOrder,
+  purchaseOrderItems,
+  InsertPurchaseOrderItem,
+  laborTimesheets,
+  InsertLaborTimesheet,
+  laborCostsSummary,
+  InsertLaborCostsSummary,
+  customerPortalAccess,
+  InsertCustomerPortalAccess,
+  customerInvoices,
+  InsertCustomerInvoice,
+  customerDocuments,
+  InsertCustomerDocument
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -1250,5 +1268,779 @@ export async function checkBudgetAlerts(projectId: string) {
   }
 
   return alerts;
+}
+
+
+
+
+// ===== SUPPLIER MANAGEMENT FUNCTIONS =====
+
+/**
+ * Create or update supplier
+ */
+export async function upsertSupplier(
+  organizationId: string,
+  data: {
+    id?: string;
+    name: string;
+    email?: string;
+    phone?: string;
+    address?: string;
+    city?: string;
+    state?: string;
+    zipCode?: string;
+    country?: string;
+    leadTime?: string;
+    minimumOrderQuantity?: string;
+    paymentTerms?: string;
+  }
+): Promise<{ success: boolean; supplierId?: string }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const supplierId = data.id || `sup_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    const existing = await db.select().from(suppliers)
+      .where(eq(suppliers.id, supplierId)).limit(1);
+
+    if (existing.length > 0) {
+      await db.update(suppliers).set(data).where(eq(suppliers.id, supplierId));
+    } else {
+      await db.insert(suppliers).values({
+        id: supplierId,
+        organizationId,
+        ...data,
+      });
+    }
+
+    return { success: true, supplierId };
+  } catch (error) {
+    console.error("[Database] Failed to upsert supplier:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Get all suppliers for organization
+ */
+export async function getOrganizationSuppliers(organizationId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db.select().from(suppliers)
+    .where(eq(suppliers.organizationId, organizationId))
+    .where(eq(suppliers.isActive, "true"));
+}
+
+/**
+ * Add supplier pricing
+ */
+export async function addSupplierPricing(
+  supplierId: string,
+  inventoryItemId: string,
+  price: number,
+  minimumQuantity: number = 1
+): Promise<{ success: boolean; pricingId?: string }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const pricingId = `pricing_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    await db.insert(supplierPricing).values({
+      id: pricingId,
+      supplierId,
+      inventoryItemId,
+      price: price.toString(),
+      minimumQuantity: minimumQuantity.toString(),
+    });
+
+    return { success: true, pricingId };
+  } catch (error) {
+    console.error("[Database] Failed to add supplier pricing:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Get best supplier pricing for item
+ */
+export async function getBestSupplierPricing(inventoryItemId: string, quantity: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const pricing = await db.select().from(supplierPricing)
+    .where(eq(supplierPricing.inventoryItemId, inventoryItemId))
+    .where(eq(supplierPricing.isActive, "true"))
+    .where(lt(supplierPricing.minimumQuantity, quantity.toString()));
+
+  if (pricing.length === 0) return null;
+
+  // Sort by price ascending and return lowest
+  return pricing.sort((a, b) => parseFloat(a.price) - parseFloat(b.price))[0];
+}
+
+/**
+ * Create purchase order
+ */
+export async function createPurchaseOrder(
+  organizationId: string,
+  supplierId: string,
+  items: Array<{ inventoryItemId: string; quantity: number; unitPrice: number }>,
+  createdBy: string,
+  expectedDeliveryDate?: Date
+): Promise<{ success: boolean; poId?: string; poNumber?: string }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const poId = `po_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const poNumber = `PO-${Date.now()}`;
+    
+    const totalAmount = items.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0);
+
+    await db.insert(purchaseOrders).values({
+      id: poId,
+      organizationId,
+      supplierId,
+      poNumber,
+      totalAmount: totalAmount.toString(),
+      expectedDeliveryDate,
+      createdBy,
+    });
+
+    // Add items to PO
+    for (const item of items) {
+      const lineTotal = item.quantity * item.unitPrice;
+      const itemId = `poi_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+      await db.insert(purchaseOrderItems).values({
+        id: itemId,
+        purchaseOrderId: poId,
+        inventoryItemId: item.inventoryItemId,
+        quantity: item.quantity.toString(),
+        unitPrice: item.unitPrice.toString(),
+        lineTotal: lineTotal.toString(),
+      });
+    }
+
+    return { success: true, poId, poNumber };
+  } catch (error) {
+    console.error("[Database] Failed to create purchase order:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Get purchase orders for organization
+ */
+export async function getOrganizationPurchaseOrders(organizationId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db.select().from(purchaseOrders)
+    .where(eq(purchaseOrders.organizationId, organizationId));
+}
+
+/**
+ * Auto-generate purchase order for low stock item
+ */
+export async function autoGeneratePurchaseOrder(
+  organizationId: string,
+  inventoryItemId: string,
+  reorderQuantity: number,
+  createdBy: string
+): Promise<{ success: boolean; poId?: string; message: string }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    // Get best supplier pricing
+    const pricing = await getBestSupplierPricing(inventoryItemId, reorderQuantity);
+    if (!pricing) {
+      return { success: false, message: "No supplier pricing found for this item" };
+    }
+
+    // Get supplier details
+    const supplier = await db.select().from(suppliers)
+      .where(eq(suppliers.id, pricing.supplierId)).limit(1);
+    
+    if (supplier.length === 0) {
+      return { success: false, message: "Supplier not found" };
+    }
+
+    // Calculate expected delivery date
+    const leadTime = parseInt(supplier[0].leadTime || "7");
+    const expectedDelivery = new Date();
+    expectedDelivery.setDate(expectedDelivery.getDate() + leadTime);
+
+    // Create PO
+    const result = await createPurchaseOrder(
+      organizationId,
+      pricing.supplierId,
+      [{ inventoryItemId, quantity: reorderQuantity, unitPrice: parseFloat(pricing.price) }],
+      createdBy,
+      expectedDelivery
+    );
+
+    if (!result.success) {
+      return { success: false, message: "Failed to create purchase order" };
+    }
+
+    return {
+      success: true,
+      poId: result.poId,
+      message: `Auto-generated PO ${result.poNumber} from ${supplier[0].name}. Expected delivery: ${expectedDelivery.toDateString()}`,
+    };
+  } catch (error) {
+    console.error("[Database] Failed to auto-generate PO:", error);
+    return { success: false, message: "Failed to auto-generate purchase order" };
+  }
+}
+
+/**
+ * Update purchase order status
+ */
+export async function updatePurchaseOrderStatus(
+  poId: string,
+  status: "draft" | "sent" | "confirmed" | "shipped" | "received" | "canceled",
+  actualDeliveryDate?: Date
+): Promise<{ success: boolean }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const updates: any = { status };
+    if (actualDeliveryDate && status === "received") {
+      updates.actualDeliveryDate = actualDeliveryDate;
+    }
+
+    await db.update(purchaseOrders).set(updates).where(eq(purchaseOrders.id, poId));
+
+    // If received, update inventory
+    if (status === "received") {
+      const po = await db.select().from(purchaseOrders).where(eq(purchaseOrders.id, poId)).limit(1);
+      if (po.length > 0) {
+        const items = await db.select().from(purchaseOrderItems).where(eq(purchaseOrderItems.purchaseOrderId, poId));
+        
+        for (const item of items) {
+          const quantity = parseInt(item.quantity || "0");
+          const currentItem = await db.select().from(inventoryItems)
+            .where(eq(inventoryItems.id, item.inventoryItemId)).limit(1);
+          
+          if (currentItem.length > 0) {
+            const currentStock = parseInt(currentItem[0].currentStock || "0");
+            await db.update(inventoryItems)
+              .set({ currentStock: (currentStock + quantity).toString() })
+              .where(eq(inventoryItems.id, item.inventoryItemId));
+          }
+        }
+      }
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("[Database] Failed to update PO status:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Get pending purchase orders (not yet received)
+ */
+export async function getPendingPurchaseOrders(organizationId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db.select().from(purchaseOrders)
+    .where(eq(purchaseOrders.organizationId, organizationId))
+    .where(or(
+      eq(purchaseOrders.status, "sent"),
+      eq(purchaseOrders.status, "confirmed"),
+      eq(purchaseOrders.status, "shipped")
+    ));
+}
+
+/**
+ * Check for overdue purchase orders
+ */
+export async function getOverduePurchaseOrders(organizationId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const now = new Date();
+  const pending = await getPendingPurchaseOrders(organizationId);
+
+  return pending.filter(po => {
+    if (!po.expectedDeliveryDate) return false;
+    return new Date(po.expectedDeliveryDate) < now;
+  });
+}
+
+
+
+
+// ===== LABOR TRACKING FUNCTIONS =====
+
+/**
+ * Submit labor timesheet entry
+ */
+export async function submitLaborTimesheet(
+  projectId: string,
+  userId: string,
+  date: Date,
+  hoursWorked: number,
+  hourlyRate: number,
+  taskDescription?: string
+): Promise<{ success: boolean; timesheetId?: string }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const timesheetId = `ts_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const totalCost = hoursWorked * hourlyRate;
+
+    await db.insert(laborTimesheets).values({
+      id: timesheetId,
+      projectId,
+      userId,
+      date,
+      hoursWorked: hoursWorked.toString(),
+      hourlyRate: hourlyRate.toString(),
+      totalCost: totalCost.toString(),
+      taskDescription,
+      status: "submitted",
+    });
+
+    // Update labor costs summary
+    await updateLaborCostsSummary(projectId);
+
+    return { success: true, timesheetId };
+  } catch (error) {
+    console.error("[Database] Failed to submit labor timesheet:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Get labor timesheets for project
+ */
+export async function getProjectLaborTimesheets(projectId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db.select().from(laborTimesheets)
+    .where(eq(laborTimesheets.projectId, projectId));
+}
+
+/**
+ * Approve labor timesheet
+ */
+export async function approveLaborTimesheet(timesheetId: string): Promise<{ success: boolean }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    await db.update(laborTimesheets)
+      .set({ status: "approved" })
+      .where(eq(laborTimesheets.id, timesheetId));
+
+    return { success: true };
+  } catch (error) {
+    console.error("[Database] Failed to approve timesheet:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Update labor costs summary for project
+ */
+export async function updateLaborCostsSummary(projectId: string): Promise<{ success: boolean }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const timesheets = await getProjectLaborTimesheets(projectId);
+    
+    const totalHours = timesheets.reduce((sum, ts) => sum + parseFloat(ts.hoursWorked || "0"), 0);
+    const totalCost = timesheets.reduce((sum, ts) => sum + parseFloat(ts.totalCost || "0"), 0);
+    const averageHourlyRate = timesheets.length > 0 ? totalCost / totalHours : 0;
+
+    // Check if summary exists
+    const existing = await db.select().from(laborCostsSummary)
+      .where(eq(laborCostsSummary.projectId, projectId)).limit(1);
+
+    if (existing.length > 0) {
+      await db.update(laborCostsSummary)
+        .set({
+          totalHours: totalHours.toString(),
+          totalCost: totalCost.toString(),
+          averageHourlyRate: averageHourlyRate.toString(),
+        })
+        .where(eq(laborCostsSummary.projectId, projectId));
+    } else {
+      const summaryId = `lcs_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      await db.insert(laborCostsSummary).values({
+        id: summaryId,
+        projectId,
+        totalHours: totalHours.toString(),
+        totalCost: totalCost.toString(),
+        averageHourlyRate: averageHourlyRate.toString(),
+      });
+    }
+
+    // Add labor cost to project costs
+    await addProjectCost(
+      projectId,
+      "labor",
+      `Labor costs for ${totalHours} hours`,
+      totalCost,
+      {},
+      "system"
+    );
+
+    return { success: true };
+  } catch (error) {
+    console.error("[Database] Failed to update labor costs summary:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Get labor costs summary for project
+ */
+export async function getProjectLaborCostsSummary(projectId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const summary = await db.select().from(laborCostsSummary)
+    .where(eq(laborCostsSummary.projectId, projectId)).limit(1);
+
+  return summary.length > 0 ? summary[0] : null;
+}
+
+/**
+ * Get labor timesheets by user
+ */
+export async function getUserLaborTimesheets(userId: string, projectId?: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  let query = db.select().from(laborTimesheets)
+    .where(eq(laborTimesheets.userId, userId));
+
+  if (projectId) {
+    query = query.where(eq(laborTimesheets.projectId, projectId));
+  }
+
+  return await query;
+}
+
+/**
+ * Calculate labor variance (budgeted vs actual)
+ */
+export async function calculateLaborVariance(
+  projectId: string,
+  budgetedHours: number
+): Promise<{ variance: number; variancePercentage: number; status: string }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const summary = await getProjectLaborCostsSummary(projectId);
+  if (!summary) {
+    return { variance: 0, variancePercentage: 0, status: "no_data" };
+  }
+
+  const actualHours = parseFloat(summary.totalHours || "0");
+  const variance = budgetedHours - actualHours;
+  const variancePercentage = budgetedHours > 0 ? (variance / budgetedHours) * 100 : 0;
+
+  let status = "on_track";
+  if (variancePercentage < -10) {
+    status = "over_budget";
+  } else if (variancePercentage < 0) {
+    status = "at_risk";
+  } else if (variancePercentage > 10) {
+    status = "under_budget";
+  }
+
+  return { variance, variancePercentage, status };
+}
+
+/**
+ * Get pending timesheets for approval
+ */
+export async function getPendingTimesheets(projectId?: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  let query = db.select().from(laborTimesheets)
+    .where(eq(laborTimesheets.status, "submitted"));
+
+  if (projectId) {
+    query = query.where(eq(laborTimesheets.projectId, projectId));
+  }
+
+  return await query;
+}
+
+
+
+
+// ===== CUSTOMER PORTAL FUNCTIONS =====
+
+/**
+ * Generate customer portal access token
+ */
+export async function generateCustomerPortalAccess(
+  organizationId: string,
+  clientId: string,
+  expiresInDays: number = 365
+): Promise<{ success: boolean; accessToken?: string }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const accessToken = `portal_${Date.now()}_${Math.random().toString(36).substr(2, 20)}`;
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + expiresInDays);
+
+    const id = `cpa_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    await db.insert(customerPortalAccess).values({
+      id,
+      organizationId,
+      clientId,
+      accessToken,
+      expiresAt,
+    });
+
+    return { success: true, accessToken };
+  } catch (error) {
+    console.error("[Database] Failed to generate portal access:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Verify customer portal access token
+ */
+export async function verifyCustomerPortalAccess(accessToken: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const access = await db.select().from(customerPortalAccess)
+    .where(eq(customerPortalAccess.accessToken, accessToken))
+    .where(eq(customerPortalAccess.isActive, "true"))
+    .limit(1);
+
+  if (access.length === 0) {
+    return null;
+  }
+
+  const record = access[0];
+  if (record.expiresAt && new Date(record.expiresAt) < new Date()) {
+    return null; // Token expired
+  }
+
+  return record;
+}
+
+/**
+ * Create customer invoice
+ */
+export async function createCustomerInvoice(
+  organizationId: string,
+  clientId: string,
+  projectId: string,
+  amount: number,
+  dueDate?: Date,
+  notes?: string
+): Promise<{ success: boolean; invoiceId?: string; invoiceNumber?: string }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const invoiceId = `inv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const invoiceNumber = `INV-${Date.now()}`;
+
+    await db.insert(customerInvoices).values({
+      id: invoiceId,
+      organizationId,
+      clientId,
+      projectId,
+      invoiceNumber,
+      amount: amount.toString(),
+      dueDate,
+      notes,
+      status: "draft",
+    });
+
+    return { success: true, invoiceId, invoiceNumber };
+  } catch (error) {
+    console.error("[Database] Failed to create customer invoice:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Get customer invoices
+ */
+export async function getClientInvoices(clientId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db.select().from(customerInvoices)
+    .where(eq(customerInvoices.clientId, clientId));
+}
+
+/**
+ * Update invoice status
+ */
+export async function updateInvoiceStatus(
+  invoiceId: string,
+  status: "draft" | "sent" | "viewed" | "overdue" | "paid" | "canceled",
+  paidDate?: Date
+): Promise<{ success: boolean }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const updates: any = { status };
+    if (paidDate && status === "paid") {
+      updates.paidDate = paidDate;
+    }
+
+    await db.update(customerInvoices).set(updates).where(eq(customerInvoices.id, invoiceId));
+
+    return { success: true };
+  } catch (error) {
+    console.error("[Database] Failed to update invoice status:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Add customer document
+ */
+export async function addCustomerDocument(
+  organizationId: string,
+  clientId: string,
+  projectId: string,
+  documentName: string,
+  documentType: string,
+  fileUrl: string,
+  fileSize?: number
+): Promise<{ success: boolean; documentId?: string }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const documentId = `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    await db.insert(customerDocuments).values({
+      id: documentId,
+      organizationId,
+      clientId,
+      projectId,
+      documentName,
+      documentType,
+      fileUrl,
+      fileSize: fileSize?.toString(),
+    });
+
+    return { success: true, documentId };
+  } catch (error) {
+    console.error("[Database] Failed to add customer document:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Get customer documents for project
+ */
+export async function getProjectCustomerDocuments(projectId: string, clientId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db.select().from(customerDocuments)
+    .where(eq(customerDocuments.projectId, projectId))
+    .where(eq(customerDocuments.clientId, clientId));
+}
+
+/**
+ * Get customer portal dashboard data
+ */
+export async function getCustomerPortalDashboard(clientId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    const invoices = await getClientInvoices(clientId);
+    
+    const totalInvoiced = invoices.reduce((sum, inv) => sum + parseFloat(inv.amount || "0"), 0);
+    const totalPaid = invoices
+      .filter(inv => inv.status === "paid")
+      .reduce((sum, inv) => sum + parseFloat(inv.amount || "0"), 0);
+    const totalOutstanding = totalInvoiced - totalPaid;
+    
+    const overdueInvoices = invoices.filter(inv => {
+      if (!inv.dueDate || inv.status === "paid") return false;
+      return new Date(inv.dueDate) < new Date();
+    });
+
+    return {
+      success: true,
+      data: {
+        totalInvoiced,
+        totalPaid,
+        totalOutstanding,
+        invoiceCount: invoices.length,
+        overdueCount: overdueInvoices.length,
+        invoices,
+        overdueInvoices,
+      },
+    };
+  } catch (error) {
+    console.error("[Database] Failed to get portal dashboard:", error);
+    return { success: false };
+  }
+}
+
+/**
+ * Get overdue invoices
+ */
+export async function getOverdueInvoices(organizationId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const now = new Date();
+  const invoices = await db.select().from(customerInvoices)
+    .where(eq(customerInvoices.organizationId, organizationId));
+
+  return invoices.filter(inv => {
+    if (!inv.dueDate || inv.status === "paid") return false;
+    return new Date(inv.dueDate) < now;
+  });
+}
+
+/**
+ * Send invoice to customer
+ */
+export async function sendInvoiceToCustomer(invoiceId: string): Promise<{ success: boolean }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  try {
+    await db.update(customerInvoices)
+      .set({ status: "sent" })
+      .where(eq(customerInvoices.id, invoiceId));
+
+    return { success: true };
+  } catch (error) {
+    console.error("[Database] Failed to send invoice:", error);
+    return { success: false };
+  }
 }
 

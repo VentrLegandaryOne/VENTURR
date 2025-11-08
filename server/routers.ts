@@ -17,6 +17,9 @@ import { financialRouter } from "./routers/financialRouter";
 import { materialAllocationRouter } from "./routers/materialAllocationRouter";
 import { fieldTrackingRouter } from "./routers/fieldTrackingRouter";
 import { profitabilityRouter } from "./routers/profitabilityRouter";
+import { supplierRouter } from "./routers/supplierRouter";
+import { laborRouter } from "./routers/laborRouter";
+import { customerPortalRouter } from "./routers/customerPortalRouter";
 import { sendQuoteEmail } from "./emailService";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
@@ -56,6 +59,9 @@ export const appRouter = router({
   materialAllocation: materialAllocationRouter,
   fieldTracking: fieldTrackingRouter,
   profitability: profitabilityRouter,
+  supplier: supplierRouter,
+  labor: laborRouter,
+  customerPortal: customerPortalRouter,
 
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

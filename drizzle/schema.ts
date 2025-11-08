@@ -423,6 +423,166 @@ export const projectProfitability = mysqlTable("projectProfitability", {
 export type ProjectProfitability = typeof projectProfitability.$inferSelect;
 export type InsertProjectProfitability = typeof projectProfitability.$inferInsert;
 
+// Suppliers
+export const suppliers = mysqlTable("suppliers", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 320 }),
+  phone: varchar("phone", { length: 20 }),
+  address: text("address"),
+  city: varchar("city", { length: 100 }),
+  state: varchar("state", { length: 50 }),
+  zipCode: varchar("zipCode", { length: 20 }),
+  country: varchar("country", { length: 100 }),
+  leadTime: varchar("leadTime", { length: 50 }),
+  minimumOrderQuantity: varchar("minimumOrderQuantity", { length: 20 }),
+  paymentTerms: varchar("paymentTerms", { length: 100 }),
+  rating: varchar("rating", { length: 5 }).default("0"),
+  isActive: varchar("isActive", { length: 5 }).default("true"),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow(),
+});
+
+export type Supplier = typeof suppliers.$inferSelect;
+export type InsertSupplier = typeof suppliers.$inferInsert;
+
+// Supplier Pricing
+export const supplierPricing = mysqlTable("supplierPricing", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  supplierId: varchar("supplierId", { length: 64 }).notNull(),
+  inventoryItemId: varchar("inventoryItemId", { length: 64 }).notNull(),
+  price: varchar("price", { length: 20 }).notNull(),
+  currency: varchar("currency", { length: 5 }).default("AUD"),
+  minimumQuantity: varchar("minimumQuantity", { length: 20 }).default("1"),
+  effectiveFrom: timestamp("effectiveFrom").defaultNow(),
+  effectiveTo: timestamp("effectiveTo"),
+  isActive: varchar("isActive", { length: 5 }).default("true"),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow(),
+});
+
+export type SupplierPricing = typeof supplierPricing.$inferSelect;
+export type InsertSupplierPricing = typeof supplierPricing.$inferInsert;
+
+// Purchase Orders
+export const purchaseOrders = mysqlTable("purchaseOrders", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  supplierId: varchar("supplierId", { length: 64 }).notNull(),
+  poNumber: varchar("poNumber", { length: 50 }).unique(),
+  status: mysqlEnum("status", ["draft", "sent", "confirmed", "shipped", "received", "canceled"]).default("draft"),
+  orderDate: timestamp("orderDate").defaultNow(),
+  expectedDeliveryDate: timestamp("expectedDeliveryDate"),
+  actualDeliveryDate: timestamp("actualDeliveryDate"),
+  totalAmount: varchar("totalAmount", { length: 20 }).notNull(),
+  notes: text("notes"),
+  createdBy: varchar("createdBy", { length: 64 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow(),
+});
+
+export type PurchaseOrder = typeof purchaseOrders.$inferSelect;
+export type InsertPurchaseOrder = typeof purchaseOrders.$inferInsert;
+
+// Purchase Order Items
+export const purchaseOrderItems = mysqlTable("purchaseOrderItems", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  purchaseOrderId: varchar("purchaseOrderId", { length: 64 }).notNull(),
+  inventoryItemId: varchar("inventoryItemId", { length: 64 }).notNull(),
+  quantity: varchar("quantity", { length: 20 }).notNull(),
+  unitPrice: varchar("unitPrice", { length: 20 }).notNull(),
+  lineTotal: varchar("lineTotal", { length: 20 }).notNull(),
+  receivedQuantity: varchar("receivedQuantity", { length: 20 }).default("0"),
+  status: mysqlEnum("status", ["pending", "partial", "received", "canceled"]).default("pending"),
+});
+
+export type PurchaseOrderItem = typeof purchaseOrderItems.$inferSelect;
+export type InsertPurchaseOrderItem = typeof purchaseOrderItems.$inferInsert;
+
+// Labor Tracking (Timesheets)
+export const laborTimesheets = mysqlTable("laborTimesheets", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  projectId: varchar("projectId", { length: 64 }).notNull(),
+  userId: varchar("userId", { length: 64 }).notNull(),
+  date: timestamp("date").notNull(),
+  hoursWorked: varchar("hoursWorked", { length: 10 }).notNull(),
+  hourlyRate: varchar("hourlyRate", { length: 20 }).notNull(),
+  totalCost: varchar("totalCost", { length: 20 }).notNull(),
+  taskDescription: text("taskDescription"),
+  status: mysqlEnum("status", ["draft", "submitted", "approved", "invoiced", "paid"]).default("draft"),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow(),
+});
+
+export type LaborTimesheet = typeof laborTimesheets.$inferSelect;
+export type InsertLaborTimesheet = typeof laborTimesheets.$inferInsert;
+
+// Labor Costs Summary
+export const laborCostsSummary = mysqlTable("laborCostsSummary", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  projectId: varchar("projectId", { length: 64 }).notNull(),
+  totalHours: varchar("totalHours", { length: 10 }).default("0"),
+  totalCost: varchar("totalCost", { length: 20 }).default("0"),
+  averageHourlyRate: varchar("averageHourlyRate", { length: 20 }).default("0"),
+  budgetedHours: varchar("budgetedHours", { length: 10 }).default("0"),
+  variance: varchar("variance", { length: 10 }).default("0"),
+  lastUpdated: timestamp("lastUpdated").defaultNow().onUpdateNow(),
+});
+
+export type LaborCostsSummary = typeof laborCostsSummary.$inferSelect;
+export type InsertLaborCostsSummary = typeof laborCostsSummary.$inferInsert;
+
+// Customer Portal Access
+export const customerPortalAccess = mysqlTable("customerPortalAccess", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  clientId: varchar("clientId", { length: 64 }).notNull(),
+  accessToken: varchar("accessToken", { length: 255 }).unique(),
+  expiresAt: timestamp("expiresAt"),
+  isActive: varchar("isActive", { length: 5 }).default("true"),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type CustomerPortalAccess = typeof customerPortalAccess.$inferSelect;
+export type InsertCustomerPortalAccess = typeof customerPortalAccess.$inferInsert;
+
+// Customer Invoices
+export const customerInvoices = mysqlTable("customerInvoices", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  clientId: varchar("clientId", { length: 64 }).notNull(),
+  projectId: varchar("projectId", { length: 64 }).notNull(),
+  invoiceNumber: varchar("invoiceNumber", { length: 50 }).unique(),
+  amount: varchar("amount", { length: 20 }).notNull(),
+  currency: varchar("currency", { length: 5 }).default("AUD"),
+  status: mysqlEnum("status", ["draft", "sent", "viewed", "overdue", "paid", "canceled"]).default("draft"),
+  issueDate: timestamp("issueDate").defaultNow(),
+  dueDate: timestamp("dueDate"),
+  paidDate: timestamp("paidDate"),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow(),
+});
+
+export type CustomerInvoice = typeof customerInvoices.$inferSelect;
+export type InsertCustomerInvoice = typeof customerInvoices.$inferInsert;
+
+// Customer Documents
+export const customerDocuments = mysqlTable("customerDocuments", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  organizationId: varchar("organizationId", { length: 64 }).notNull(),
+  clientId: varchar("clientId", { length: 64 }).notNull(),
+  projectId: varchar("projectId", { length: 64 }).notNull(),
+  documentName: varchar("documentName", { length: 255 }).notNull(),
+  documentType: varchar("documentType", { length: 50 }).notNull(),
+  fileUrl: text("fileUrl").notNull(),
+  fileSize: varchar("fileSize", { length: 20 }),
+  uploadedAt: timestamp("uploadedAt").defaultNow(),
+});
+
+export type CustomerDocument = typeof customerDocuments.$inferSelect;
+export type InsertCustomerDocument = typeof customerDocuments.$inferInsert;
+
 // Reorder Orders
 export const reorderOrders = mysqlTable("reorderOrders", {
   id: varchar("id", { length: 64 }).primaryKey(),
