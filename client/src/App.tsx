@@ -67,6 +67,9 @@ const MobileNativeAppsConfig = lazy(() => import("./pages/MobileNativeAppsConfig
 const EnterpriseSSOSAML = lazy(() => import("./pages/EnterpriseSSOSAML"));
 const AdvancedComplianceAudit = lazy(() => import("./pages/AdvancedComplianceAudit"));
 const RealtimeCollaborationSuite = lazy(() => import("./pages/RealtimeCollaborationSuite"));
+const AdvancedMarketplaceEcosystem = lazy(() => import("./pages/AdvancedMarketplaceEcosystem"));
+const PredictiveMaintenanceIoT = lazy(() => import("./pages/PredictiveMaintenanceIoT"));
+const AdvancedFinancialManagement = lazy(() => import("./pages/AdvancedFinancialManagement"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -139,6 +142,9 @@ function Router() {
       <Route path={"//enterprise-sso"} component={EnterpriseSSOSAML} />
       <Route path={"//compliance-audit"} component={AdvancedComplianceAudit} />
       <Route path={"//collaboration-suite"} component={RealtimeCollaborationSuite} />
+      <Route path={"//marketplace-ecosystem"} component={AdvancedMarketplaceEcosystem} />
+      <Route path={"//predictive-maintenance"} component={PredictiveMaintenanceIoT} />
+      <Route path={"//financial-management"} component={AdvancedFinancialManagement} />
       <Route path={"//404"} component={NotFound} />
         <Route component={NotFound} /> </Switch>
     </Suspense>
