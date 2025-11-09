@@ -183,3 +183,69 @@
     }
   }
 }
+
+
+/* Dropdown, Select, and Popover Styling - Ensure Opaque Backgrounds */
+@layer components {
+  /* Select Content - Opaque Background */
+  [data-slot="select-content"] {
+    @apply bg-background text-foreground;
+    background-color: hsl(var(--background)) !important;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Select Items - Proper Contrast */
+  [data-slot="select-item"] {
+    @apply bg-background hover:bg-accent/50;
+    background-color: hsl(var(--background)) !important;
+  }
+
+  [data-slot="select-item"]:focus {
+    @apply bg-accent text-accent-foreground;
+    background-color: hsl(var(--accent)) !important;
+  }
+
+  /* Dropdown Menu Content - Opaque Background */
+  [data-slot="dropdown-menu-content"] {
+    @apply bg-background text-foreground;
+    background-color: hsl(var(--background)) !important;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Dropdown Menu Items - Proper Contrast */
+  [data-slot="dropdown-menu-item"] {
+    @apply hover:bg-accent/50;
+  }
+
+  [data-slot="dropdown-menu-item"]:focus {
+    @apply bg-accent text-accent-foreground;
+    background-color: hsl(var(--accent)) !important;
+  }
+
+  /* Popover Content - Opaque Background */
+  [data-slot="popover-content"] {
+    @apply bg-background text-foreground;
+    background-color: hsl(var(--background)) !important;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Command Component - Opaque Background */
+  [data-slot="command"] {
+    @apply bg-background text-foreground;
+    background-color: hsl(var(--background)) !important;
+    opacity: 1 !important;
+  }
+
+  /* Ensure all dropdown-like elements have visible borders */
+  [data-slot="select-content"],
+  [data-slot="dropdown-menu-content"],
+  [data-slot="popover-content"],
+  [data-slot="command"] {
+    border-color: hsl(var(--border)) !important;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important;
+  }
+}
+
