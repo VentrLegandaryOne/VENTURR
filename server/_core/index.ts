@@ -10,6 +10,7 @@ import { serveStatic, setupVite } from "./vite";
 import helmet from "helmet";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
+import compression from "compression";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -36,6 +37,33 @@ async function startServer() {
   
   // Trust proxy for rate limiting behind reverse proxy
   app.set('trust proxy', 1);
+  
+  // Enable gzip/brotli compression
+  app.use(compression({
+    level: 6, // Compression level (0-9, 6 is good balance)
+    threshold: 1024, // Only compress responses > 1KB
+    filter: (req, res) => {
+      if (req.headers['x-no-compression']) {
+        return false;
+      }
+      return compression.filter(req, res);
+    }
+  }));
+  
+  // Add cache headers for static assets
+  app.use((req, res, next) => {
+    if (req.url.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/)) {
+      // Cache static assets for 1 year
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    } else if (req.url.startsWith('/api/')) {
+      // Don't cache API responses
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    } else {
+      // Cache HTML for 5 minutes
+      res.setHeader('Cache-Control', 'public, max-age=300');
+    }
+    next();
+  });
   
   // Security middleware
   app.use(helmet({
