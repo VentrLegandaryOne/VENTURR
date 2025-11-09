@@ -1,4 +1,5 @@
 import { invokeLLM } from "./_core/llm";
+import { enhancedIntelligenceModel } from "./enhancedIntelligenceModel";
 
 /**
  * Venturr Intelligence Analysis Engine
@@ -145,6 +146,12 @@ export async function analyzeProject(input: ProjectInput): Promise<IntelligenceA
  */
 async function analyzeMaterialRequirements(input: ProjectInput): Promise<IntelligenceAnalysis["materialTakeOff"]> {
   console.log("[Material Analysis] Analyzing material requirements...");
+  
+  // Get knowledge base recommendations
+  const knowledgeBase = enhancedIntelligenceModel.getKnowledgeBase();
+  const materialRecommendations = Object.values(knowledgeBase.materials.metalRoofing)
+    .filter(m => !input.coastalExposure || m.compatibility.includes("Coastal"))
+    .slice(0, 5);
   
   const prompt = `You are a professional roofing estimator with 20+ years of experience. Analyze the following project and provide a 100% accurate material take-off.
 
