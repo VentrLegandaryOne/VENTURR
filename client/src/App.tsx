@@ -70,6 +70,7 @@ const RealtimeCollaborationSuite = lazy(() => import("./pages/RealtimeCollaborat
 const AdvancedMarketplaceEcosystem = lazy(() => import("./pages/AdvancedMarketplaceEcosystem"));
 const PredictiveMaintenanceIoT = lazy(() => import("./pages/PredictiveMaintenanceIoT"));
 const AdvancedFinancialManagement = lazy(() => import("./pages/AdvancedFinancialManagement"));
+const AutonomousCycleDashboard = lazy(() => import("./pages/AutonomousCycleDashboard"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -87,6 +88,7 @@ function Router() {
         <Route path={"/"} component={Home} />
       <Route path={"/pricing"} component={Pricing} />
       <Route path={"/pricing-dashboard"} component={PricingDashboard} />
+      <Route path={"/autonomous-cycle"} component={AutonomousCycleDashboard} />
       <Route path={"/chatbot"} component={Chatbot} />
       <Route path={"/marketplace"} component={Marketplace} />
       <Route path={"/admin"} component={AdminDashboard} />
