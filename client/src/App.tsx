@@ -13,11 +13,11 @@ const NewProject = lazy(() => import("./pages/NewProject"));
 const Projects = lazy(() => import("./pages/Projects"));
 const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
 const CalculatorEnhanced = lazy(() => import("./pages/CalculatorEnhanced"));
-// QuoteGenerator temporarily removed
+const QuoteGenerator = lazy(() => import("./pages/QuoteGenerator"));
 const LeafletSiteMeasurement = lazy(() => import("./pages/LeafletSiteMeasurement"));
 const Profile = lazy(() => import("./pages/Profile"));
 const OrganizationSettings = lazy(() => import("./pages/OrganizationSettings"));
-// MaterialsLibrary temporarily removed
+const MaterialsLibrary = lazy(() => import("./pages/MaterialsLibrary"));
 const Pricing = lazy(() => import("./pages/Pricing"));
 // Settings temporarily removed
 const Compliance = lazy(() => import("./pages/Compliance"));
@@ -54,7 +54,7 @@ function Router() {
         <Route path="/projects/:id/compliance" component={Compliance} />
         <Route path="/projects/:id/measure" component={LeafletSiteMeasurement} />
         <Route path="/projects/:id/calculator" component={CalculatorEnhanced} />
-        {/* Quote generator temporarily disabled */}
+        <Route path="/projects/:id/quote" component={QuoteGenerator} />
 
         {/* Intelligence System */}
         <Route path={"/project-input-form"} component={ProjectInputForm} />
@@ -67,7 +67,8 @@ function Router() {
         <Route path={"/settings/profile"} component={Profile} />
         <Route path={"/settings/organization"} component={OrganizationSettings} />
 
-        {/* Materials temporarily disabled */}
+        {/* Materials Library */}
+        <Route path="/materials" component={MaterialsLibrary} />
 
         {/* 404 */}
         <Route path={"/404"} component={NotFound} />
