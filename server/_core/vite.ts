@@ -44,7 +44,7 @@ export async function setupVite(app: Express, server: Server) {
  * Serve static files in production mode
  */
 export function serveStatic(app: Express) {
-  const distPath = path.resolve(process.cwd(), "dist/client");
+  const distPath = path.resolve(process.cwd(), "dist/public");
   app.use(express.static(distPath));
 
   app.get("*", (req, res) => {

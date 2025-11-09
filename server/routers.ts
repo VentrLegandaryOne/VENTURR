@@ -6,6 +6,8 @@ import { measurementsRouter } from "./routers/measurements";
 import { clientsRouter } from "./routers/clients";
 import { quotesRouter } from "./routers/quotes";
 import { intelligenceRouter } from "./routers/intelligenceRouter";
+import { projectsRouter } from "./routers/projects";
+import { materialsRouter } from "./routers/materials";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { 
@@ -202,8 +204,11 @@ export const appRouter = router({
       }),
   }),
 
-  // Materials library router
-  materials: router({
+  // Materials library router (using dedicated router)
+  materials: materialsRouter,
+
+  // Legacy materials search (deprecated)
+  materialsLegacy: router({
     search: publicProcedure
       .input(z.object({
         query: z.string(),
