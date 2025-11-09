@@ -1,5 +1,6 @@
-import { WebSocketServer, WebSocket } from 'ws';
+import { WebSocket, WebSocketServer } from 'ws';
 import { Server } from 'http';
+import { IncomingMessage } from 'http';
 
 interface NotificationMessage {
   type: 'comment' | 'mention' | 'project_update' | 'team_activity' | 'quote_sent';
@@ -29,7 +30,7 @@ class NotificationManager {
   }
 
   private setupWebSocket() {
-    this.wss.on('connection', (ws: WebSocket, req: any) => {
+    this.wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
       const userId = this.extractUserId(req);
       if (!userId) {
         ws.close(1008, 'Unauthorized');
@@ -55,7 +56,7 @@ class NotificationManager {
         }
       });
 
-      ws.on('error', (error: any) => {
+      ws.on('error', (error: Error) => {
         console.error('[WebSocket] Error:', error);
       });
     });

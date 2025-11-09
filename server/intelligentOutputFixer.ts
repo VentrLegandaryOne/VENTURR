@@ -306,7 +306,7 @@ export class IntelligentOutputFixer {
         // If not enough rules applied, try LLM
         const llmFixes = await this.applyLLMFixes(originalContent, gapType, category);
         appliedLLMFixes.push(...llmFixes);
-        fixedContent = this.integrateL LMFixes(fixedContent, llmFixes);
+        fixedContent = this.integrateLLMFixes(fixedContent, llmFixes);
       }
     }
 
@@ -368,7 +368,7 @@ export class IntelligentOutputFixer {
   /**
    * Integrate LLM fixes into content
    */
-  private integrateL LMFixes(content: string, fixes: string[]): string {
+  private integrateLLMFixes(content: string, fixes: string[]): string {
     let result = content;
 
     for (const fix of fixes) {
