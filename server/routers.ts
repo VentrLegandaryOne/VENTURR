@@ -18,6 +18,7 @@ import { materialAllocationRouter } from "./routers/materialAllocationRouter";
 import { fieldTrackingRouter } from "./routers/fieldTrackingRouter";
 import { profitabilityRouter } from "./routers/profitabilityRouter";
 import { autonomousCycleRouter } from "./routers/autonomousCycleRouter";
+import { intelligenceRouter } from "./routers/intelligenceRouter";
 import { sendQuoteEmail } from "./emailService";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
@@ -58,6 +59,7 @@ export const appRouter = router({
   fieldTracking: fieldTrackingRouter,
   profitability: profitabilityRouter,
   autonomousCycle: autonomousCycleRouter,
+  intelligence: intelligenceRouter,
 
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
