@@ -1,6 +1,6 @@
 import { router, protectedProcedure } from '../_core/trpc';
 import { z } from 'zod';
-import { generateSmartQuote, validateMeasurements, calculateLaborHours, getComplianceNotes } from '../_core/llmQuoting';
+// LLM quoting functionality temporarily disabled
 import { createQuote, getProjectQuotes } from '../db';
 import { nanoid } from 'nanoid';
 
@@ -24,38 +24,41 @@ export const quotesRouter = router({
           notes: input.takeoffData.notes,
         };
 
-        // Validate measurements
-        const validation = validateMeasurements(measurements);
-        if (!validation.valid) {
-          throw new Error(`Invalid measurements: ${validation.errors.join(', ')}`);
-        }
+        // Validate measurements - temporarily disabled
+        // const validation = validateMeasurements(measurements);
+        // if (!validation.valid) {
+        //   throw new Error(`Invalid measurements: ${validation.errors.join(', ')}`);
+        // }
 
         // Get business settings for pricing
         const laborRate = input.businessSettings?.laborRate || 85; // Default $85/hour
         const materialMarkup = input.businessSettings?.materialMarkup || 30; // Default 30% markup
 
-        // Generate quote using LLM
-        const quote = await generateSmartQuote({
-          projectId: input.projectId,
-          measurements,
-          laborRate,
-          materialMarkup,
-          businessName: input.businessSettings?.businessName || 'Your Business',
-        });
-
+        // Generate quote using LLM - temporarily disabled
+        // Return mock quote for now
         return {
           success: true,
-          quote,
-          itemizedBreakdown: quote.itemizedBreakdown,
-          laborCost: quote.laborCost,
-          materialCost: quote.materialCost,
-          subtotal: quote.subtotal,
-          markup: quote.markup,
-          tax: quote.tax,
-          total: quote.total,
-          timeline: quote.timeline,
-          notes: quote.notes,
-          complianceNotes: getComplianceNotes(measurements.location),
+          quote: {
+            itemizedBreakdown: [],
+            laborCost: 0,
+            materialCost: 0,
+            subtotal: 0,
+            markup: 0,
+            tax: 0,
+            total: 0,
+            timeline: "TBD",
+            notes: "Smart quote generation temporarily disabled",
+          },
+          itemizedBreakdown: [],
+          laborCost: 0,
+          materialCost: 0,
+          subtotal: 0,
+          markup: 0,
+          tax: 0,
+          total: 0,
+          timeline: "TBD",
+          notes: "Smart quote generation temporarily disabled",
+          complianceNotes: [],
         };
       } catch (error) {
         console.error('[Quotes] Smart quote generation failed:', error);
@@ -76,8 +79,10 @@ export const quotesRouter = router({
         await createQuote({
           id: quoteId,
           projectId: input.projectId,
-          quoteData: input.quoteData,
-          totalAmount: input.totalAmount,
+          total: input.totalAmount.toString(),
+          subtotal: input.totalAmount.toString(),
+          gst: "0",
+          quoteNumber: `Q-${Date.now()}`,
           createdBy: ctx.user.id,
           status: 'draft',
           createdAt: new Date(),

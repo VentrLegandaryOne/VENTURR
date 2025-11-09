@@ -18,7 +18,8 @@ export const measurementsRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const db = getDb();
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
       
       // Check if measurement already exists for this project
       const existing = await db
@@ -61,7 +62,8 @@ export const measurementsRouter = router({
   get: protectedProcedure
     .input(z.object({ projectId: z.string() }))
     .query(async ({ input }) => {
-      const db = getDb();
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
       
       const result = await db
         .select()
@@ -77,7 +79,8 @@ export const measurementsRouter = router({
   list: protectedProcedure
     .input(z.object({ projectId: z.string() }))
     .query(async ({ input }) => {
-      const db = getDb();
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
       
       const result = await db
         .select()
@@ -92,7 +95,8 @@ export const measurementsRouter = router({
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input }) => {
-      const db = getDb();
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
       
       // Verify measurement exists
       const measurement = await db

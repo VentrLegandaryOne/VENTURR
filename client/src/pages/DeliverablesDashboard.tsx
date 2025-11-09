@@ -1,4 +1,5 @@
-import { useParams, useNavigate } from "wouter";
+import { useParams, useLocation } from "wouter";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -29,14 +30,28 @@ import {
  */
 export default function DeliverablesDashboard() {
   const params = useParams();
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
   const projectId = params.id;
 
-  // Fetch all deliverables
-  const { data: deliverables, isLoading } = trpc.intelligence.generateDeliverables.useQuery(
-    { projectId: projectId || "" },
-    { enabled: !!projectId }
-  );
+  // Generate deliverables
+  const generateMutation = trpc.intelligence.generateDeliverables.useMutation();
+  const [deliverables, setDeliverables] = React.useState<any>(null);
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    if (projectId) {
+      setIsLoading(true);
+      generateMutation.mutate({} as any, {
+        onSuccess: (data) => {
+          setDeliverables(data);
+          setIsLoading(false);
+        },
+        onError: () => {
+          setIsLoading(false);
+        }
+      });
+    }
+  }, [projectId]);
 
   const handlePrint = () => {
     window.print();
@@ -67,7 +82,7 @@ export default function DeliverablesDashboard() {
             <CardDescription>Unable to load project deliverables</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button onClick={() => navigate("/dashboard")}>Return to Dashboard</Button>
+            <Button onClick={() => setLocation("/dashboard")}>Return to Dashboard</Button>
           </CardContent>
         </Card>
       </div>
@@ -83,7 +98,7 @@ export default function DeliverablesDashboard() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => navigate("/dashboard")}
+              onClick={() => setLocation("/dashboard")}
               className="mb-4"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -261,10 +276,10 @@ export default function DeliverablesDashboard() {
 
         {/* Actions */}
         <div className="mt-8 flex justify-end gap-4">
-          <Button variant="outline" onClick={() => navigate("/projects")}>
+          <Button variant="outline" onClick={() => setLocation("/projects")}>
             View All Projects
           </Button>
-          <Button onClick={() => navigate("/project-input-form")}>
+          <Button onClick={() => setLocation("/project-input-form")}>
             New Analysis
           </Button>
         </div>

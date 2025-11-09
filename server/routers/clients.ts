@@ -15,7 +15,8 @@ export const clientsRouter = router({
       })
     )
     .query(async ({ input }) => {
-      const db = getDb();
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
       
       let query = db
         .select()
@@ -43,7 +44,8 @@ export const clientsRouter = router({
   get: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input }) => {
-      const db = getDb();
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
       
       const result = await db
         .select()
@@ -72,7 +74,8 @@ export const clientsRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const db = getDb();
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
       const clientId = nanoid();
 
       await db.insert(clients).values({
@@ -112,7 +115,8 @@ export const clientsRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      const db = getDb();
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
       const { id, tags, ...updates } = input;
 
       const updateData: any = updates;
@@ -132,7 +136,8 @@ export const clientsRouter = router({
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input }) => {
-      const db = getDb();
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
 
       await db.delete(clients).where(eq(clients.id, input.id));
 
@@ -143,7 +148,8 @@ export const clientsRouter = router({
   stats: protectedProcedure
     .input(z.object({ organizationId: z.string() }))
     .query(async ({ input }) => {
-      const db = getDb();
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
 
       const allClients = await db
         .select()

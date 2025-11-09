@@ -1,6 +1,6 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { QuickProjectModal } from "@/components/QuickProjectModal";
+// import { QuickProjectModal } from "@/components/QuickProjectModal";
 import { SubscriptionStatus } from "@/components/SubscriptionStatus";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
@@ -338,7 +338,7 @@ export default function Dashboard() {
                   </div>
                   <div className="flex items-center gap-2 text-xs text-slate-500">
                     <Folder className="w-3 h-3" />
-                    <span>{new Date(project.createdAt).toLocaleDateString()}</span>
+                    <span>{project.createdAt ? new Date(project.createdAt).toLocaleDateString() : 'N/A'}</span>
                   </div>
                 </div>
               ))}
@@ -362,16 +362,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Quick Project Modal */}
-      {quickProjectModal && (
-        <QuickProjectModal
-          isOpen={quickProjectModal.isOpen}
-          onClose={() => setQuickProjectModal(null)}
-          defaultTitle={quickProjectModal.defaultTitle}
-          action={quickProjectModal.action}
-          onComplete={quickProjectModal.onComplete}
-        />
-      )}
+      {/* Quick Project Modal - temporarily disabled */}
     </div>
   );
 }

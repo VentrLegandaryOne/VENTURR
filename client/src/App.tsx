@@ -13,13 +13,13 @@ const NewProject = lazy(() => import("./pages/NewProject"));
 const Projects = lazy(() => import("./pages/Projects"));
 const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
 const CalculatorEnhanced = lazy(() => import("./pages/CalculatorEnhanced"));
-const QuoteGenerator = lazy(() => import("./pages/QuoteGenerator"));
+// QuoteGenerator temporarily removed
 const LeafletSiteMeasurement = lazy(() => import("./pages/LeafletSiteMeasurement"));
 const Profile = lazy(() => import("./pages/Profile"));
 const OrganizationSettings = lazy(() => import("./pages/OrganizationSettings"));
-const MaterialsLibrary = lazy(() => import("./pages/MaterialsLibrary"));
+// MaterialsLibrary temporarily removed
 const Pricing = lazy(() => import("./pages/Pricing"));
-const Settings = lazy(() => import("./pages/Settings"));
+// Settings temporarily removed
 const Compliance = lazy(() => import("./pages/Compliance"));
 const Clients = lazy(() => import("./pages/Clients"));
 const ProjectInputForm = lazy(() => import("./pages/ProjectInputForm"));
@@ -54,7 +54,7 @@ function Router() {
         <Route path="/projects/:id/compliance" component={Compliance} />
         <Route path="/projects/:id/measure" component={LeafletSiteMeasurement} />
         <Route path="/projects/:id/calculator" component={CalculatorEnhanced} />
-        <Route path="/projects/:id/quote" component={QuoteGenerator} />
+        {/* Quote generator temporarily disabled */}
 
         {/* Intelligence System */}
         <Route path={"/project-input-form"} component={ProjectInputForm} />
@@ -63,13 +63,11 @@ function Router() {
         {/* Client Management */}
         <Route path={"/clients"} component={Clients} />
 
-        {/* Settings */}
-        <Route path={"/settings"} component={Settings} />
+        {/* Settings temporarily disabled */}
         <Route path={"/settings/profile"} component={Profile} />
         <Route path={"/settings/organization"} component={OrganizationSettings} />
 
-        {/* Materials */}
-        <Route path={"/materials"} component={MaterialsLibrary} />
+        {/* Materials temporarily disabled */}
 
         {/* 404 */}
         <Route path={"/404"} component={NotFound} />

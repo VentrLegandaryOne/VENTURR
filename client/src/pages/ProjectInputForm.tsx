@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "wouter";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -16,7 +16,7 @@ import { Upload, FileText, Loader2 } from "lucide-react";
  * Collects project data and feeds it to the intelligence analysis engine
  */
 export default function ProjectInputForm() {
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   
   // Form state
@@ -35,7 +35,7 @@ export default function ProjectInputForm() {
     onSuccess: (data) => {
       toast.success("Project analysis complete!");
       // Navigate to deliverables dashboard with analysis data
-      navigate(`/deliverables/${data.projectId}`);
+      setLocation(`/deliverables/${data.projectId}`);
     },
     onError: (error) => {
       toast.error(`Analysis failed: ${error.message}`);
@@ -293,7 +293,7 @@ export default function ProjectInputForm() {
                   <button
                     type="button"
                     className="text-primary underline"
-                    onClick={() => navigate("/site-measurement")}
+                    onClick={() => setLocation("/site-measurement")}
                   >
                     Venturr Measurement Tool
                   </button>
@@ -308,7 +308,7 @@ export default function ProjectInputForm() {
             <Button
               type="button"
               variant="outline"
-              onClick={() => navigate("/dashboard")}
+              onClick={() => setLocation("/dashboard")}
               disabled={isAnalyzing}
             >
               Cancel

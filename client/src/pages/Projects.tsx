@@ -1,5 +1,5 @@
 import { useAuth } from "@/_core/hooks/useAuth";
-import { ProjectsImportExport } from "./ProjectsImportExport";
+// Import/Export functionality temporarily disabled
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -37,9 +37,9 @@ export default function Projects() {
     { enabled: !!selectedOrg }
   );
 
-  const exportMutation = trpc.projects.export.useMutation();
-  const importMutation = trpc.projects.import.useMutation();
-  const downloadTemplateMutation = trpc.projects.downloadTemplate.useMutation();
+  // const exportMutation = trpc.projects.export.useMutation();
+  // const importMutation = trpc.projects.import.useMutation();
+  // const downloadTemplateMutation = trpc.projects.downloadTemplate.useMutation();
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
@@ -119,8 +119,7 @@ export default function Projects() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 relative z-2">
-        {/* Import/Export Section */}
-        {selectedOrg && <ProjectsImportExport organizationId={selectedOrg} />}
+        {/* Import/Export Section - Temporarily Disabled */}
         {/* Filters */}
         <Card className="mb-6 bg-white/95 backdrop-blur border-slate-200/50 shadow-lg hover:shadow-xl hover:shadow-blue-500/10 transition-all animate-fadeInUp">
           <CardContent className="pt-6">
