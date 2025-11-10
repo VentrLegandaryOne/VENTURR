@@ -2533,3 +2533,52 @@
 - [ ] Monitoring and alerting setup
 - [ ] Handover documentation complete
 
+
+
+
+## KNOWLEDGE BASE EXPANSION & ALGORITHMIC STRENGTHENING (THOMCO ROOFING NSW)
+
+### Phase 1: Qualitative Analysis & Audit
+- [ ] Audit existing ThomCo knowledge bases and datasets
+- [ ] Identify weak points and shallow data areas
+- [ ] Review current algorithmic models (quoting, compliance, intelligence)
+- [ ] Document outdated logic and missing real-world grounding
+- [ ] Assess current knowledge accuracy (baseline 85%)
+
+### Phase 2: External Data Acquisition (NSW-Specific)
+- [ ] Research active metal roofing forums and trade communities (NSW/East Coast)
+- [ ] Gather supplier technical resources (Lysaght, Stramit, Metroll, Kingspan, Fielders)
+- [ ] Collect SafeWork NSW documentation and construction bulletins
+- [ ] Find case studies from large-scale NSW/QLD roofing companies
+- [ ] Research NSW Open Tenders and strata projects
+- [ ] Focus on coastal and high-wind zone data
+
+### Phase 3: Quality-Based Patterning
+- [ ] Identify large-scale successful NSW roofing companies
+- [ ] Analyze their efficient workflows and quoting methods
+- [ ] Study their safety processes and compliance frameworks
+- [ ] Derive "Optimal Process Framework" from best practices
+- [ ] Weight findings toward professional standards and scalability
+
+### Phase 4: Integration & Model Optimization
+- [ ] Enhance quoting algorithms (material, labour, compliance weighting)
+- [ ] Strengthen compliance validation models (HB-39, NCC, AS 1562.1, AS 3500)
+- [ ] Expand knowledge graph embeddings (supplier intelligence, process logic)
+- [ ] Normalize data to NSW building code standards
+- [ ] Implement adaptive reasoning loops (process, compliance, profitability)
+
+### Phase 5: Deliverables Creation
+- [ ] Create "Knowledge Expansion Report" with credibility sources
+- [ ] Write "Optimal Process Framework (NSW)" from major companies
+- [ ] Document "Algorithmic Reinforcement Log" with dataset mappings
+
+### Phase 6: System Testing & Validation
+- [ ] Test enhanced intelligence system accuracy
+- [ ] Validate compliance improvements
+- [ ] Verify NSW-specific data integration
+
+### Phase 7: Production Deployment
+- [ ] Deploy strengthened knowledge base to live system
+- [ ] Monitor performance improvements
+- [ ] Measure knowledge accuracy improvement (target 98%)
+
