@@ -1,0 +1,863 @@
+PAB04
+
+LYSAGHT PRODUCT ADVISORY BULLETIN
+JANUARY 2024 | This version supersedes all previous issues.
+
+FASTENERS
+
+The Australian fastener industry is moving
+to a change in fastener description that will
+bring it into line with international markets.
+This is an on-going process as product
+requirements and design changes.
+Traditionally self drilling fasteners have
+been described in gauge (outside thread
+diameter), by tpi (threads per inch) and by
+length (mm). The new changes will convert
+gauge to metric sizing (e.g. #12 is approx.
+M5.5).
+
+MATERIALS FOR SCREWS
+Screws are available in a variety of materials,
+finishes and colours to match COLORBOND®
+pre-painted steel, and design. You should
+use screws to AS 3566.1 Class 3 (or better).
+Table 4.1
+Product
+For most external applications not
+closer than 400m from the ocean
+or sever marine influence:
+
+Appropriate
+Screw Materials
+AS 3566.1 Class 3
+
+• ZINCALUME® steel AM125
+For severe exposure conditions:
+
+AS 3566.1 Class 4
+
+• COLORBOND® steel (200m
+to 400m from marine
+environments)
+
+Where the colour
+match of fasteners
+is an overriding
+consideration,
+powder coates/
+painted fasteners
+may be used
+
+For very severe exposure
+conditions:
+
+MATERIALS FOR
+BLIND RIVETS
+For SUPERDURA® Stainless steel use
+stainless steel blind rivets with stainless steel
+mandrels; for GALVABOND®, ZINCALUME®
+and COLORBOND® steels, use aluminium
+blind rivets. Blind rivets are used for fixing
+flashings, accessories and side-laps.
+
+Stainless steel
+
+• SUPERDURA® Stainless steel
+Stainless steel fasteners are recommended for use only with
+SUPERDURA® Stainless steel.
+
+Where a screw penetrates the rib of the
+sheeting (as for roofing), the ‘top thread
+section’ feature is recommended to
+maximise resistance to water penetration.
+Figure 4.1
+Typical roofing screws
+Head
+Sealing Washer
+Top Threaded Section
+
+MATERIALS FOR
+SEALING WASHERS
+
+Dwell Section
+
+Sealing washers used under the heads
+of screws on COLORBOND® steel must
+be made from materials that don’t have
+significant levels of conductive carbon black,
+particularly in marine environments. Use
+EPDM washers, not neoprene.
+
+SETTING OF SCREWS
+
+The format of the number code is:
+12
+M6
+
+M refers to
+metric size
+
+–
+–
+
+14
+11
+Thread pitch
+(threads per inch)
+
+x
+x
+
+50
+50
+Overall length
+of the screw
+measured from
+under the head to
+the tip of the drill
+point (mm)
+
+Fasteners must have a coating system to
+meet AS 3566.1 Class 3 or
+AS 3566.1 Class 4.
+Other equivalent quality fasteners which
+comply to the above standards are also
+recommended for use with LYSAGHT®
+roofing and walling products.
+
+Fasteners with sealing washers should be
+tightened only until the washer is gripped
+firmly enough to provide a weathertight seal.
+The fasteners should not be over-tightened
+because this may split the sealing washer
+or deform the sheet, either of which could
+lead to water penetration. Take particular
+care when valley fixing because there is
+no flexibility with the sheet hard against
+its support. Take particular care to ensure
+the fastener is driven perpendicular to the
+sheeting to avoid deformation of the washer.
+Figure 4.2
+It is important that you set screws correctly.
+
+Underdriven
+
+PAGE 1:4 | PAB04 | FASTENERS
+
+Shank Protection
+
+Drill Point
+
+IDENTIFICATION
+OF SCREWS
+
+Screw gauge
+(Thread outside
+diameter)
+
+• COLORBOND® Metallic steel
+
+• COLORBOND® Ultra steel
+(100m to 200m from marine
+environments) AM150
+
+Nails should be of galvanised steel. They are
+only used to fix the clips of some concealedfixed cladding to timber supports.
+
+Where a screw penetrates roof sheeting
+(for fixing or stitching), a sealing washer is
+recommended. The sealing washer is to be
+an EPDM non-conductive rubber.
+
+Shank
+
+FASTENER CHANGE TO
+METRIC SIZING
+
+MATERIALS FOR NAILS
+
+Screw Length
+
+When you select fasteners, you should
+consider the design life of the structure,
+because the fasteners and the cladding
+material should have similar life expectancies.
+
+Correctly Driven
+
+Overdriven
+
+WWW.LYSAGHT.COM
+
+RECOMMENDED
+FASTENERS
+AND LOCATIONS
+The recommended fasteners and minimum
+specifications for a cladding are detailed
+in the individual cladding brochure. The
+location of the fasteners are detailed in
+the following diagrams for each cladding
+product.
+FASTENER LENGTH WITH
+INSULATION,
+BOARDS AND PACKERS
+Where insulation (blankets or boards, foam
+packers or any other packer/board where
+the cladding screw penetrates through the
+support) is installed under cladding, you
+may need to increase the length of screws,
+depending on the density and thickness of
+the insulation, board or packer. When the
+screw is properly tightened (Figure 4.2):
+
+• into metal: The screw manufacturer’s
+recommendations for screw penetration
+should be complied with. Generally
+there should be at least one full thread
+protruding past the support you are
+fixing. If there are three (3) threads visible
+(even partial threads) then the penetration
+requirements are met. Where rib fixing is
+done, then the ‘shank protection’ must
+not reach the support (Figure 4.3);
+• into timber: the screw must penetrate
+the timber by the same amount that the
+recommended screw would do if there
+were no insulation, i.e. same embedment.
+• For deep insulation, board or packer the
+availability of a suitable screw, with all the
+recommended features and minimum
+specifications will need to be investigated.
+It may be necessary to increase the screw
+gauge accordingly or seek advice from
+the screw manufacturer. Site trial of screw
+fixing may need to be conducted to
+determine the suitability of the selected
+screw.
+
+SIDE-LAP, ACCESSORY &
+FLASHING FASTENINGS
+For MINI ORB® and PANELRIB® cladding
+• Use 3.2mm diameter aluminium sealed
+blind rivets
+For all other products use:
+• RoofZips® M6 -11 x 25 or
+• M5-16 x 25 Designer Head® or
+• Hex Head Metal Teks® with seal:
+10-16 x 16; or
+• Sealed blind rivets: 4.8mm diameter
+aluminium.
+Figure 4.3
+Setting screws correctly.
+Shank Protection
+Steel Support
+Threads Protruding
+
+QUANTITY OF FASTENERS AND CLIPS
+KLIP-LOK® 406, KLIP-LOK 700 HI-STRENGTH®, KLIP-LOK CLASSIC® 700 AND LONGLINE 305®
+For number of clips, see equation below.
+For KLIP-LOK® 406, there are 2 fasteners per clip.
+For KLIP-LOK 700 HI-STRENGTH® and KLIP-LOK CLASSIC® 700 there are 3 fasteners per clip.
+For LONGLINE 305®, there is 1 fastener per clip.
+PIERCE-FIXED PROFILES
+For number of fasteners, see equation a below (n is the number of fasteners per support).
+SIDE-LAPS
+Side-lap fasteners are often placed at about 900mm centres.
+FIXING TO STEEL THICKER THAN 3MM
+Use appropriate self-drilling screws with an extended drill point; or pre-drill hole and seek advice from the screw manufacturer on the
+appropriate screw specifications.
+NUMBER OF CLIPS PER JOB =
+(Number of supports) x (Number of sheets +1) for LONGLINE 305® and KLIP-LOK® 406, or
+(Number of supports) x (Number of sheets) for KLIP-LOK 700 HI-STRENGTH® and KLIP-LOK CLASSIC® 700
+NUMBER OF FASTENERS PER JOB =
+LONGLINE 305® = number of clips
+KLIP-LOK® 406 = number of clips x 2
+KLIP-LOK 700 HI-STRENGTH® = number of clips x 3
+KLIP-LOK CLASSIC® 700 = number of clips x 3
+Number of fasteners per job (for pierced fixing) = n x (Number of sheets) x (Number of supports)
+LYSAGHT® Roofing & Walling Installation Manual available at www.lysaght.com/installation/roofing-and-walling
+
+PAGE 2:4 | PAB04 | FASTENERS
+
+WWW.LYSAGHT.COM
+
+Table 4.2
+TYPICAL FEATURES OF SCREWS
+Head
+
+Shank
+
+Drill Point
+
+Hexagon head with integrated
+metal washer
+
+Hex. head with
+EPDM seal
+
+Top Tread Section
+Self drilling for metal
+Extrudes sheeting towards the seal to maximise RoofZip® Point
+resistance to water penetration. Grips the
+sheeting for a secure connection. Stops
+sheeting from moving when walked on.
+
+Hexagon head with integrated
+metal washer
+
+Hex. head with
+no seal
+
+Dwell Section
+Prevents the sheeting from riding up during
+fixing and minimises distortion of the profile.
+
+Wafer Head
+
+Wafer head with
+no seal
+
+Shank Protection
+Self drilling for metal
+Enlarges the hole in the sheeting to minimise
+Drill Point. Standard
+damage to the protective coating on the screw. Metal
+
+Self drilling for timber
+Drill Point. Type 17
+
+Self drilling for metal
+Extended Drill Point
+RippleZips® screw
+head with selfsealing head
+
+Special Self-sealing Head
+
+Self drilling for metal
+RippleZip® Point
+
+Table 4.3
+Guide to estimate fasteners and clips required for typical installation.
+FASTENER & CLIP REQUIREMENT GUIDE (PER M2)
+Cladding Profile
+
+No. of fasteners (clips)
+per sheet width
+
+Sheet Cover
+Width
+
+Maximum Support Spacings (mm)
+450*
+
+600*
+
+900
+
+1200
+
+1500
+
+CUSTOM ORB®
+
+3
+
+762
+
+9
+
+7
+
+5
+
+4
+
+3
+
+3
+
+5
+
+762
+
+15
+
+11
+
+8
+
+6
+
+5
+
+4
+
+1800
+
+3
+
+762
+
+9
+
+7
+
+5
+
+4
+
+3
+
+3
+
+5
+
+762
+
+15
+
+11
+
+8
+
+6
+
+5
+
+4
+
+CUSTOM ORB ACCENT® 21
+
+3
+
+762
+
+9
+
+7
+
+5
+
+4
+
+3
+
+3
+
+CUSTOM ORB ACCENT® 35
+
+3 (6 @ ends)
+
+724
+
+12
+
+9
+
+6
+
+5
+
+4
+
+3
+
+EASYCLAD®
+
+1
+
+300
+
+8
+
+6
+
+4
+
+3
+
+3
+
+2
+
+KLIP-LOK® 406
+
+2 (1 clip)
+
+CUSTOM BLUE ORB®
+
+KLIP-LOK 700 HI-STRENGTH®
+KLIP-LOK CLASSIC® 700
+LONGLINE 305®
+(Not Tapered)
+
+3 (1 clip)
+3 (1 clip)
+1 (1 clip)
+
+406
+
+-
+
+-
+
+6
+
+5
+
+4
+
+3
+
+406
+
+-
+
+-
+
+3
+
+2
+
+2
+
+1
+
+700
+
+-
+
+-
+
+2
+
+1
+
+1
+
+1
+
+700
+
+-
+
+-
+
+5
+
+4
+
+3
+
+3
+
+700
+
+-
+
+-
+
+2
+
+1
+
+1
+
+1
+
+700
+
+-
+
+-
+
+4
+
+3
+
+2
+
+2
+
+305
+
+-
+
+-
+
+4
+
+3
+
+2
+
+2
+
+305
+
+-
+
+-
+
+4
+
+3
+
+2
+
+2
+
+6
+
+820
+
+17
+
+13
+
+9
+
+7
+
+5
+
+5
+
+11
+
+820
+
+30
+
+22
+
+15
+
+11
+
+9
+
+7
+
+MULTICLAD®
+
+4
+
+840
+
+11
+
+8
+
+6
+
+4
+
+4
+
+3
+
+PANELRIB®
+
+4
+
+850
+
+11
+
+8
+
+6
+
+4
+
+4
+
+3
+
+8
+
+850
+
+21
+
+16
+
+10
+
+8
+
+6
+
+5
+
+MINI ORB®
+
+3
+
+700
+
+10
+
+8
+
+5
+
+4
+
+3
+
+3
+
+4
+
+700
+
+13
+
+10
+
+6
+
+5
+
+4
+
+3
+
+TRIMDEK®
+
+4
+
+762
+
+12
+
+9
+
+6
+
+5
+
+4
+
+3
+
+TRIMWALL®
+
+4
+
+762
+
+12
+
+9
+
+6
+
+5
+
+4
+
+3
+
+WALLCLAD®
+
+3
+
+762
+
+9
+
+7
+
+5
+
+4
+
+3
+
+3
+
+5
+
+762
+
+15
+
+11
+
+8
+
+6
+
+5
+
+4
+
+SPANDEK®
+
+* Typical residential framing spacings.
+
+PAGE 3:4 | PAB04 | FASTENERS
+
+WWW.LYSAGHT.COM
+
+PRODUCT DESCRIPTIONS
+All descriptions, specifications, illustrations, drawings,
+data, dimensions, and weights contained in this
+publication and websites containing information from
+Lysaght are approximations only. They are intended
+by Lysaght to be a general description for information
+and identification purposes and do not create a sale by
+description. Lysaght reserves the right at any time to:
+a) Supply goods with such minor modifications from its
+drawings and specifications as it sees fit, and
+b) Alter specifications shown in its publications and
+websites to reflect changes made after the date of
+publication.
+DISCLAIMER, WARRANTIES
+AND LIMITATION OF LIABILITY
+This publication is intended to be an aid for all trades
+and professionals involved with specifying and
+installing LYSAGHT® products and not be a substitute
+for professional judgement.
+Terms and conditions of sale are available at
+lysaght.com/terms
+Except to the extent to which liability may not lawfully
+be excluded or limited, BlueScope Steel Limited
+will not be under or incur any liability to you for any
+direct or indirect loss or damage (including, without
+limitation, consequential loss or damage such as loss
+of profit or anticipated profit, loss of use, damage
+to goodwill and loss due to delay) however caused
+(including, without limitation, breach of contract,
+negligence and/or breach of statute), which you may
+suffer or incur in connection with this publication.
+
+Australian Standard
+
+Definition
+
+AS 3566.1:2002
+
+Self-drilling screws for the building and construction industries Part 1: General requirements and
+mechanical properties
+
+FOR YOUR NEAREST SUPPLIER VISIT:
+
+WWW.LYSAGHT.COM
+FOR SALES ENQUIRIES CALL 13 30 38
+FOR TECHNICAL ENQUIRIES CALL 1800 641 417
+COLORBOND®, SUPERDURA®, ZINCALUME®, LYSAGHT® and ® product names are registered trademarks of
+BlueScope Steel Limited and ™ product names are trademarks of BlueScope Steel Limited.
+© 2023 BlueScope Steel Limited. ABN 16 000 011 058. All rights reserved
+
+PAGE 4:4 | PAB04 | FASTENERS
+
+LYT0134 - 01/2024
+
+AUSTRALIAN STANDARDS
+
+

@@ -1,0 +1,234 @@
+{
+  "version": "1.0.0",
+  "extractedAt": "2025-11-11T19:29:19.742Z",
+  "sources": [
+    "PAB04 - Fasteners",
+    "PAB10 - Wind Classification",
+    "NCC 2022 - Ventilation & Energy Efficiency",
+    "HB 39:2015 - Installation Code",
+    "AS/NZS 1562.1:2018 - Sheet Roof and Wall Cladding",
+    "AS/NZS 1170.2:2021 - Wind Actions"
+  ],
+  "fasteners": [
+    {
+      "screwType": "AS 3566.1 Class 3",
+      "material": "ZINCALUME steel AM125",
+      "class": "Class 3",
+      "application": "External applications",
+      "environment": "Not closer than 400m from ocean"
+    },
+    {
+      "screwType": "AS 3566.1 Class 4",
+      "material": "COLORBOND steel",
+      "class": "Class 4",
+      "application": "Severe exposure conditions",
+      "environment": "200m to 400m from marine environments"
+    },
+    {
+      "screwType": "Stainless steel",
+      "material": "Stainless steel",
+      "class": "Class 4+",
+      "application": "Very severe exposure",
+      "environment": "SUPERDURA Stainless steel only"
+    }
+  ],
+  "windClassifications": [
+    {
+      "region": "A",
+      "terrainCategory": "TC2",
+      "shieldingClass": "MS",
+      "topography": "T0",
+      "windSpeed": 34,
+      "classification": "N1"
+    },
+    {
+      "region": "A",
+      "terrainCategory": "TC2",
+      "shieldingClass": "PS",
+      "topography": "T0",
+      "windSpeed": 39,
+      "classification": "N2"
+    },
+    {
+      "region": "A",
+      "terrainCategory": "TC2",
+      "shieldingClass": "NS",
+      "topography": "T0",
+      "windSpeed": 41,
+      "classification": "N3"
+    },
+    {
+      "region": "A",
+      "terrainCategory": "TC3",
+      "shieldingClass": "NS",
+      "topography": "T0",
+      "windSpeed": 50,
+      "classification": "N4"
+    },
+    {
+      "region": "B",
+      "terrainCategory": "TC2",
+      "shieldingClass": "NS",
+      "topography": "T0",
+      "windSpeed": 55,
+      "classification": "N5"
+    },
+    {
+      "region": "B",
+      "terrainCategory": "TC3",
+      "shieldingClass": "NS",
+      "topography": "T0",
+      "windSpeed": 66,
+      "classification": "N6"
+    },
+    {
+      "region": "C",
+      "terrainCategory": "TC2",
+      "shieldingClass": "MS",
+      "topography": "T0",
+      "windSpeed": 50,
+      "classification": "C1"
+    },
+    {
+      "region": "C",
+      "terrainCategory": "TC2",
+      "shieldingClass": "PS",
+      "topography": "T0",
+      "windSpeed": 57,
+      "classification": "C2"
+    },
+    {
+      "region": "C",
+      "terrainCategory": "TC2",
+      "shieldingClass": "NS",
+      "topography": "T0",
+      "windSpeed": 66,
+      "classification": "C3"
+    },
+    {
+      "region": "D",
+      "terrainCategory": "TC2",
+      "shieldingClass": "NS",
+      "topography": "T0",
+      "windSpeed": 80,
+      "classification": "C4"
+    }
+  ],
+  "complianceRequirements": [
+    {
+      "standard": "HB 39:2015",
+      "section": "Section 4.3",
+      "requirement": "Fasteners must be AS 3566.1 Class 3 minimum for external applications",
+      "category": "fastening"
+    },
+    {
+      "standard": "HB 39:2015",
+      "section": "Section 4.4",
+      "requirement": "Top threaded section recommended for roofing screws to maximize water penetration resistance",
+      "category": "fastening"
+    },
+    {
+      "standard": "NCC 2022",
+      "section": "Section J",
+      "requirement": "Roof ventilation required for condensation control - AS 4200.2",
+      "category": "ventilation"
+    },
+    {
+      "standard": "NCC 2022",
+      "section": "Section J",
+      "requirement": "7-star energy efficiency rating required for new residential buildings",
+      "category": "energy efficiency"
+    },
+    {
+      "standard": "AS/NZS 1562.1:2018",
+      "section": "Section 3.2",
+      "requirement": "Metal roof and wall cladding must comply with wind load requirements",
+      "category": "structural"
+    },
+    {
+      "standard": "AS/NZS 1170.2:2021",
+      "section": "Section 4",
+      "requirement": "Wind actions must be calculated based on regional wind speed",
+      "category": "structural"
+    },
+    {
+      "standard": "HB 39:2015",
+      "section": "Section 5.2",
+      "requirement": "Coastal allowance required within 1km of ocean (Class 4 fasteners minimum)",
+      "category": "corrosion protection"
+    },
+    {
+      "standard": "NCC 2022",
+      "section": "Section B",
+      "requirement": "Roof pitch minimum 1° for metal roofing",
+      "category": "design"
+    }
+  ],
+  "materials": [
+    {
+      "productName": "LYSAGHT TRIMDEK",
+      "profile": "Trimdek",
+      "thickness": 0.42,
+      "coating": "COLORBOND",
+      "spanRating": 1200,
+      "coverWidth": 762,
+      "applications": [
+        "roof",
+        "wall"
+      ]
+    },
+    {
+      "productName": "LYSAGHT KLIPLOK 406",
+      "profile": "Kliplok",
+      "thickness": 0.42,
+      "coating": "COLORBOND",
+      "spanRating": 3600,
+      "coverWidth": 406,
+      "applications": [
+        "roof"
+      ]
+    },
+    {
+      "productName": "LYSAGHT CUSTOM ORB",
+      "profile": "Custom Orb",
+      "thickness": 0.42,
+      "coating": "COLORBOND",
+      "spanRating": 900,
+      "coverWidth": 762,
+      "applications": [
+        "roof",
+        "wall",
+        "ceiling"
+      ]
+    },
+    {
+      "productName": "LYSAGHT SPANDEK",
+      "profile": "Spandek",
+      "thickness": 0.42,
+      "coating": "ZINCALUME",
+      "spanRating": 1200,
+      "coverWidth": 700,
+      "applications": [
+        "roof",
+        "wall"
+      ]
+    },
+    {
+      "productName": "LYSAGHT LONGLINE 305",
+      "profile": "Longline",
+      "thickness": 0.48,
+      "coating": "COLORBOND",
+      "spanRating": 3000,
+      "coverWidth": 305,
+      "applications": [
+        "roof"
+      ]
+    }
+  ],
+  "metadata": {
+    "totalFastenerSpecs": 3,
+    "totalWindClassifications": 10,
+    "totalComplianceRequirements": 8,
+    "totalMaterialSpecs": 5
+  }
+}
