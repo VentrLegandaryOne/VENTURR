@@ -5,6 +5,12 @@
  */
 
 import openrouter from './ai/openrouter';
+import {
+  getFormattedComplianceNotes,
+  getFormattedFastenerRecommendation,
+  getFormattedWindClassification,
+  getAllMaterialSpecs,
+} from './knowledgeBaseHelper';
 
 export interface ProjectInput {
   clientName: string;
@@ -65,12 +71,24 @@ export async function analyzeProject(input: ProjectInput): Promise<AnalysisResul
     // Generate unique project ID
     const projectId = `proj_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-    // Build project description for AI
+    // Query knowledge base for industry-specific intelligence
+    console.log('[Intelligence Engine] Querying knowledge base...');
+    const distanceFromOcean = input.coastalExposure ? 0.3 : 5.0; // Assume 300m if coastal, 5km if inland
+    const windRegion = input.coastalExposure ? 'C' : 'A'; // Cyclonic if coastal, non-cyclonic if inland
+    
+    const [complianceNotes, fastenerRec, windClass, materialSpecs] = await Promise.all([
+      getFormattedComplianceNotes(),
+      getFormattedFastenerRecommendation(distanceFromOcean),
+      getFormattedWindClassification(windRegion),
+      getAllMaterialSpecs(),
+    ]);
+
+    // Build enhanced project description with knowledge base context
     const projectDescription = `
 ${input.jobType} project for ${input.clientName}
 Location: ${input.address}
 Difficulty: ${input.difficultyLevel}
-Coastal exposure: ${input.coastalExposure ? 'Yes' : 'No'}
+Coastal exposure: ${input.coastalExposure ? 'Yes (assume 300m from ocean)' : 'No (assume 5km+ from ocean)'}
 Urgency: ${input.urgency}
 ${input.measurements ? `
 Roof area: ${input.measurements.totalArea}m²
@@ -79,6 +97,16 @@ Roof type: ${input.measurements.roofType}
 Material: ${input.measurements.roofingMaterial}
 ` : ''}
 Additional notes: ${input.customNotes}
+
+--- KNOWLEDGE BASE CONTEXT ---
+${fastenerRec}
+
+${windClass}
+
+${complianceNotes}
+
+Available Lysaght Materials:
+${materialSpecs.map(m => `- ${m.productName} (${m.profile}, ${m.coating}, span: ${m.spanRating}mm, cover: ${m.coverWidth}mm)`).join('\n')}
     `.trim();
 
     // 1. Generate quote/material requirements
@@ -108,14 +136,17 @@ Additional notes: ${input.customNotes}
       budget: quoteData.totalCost,
     });
 
-    // 4. Generate compliance notes
-    const complianceNotes = [
-      'AS 1562.1:2018 - Design and installation of sheet roof and wall cladding',
-      'AS/NZS 1170.2:2021 - Structural design actions - Wind actions',
+    // 4. Generate additional compliance notes specific to project
+    const additionalComplianceNotes = [
       input.coastalExposure ? 'AS 2728:2007 - Prefinished/prepainted sheet products - Corrosion resistance' : null,
-      'NCC 2022 Building Code compliance required',
       input.difficultyLevel === 'extreme' ? 'Additional engineering certification may be required' : null,
     ].filter(Boolean) as string[];
+    
+    // Combine knowledge base compliance with project-specific notes
+    const allComplianceNotes = [
+      ...complianceNotes.split('\n').filter(line => line.startsWith('-')).map(line => line.substring(2)),
+      ...additionalComplianceNotes,
+    ];
 
     // Determine complexity
     const complexity = 
@@ -138,7 +169,7 @@ Additional notes: ${input.customNotes}
         complexity,
         estimatedDuration,
         materialRequirements: quoteData.materials,
-        complianceNotes,
+        complianceNotes: allComplianceNotes,
         laborEstimate: {
           hours: laborEstimate.hours,
           crewSize: laborEstimate.crewSize,

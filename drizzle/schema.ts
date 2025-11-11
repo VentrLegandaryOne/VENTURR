@@ -1,4 +1,4 @@
-import { mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -579,4 +579,70 @@ export const intelligentInsights = mysqlTable("intelligentInsights", {
 
 export type IntelligentInsight = typeof intelligentInsights.$inferSelect;
 export type InsertIntelligentInsight = typeof intelligentInsights.$inferInsert;
+
+
+
+// ============================================================================
+// VENTURR KNOWLEDGE BASE TABLES
+// ============================================================================
+
+// Fastener specifications from Lysaght PAB04
+export const fasteners = mysqlTable("fasteners", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  screwType: varchar("screwType", { length: 100 }).notNull(),
+  material: varchar("material", { length: 100 }).notNull(),
+  class: varchar("class", { length: 50 }).notNull(), // AS 3566.1 Class 3, Class 4, etc.
+  application: text("application").notNull(),
+  environment: text("environment").notNull(), // Distance from ocean, exposure conditions
+  distanceFromOcean: varchar("distanceFromOcean", { length: 50 }),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type Fastener = typeof fasteners.$inferSelect;
+export type InsertFastener = typeof fasteners.$inferInsert;
+
+// Wind classifications from Lysaght PAB10 and AS/NZS 1170.2
+export const windClassifications = mysqlTable("wind_classifications", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  region: varchar("region", { length: 10 }).notNull(), // A, B, C, D
+  terrainCategory: varchar("terrainCategory", { length: 10 }).notNull(), // TC1, TC2, TC3, TC4
+  shieldingClass: varchar("shieldingClass", { length: 10 }).notNull(), // MS, PS, NS
+  topography: varchar("topography", { length: 10 }).notNull(), // T0, T1, T2
+  windSpeed: int("windSpeed").notNull(), // m/s
+  classification: varchar("classification", { length: 10 }).notNull(), // N1-N6, C1-C4
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type WindClassification = typeof windClassifications.$inferSelect;
+export type InsertWindClassification = typeof windClassifications.$inferInsert;
+
+// Compliance requirements from HB 39, NCC 2022, AS/NZS standards
+export const complianceRequirements = mysqlTable("compliance_requirements", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  standard: varchar("standard", { length: 100 }).notNull(), // HB 39:2015, NCC 2022, AS/NZS 1562.1:2018
+  section: varchar("section", { length: 100 }).notNull(),
+  requirement: text("requirement").notNull(),
+  category: varchar("category", { length: 100 }).notNull(), // fastening, ventilation, energy efficiency, structural, etc.
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type ComplianceRequirement = typeof complianceRequirements.$inferSelect;
+export type InsertComplianceRequirement = typeof complianceRequirements.$inferInsert;
+
+// Material specifications from Lysaght catalogs
+export const materialSpecs = mysqlTable("material_specs", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  productName: varchar("productName", { length: 255 }).notNull(),
+  profile: varchar("profile", { length: 100 }).notNull(), // Trimdek, Kliplok, Custom Orb, etc.
+  thickness: varchar("thickness", { length: 20 }).notNull(), // mm
+  coating: varchar("coating", { length: 100 }).notNull(), // COLORBOND, ZINCALUME, etc.
+  color: varchar("color", { length: 100 }),
+  spanRating: int("spanRating").notNull(), // mm
+  coverWidth: int("coverWidth").notNull(), // mm
+  applications: text("applications").notNull(), // JSON array: ["roof", "wall", "ceiling"]
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type MaterialSpec = typeof materialSpecs.$inferSelect;
+export type InsertMaterialSpec = typeof materialSpecs.$inferInsert;
 
