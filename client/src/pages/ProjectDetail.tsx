@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, Calculator, FileText, Loader2, Ruler, Edit, Shield } from "lucide-react";
+import { ArrowLeft, Calculator, FileText, Loader2, Ruler, Edit, Shield, ArrowRight } from "lucide-react";
+import { WorkflowStepper, WorkflowStage } from "@/components/WorkflowStepper";
+import { useWorkflowState } from "@/hooks/useWorkflowState";
 import { useEffect } from "react";
 import { useLocation, useRoute } from "wouter";
 import { getLoginUrl } from "@/const";
@@ -29,6 +31,19 @@ export default function ProjectDetail() {
     { projectId: projectId! },
     { enabled: !!projectId }
   );
+
+  const { data: measurements } = trpc.measurements.list.useQuery(
+    { projectId: projectId! },
+    { enabled: !!projectId }
+  );
+
+  // Workflow state management
+  const workflowState = useWorkflowState(project ? {
+    ...project,
+    measurements: measurements || [],
+    takeoffs: takeoffs || [],
+    quotes: quotes || [],
+  } : null);
 
   const updateProjectMutation = trpc.projects.update.useMutation({
     onSuccess: () => {
@@ -140,6 +155,50 @@ export default function ProjectDetail() {
             </div>
           </div>
         </div>
+
+        {/* Workflow Progress */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Project Workflow</CardTitle>
+            <CardDescription>Track your progress through the VENTURR workflow</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <WorkflowStepper
+              currentStage={workflowState.currentStage}
+              completedStages={workflowState.completedStages}
+              onStageClick={(stage) => {
+                const routes = {
+                  [WorkflowStage.LEAD]: `/projects/${projectId}`,
+                  [WorkflowStage.SITE_CAPTURE]: `/site-measurement?projectId=${projectId}`,
+                  [WorkflowStage.TAKEOFF]: `/calculator?projectId=${projectId}`,
+                  [WorkflowStage.QUOTE]: `/quote-generator?projectId=${projectId}`,
+                  [WorkflowStage.ARCHIVE]: `/projects`,
+                };
+                setLocation(routes[stage]);
+              }}
+            />
+            {workflowState.nextStage && (
+              <div className="mt-6 flex items-center justify-between bg-primary/5 p-4 rounded-lg">
+                <div>
+                  <p className="font-medium text-sm">Next Step: {workflowState.nextStage.replace('_', ' ').toUpperCase()}</p>
+                  {workflowState.validationErrors.length > 0 && (
+                    <p className="text-sm text-red-600 mt-1">{workflowState.validationErrors[0]}</p>
+                  )}
+                </div>
+                <Button
+                  onClick={() => {
+                    const url = workflowState.getNextStageUrl();
+                    if (url) setLocation(url);
+                  }}
+                  disabled={!workflowState.canProgress}
+                >
+                  Continue to {workflowState.nextStage.replace('_', ' ')}
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Main Column */}
