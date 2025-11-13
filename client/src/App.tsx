@@ -24,6 +24,7 @@ const Compliance = lazy(() => import("./pages/Compliance"));
 const Clients = lazy(() => import("./pages/Clients"));
 const ProjectInputForm = lazy(() => import("./pages/ProjectInputForm"));
 const DeliverablesDashboard = lazy(() => import("./pages/DeliverablesDashboard"));
+const ClientPortal = lazy(() => import("./pages/ClientPortal"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -41,6 +42,7 @@ function Router() {
         {/* Public Routes */}
         <Route path={"/"} component={Home} />
         <Route path={"/pricing"} component={Pricing} />
+        <Route path={"/client-portal"} component={ClientPortal} />
 
         {/* Core Dashboard */}
         <Route path={"/dashboard"} component={Dashboard} />
