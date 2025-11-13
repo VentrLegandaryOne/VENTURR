@@ -34,7 +34,11 @@ export default function ClientPortal() {
   const [selectedQuote, setSelectedQuote] = useState<string | null>(null);
 
   // Fetch quotes for current user's organization
-  const { data: quotes, isLoading } = trpc.quotes.list.useQuery({});
+  // Note: This requires a projectId - for now showing empty state
+  const { data: quotes, isLoading } = trpc.quotes.list.useQuery(
+    { projectId: "" },
+    { enabled: false } // Disable until we have proper project context
+  );
 
   const acceptQuoteMutation = trpc.quotes.update.useMutation({
     onSuccess: () => {

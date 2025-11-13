@@ -80,13 +80,12 @@ export async function getComplianceRequirements(category?: string): Promise<Comp
   if (!db) return [];
 
   try {
-    let query = db.select().from(complianceRequirements);
-    
     if (category) {
-      query = query.where(eq(complianceRequirements.category, category));
+      return await db.select().from(complianceRequirements)
+        .where(eq(complianceRequirements.category, category));
     }
     
-    return await query;
+    return await db.select().from(complianceRequirements);
   } catch (error) {
     console.error('[Knowledge Base] Error fetching compliance requirements:', error);
     return [];

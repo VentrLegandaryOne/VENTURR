@@ -47,34 +47,18 @@ export default function QuoteGenerator() {
   const createQuoteMutation = trpc.quotes.create.useMutation({
     onSuccess: (data) => {
       toast.success("Quote created successfully");
-      setSavedQuoteId(data.id);
+      setSavedQuoteId(data.quoteId);
       if (projectId) {
         setLocation(`/projects/${projectId}`);
       }
     },
   });
 
-  // Xero invoice creation
-  const createInvoiceMutation = trpc.xero.createInvoiceFromQuote.useMutation({
-    onSuccess: (data) => {
-      toast.success("Invoice created in Xero!");
-      if (data.xeroLink) {
-        window.open(data.xeroLink, '_blank');
-      }
-    },
-    onError: (error) => {
-      toast.error(`Failed to create invoice: ${error.message}`);
-    },
-  });
-
   const [savedQuoteId, setSavedQuoteId] = useState<string | null>(null);
 
   const handleCreateInvoice = () => {
-    if (!savedQuoteId) {
-      toast.error("Please save the quote first");
-      return;
-    }
-    createInvoiceMutation.mutate({ quoteId: savedQuoteId });
+    toast.error("Invoice creation feature coming soon");
+    // Future: Integrate with accounting system
   };
 
   const [lineItems, setLineItems] = useState<LineItem[]>([
@@ -270,18 +254,17 @@ Validity: 30 days from quote date`,
       return;
     }
 
-    const quoteNumber = `Q-${Date.now().toString().slice(-8)}`;
-
-    await createQuoteMutation.mutateAsync({
-      projectId,
-      quoteNumber,
-      subtotal: subtotal.toFixed(2),
-      gst: gst.toFixed(2),
-      total: total.toFixed(2),
+    const quoteData = JSON.stringify({
+      lineItems,
       validUntil: formData.validUntil,
       terms: formData.terms,
       notes: formData.notes,
-      items: JSON.stringify(lineItems),
+    });
+
+    await createQuoteMutation.mutateAsync({
+      projectId,
+      quoteData,
+      totalAmount: total,
     });
   };
 
@@ -342,15 +325,11 @@ Validity: 30 days from quote date`,
               {savedQuoteId && (
                 <Button
                   onClick={handleCreateInvoice}
-                  disabled={createInvoiceMutation.isPending}
+                  disabled={false}
                   className="bg-green-600 hover:bg-green-700"
                 >
-                  {createInvoiceMutation.isPending ? (
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  ) : (
-                    <Receipt className="w-4 h-4 mr-2" />
-                  )}
-                  Create Invoice in Xero
+                  <Receipt className="w-4 h-4 mr-2" />
+                  Create Invoice
                 </Button>
               )}
             </div>
@@ -386,9 +365,9 @@ Validity: 30 days from quote date`,
         {/* Compliance Validation */}
         <ComplianceChecker
           projectData={{
-            location: project?.address,
-            windZone: project?.windZone,
-            roofType: project?.roofType,
+            location: project?.address || undefined,
+            windZone: undefined, // Future: Add to project schema
+            roofType: undefined, // Future: Add to project schema
             materials: lineItems,
           }}
           className="mb-6"

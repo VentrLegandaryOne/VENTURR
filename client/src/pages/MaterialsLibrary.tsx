@@ -21,18 +21,19 @@ export default function MaterialsLibrary() {
   const [validationResult, setValidationResult] = useState<ImportResult | null>(null);
   
   // Queries
-  const materialsQuery = trpc.materials.list.useQuery({ organizationId });
+  const materialsQuery = trpc.materials.list.useQuery();
   const materials = materialsQuery.data;
   const refetch = materialsQuery.refetch;
   
   // Mutations
-  const exportMutation = trpc.materials.export.useMutation();
-  const importMutation = trpc.materials.import.useMutation();
-  const downloadTemplateMutation = trpc.materials.downloadTemplate.useMutation();
+  // Note: Export/import/template features not yet implemented in router
   const deleteMutation = trpc.materials.delete.useMutation();
   
   const handleExport = async (format: 'csv' | 'xlsx') => {
-    try {
+    // Export functionality not yet implemented
+    toast.error("Export feature coming soon");
+    return;
+    /* try {
       const result = await exportMutation.mutateAsync({ 
         organizationId,
         format 
@@ -63,11 +64,13 @@ export default function MaterialsLibrary() {
     } catch (error) {
       toast.error('Export failed');
       console.error(error);
-    }
+    } */
   };
   
   const handleDownloadTemplate = async (format: 'csv' | 'xlsx') => {
-    try {
+    toast.error("Template download feature coming soon");
+    return;
+    /* try {
       const result = await downloadTemplateMutation.mutateAsync({ format });
       
       let blob: Blob;
@@ -94,7 +97,7 @@ export default function MaterialsLibrary() {
     } catch (error) {
       toast.error('Download failed');
       console.error(error);
-    }
+    } */
   };
   
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -127,7 +130,9 @@ export default function MaterialsLibrary() {
   };
   
   const handleImportValidate = async () => {
-    if (!importFile) return;
+    toast.error("Import feature coming soon");
+    return;
+    /* if (!importFile) return;
     
     try {
       const format = importFile.name.endsWith('.csv') ? 'csv' : 'xlsx';
@@ -155,7 +160,7 @@ export default function MaterialsLibrary() {
     } catch (error) {
       toast.error('Import failed');
       console.error(error);
-    }
+    } */
   };
   
   const handleDelete = async (id: string) => {
@@ -191,20 +196,12 @@ export default function MaterialsLibrary() {
           <CardDescription>Download your materials database</CardDescription>
         </CardHeader>
         <CardContent className="flex gap-2">
-          <Button onClick={() => handleExport('csv')} disabled={exportMutation.isPending}>
-            {exportMutation.isPending ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <Download className="mr-2 h-4 w-4" />
-            )}
+          <Button onClick={() => handleExport('csv')} disabled={false}>
+            <Download className="mr-2 h-4 w-4" />
             Export CSV
           </Button>
-          <Button onClick={() => handleExport('xlsx')} disabled={exportMutation.isPending}>
-            {exportMutation.isPending ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <Download className="mr-2 h-4 w-4" />
-            )}
+          <Button onClick={() => handleExport('xlsx')} disabled={false}>
+            <Download className="mr-2 h-4 w-4" />
             Export Excel
           </Button>
         </CardContent>
@@ -221,7 +218,7 @@ export default function MaterialsLibrary() {
             <Button 
               variant="outline" 
               onClick={() => handleDownloadTemplate('csv')}
-              disabled={downloadTemplateMutation.isPending}
+              disabled={false}
             >
               <FileText className="mr-2 h-4 w-4" />
               Download CSV Template
@@ -229,7 +226,7 @@ export default function MaterialsLibrary() {
             <Button 
               variant="outline" 
               onClick={() => handleDownloadTemplate('xlsx')}
-              disabled={downloadTemplateMutation.isPending}
+              disabled={false}
             >
               <FileText className="mr-2 h-4 w-4" />
               Download Excel Template
@@ -370,9 +367,9 @@ export default function MaterialsLibrary() {
             </Button>
             <Button 
               onClick={handleImportValidate}
-              disabled={!importFile || importMutation.isPending}
+              disabled={!importFile}
             >
-              {importMutation.isPending ? (
+              {false ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Importing...
