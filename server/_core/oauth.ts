@@ -20,7 +20,12 @@ export function registerOAuthRoutes(app: Express) {
     }
 
     try {
-      const tokenResponse = await sdk.exchangeCodeForToken(code);
+      // Construct the callback URL from the request
+      const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+      const host = req.headers['x-forwarded-host'] || req.get('host');
+      const callbackUrl = `${protocol}://${host}/api/oauth/callback`;
+      
+      const tokenResponse = await sdk.exchangeCodeForToken(code, callbackUrl);
       if (!tokenResponse) {
         res.status(500).json({ error: "Failed to exchange code for token" });
         return;

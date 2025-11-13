@@ -25,7 +25,7 @@ export const sdk = {
     }
   },
 
-  async exchangeCodeForToken(code: string): Promise<{ access_token: string } | null> {
+  async exchangeCodeForToken(code: string, callbackUrl: string): Promise<{ access_token: string } | null> {
     try {
       const response = await fetch(`${ENV.oauthServerUrl}/oauth/token`, {
         method: "POST",
@@ -36,7 +36,7 @@ export const sdk = {
           grant_type: "authorization_code",
           code,
           client_id: ENV.appId,
-          redirect_uri: `${ENV.oauthServerUrl}/api/oauth/callback`,
+          redirect_uri: callbackUrl,
         }),
       });
 
