@@ -27,7 +27,9 @@ export const sdk = {
 
   async exchangeCodeForToken(code: string, callbackUrl: string): Promise<{ access_token: string } | null> {
     try {
-      const response = await fetch(`${ENV.oauthServerUrl}/oauth/token`, {
+      // Use manus.im for OAuth token exchange (not api.manus.im)
+      const oauthBaseUrl = ENV.oauthServerUrl.replace('api.manus.im', 'manus.im');
+      const response = await fetch(`${oauthBaseUrl}/oauth/token`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -55,7 +57,9 @@ export const sdk = {
 
   async getUserInfo(accessToken: string): Promise<any> {
     try {
-      const response = await fetch(`${ENV.oauthServerUrl}/oauth/userinfo`, {
+      // Use manus.im for OAuth userinfo endpoint
+      const oauthBaseUrl = ENV.oauthServerUrl.replace('api.manus.im', 'manus.im');
+      const response = await fetch(`${oauthBaseUrl}/oauth/userinfo`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
