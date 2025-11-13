@@ -12,6 +12,7 @@ import { getLoginUrl } from "@/const";
 import { toast } from "sonner";
 import { nanoid } from "nanoid";
 import { downloadQuotePDF } from "@/lib/pdfGenerator";
+import { ComplianceChecker } from "@/components/ComplianceChecker";
 
 interface LineItem {
   id: string;
@@ -381,6 +382,17 @@ Validity: 30 days from quote date`,
             </div>
           </CardHeader>
         </Card>
+
+        {/* Compliance Validation */}
+        <ComplianceChecker
+          projectData={{
+            location: project?.address,
+            windZone: project?.windZone,
+            roofType: project?.roofType,
+            materials: lineItems,
+          }}
+          className="mb-6"
+        />
 
         {/* Line Items */}
         <Card className="mb-6">

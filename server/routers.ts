@@ -8,6 +8,7 @@ import { quotesRouter } from "./routers/quotes";
 import { intelligenceRouter } from "./routers/intelligenceRouter";
 import { projectsRouter } from "./routers/projects";
 import { materialsRouter } from "./routers/materials";
+import { notificationsRouter } from "./routers/notifications";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { 
@@ -39,6 +40,7 @@ export const appRouter = router({
   clients: clientsRouter,
   quotes: quotesRouter,
   intelligence: intelligenceRouter,
+  notifications: notificationsRouter,
 
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
