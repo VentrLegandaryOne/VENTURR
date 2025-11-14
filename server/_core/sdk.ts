@@ -29,25 +29,33 @@ export const sdk = {
     try {
       // Use manus.im for OAuth token exchange (not api.manus.im)
       const oauthBaseUrl = ENV.oauthServerUrl.replace('api.manus.im', 'manus.im');
-      const response = await fetch(`${oauthBaseUrl}/oauth/token`, {
+      const tokenUrl = `${oauthBaseUrl}/oauth/token`;
+      const requestBody = {
+        grant_type: "authorization_code",
+        code,
+        client_id: ENV.appId,
+        redirect_uri: callbackUrl,
+      };
+      
+      console.log("[OAuth SDK] Token exchange request:", { url: tokenUrl, client_id: ENV.appId, redirect_uri: callbackUrl });
+      
+      const response = await fetch(tokenUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          grant_type: "authorization_code",
-          code,
-          client_id: ENV.appId,
-          redirect_uri: callbackUrl,
-        }),
+        body: JSON.stringify(requestBody),
       });
 
+      const responseText = await response.text();
+      console.log("[OAuth SDK] Token exchange response:", { status: response.status, body: responseText });
+      
       if (!response.ok) {
-        console.error("[OAuth] Token exchange failed:", response.status, await response.text());
+        console.error("[OAuth SDK] Token exchange failed:", response.status, responseText);
         return null;
       }
 
-      const data = await response.json();
+      const data = JSON.parse(responseText);
       return { access_token: data.access_token };
     } catch (error) {
       console.error("[OAuth] Token exchange error:", error);
