@@ -6,6 +6,8 @@ import { measurementsRouter } from "./routers/measurements";
 import { clientsRouter } from "./routers/clients";
 import { quotesRouter } from "./routers/quotes";
 import { intelligenceRouter } from "./routers/intelligenceRouter";
+import { aiRouter } from "./routers/ai";
+import { takeoffRouter } from "./routers/takeoff";
 import { projectsRouter } from "./routers/projects";
 import { materialsRouter } from "./routers/materials";
 import { notificationsRouter } from "./routers/notifications";
@@ -40,6 +42,8 @@ export const appRouter = router({
   clients: clientsRouter,
   quotes: quotesRouter,
   intelligence: intelligenceRouter,
+  ai: aiRouter,
+  takeoff: takeoffRouter,
   notifications: notificationsRouter,
 
   auth: router({
