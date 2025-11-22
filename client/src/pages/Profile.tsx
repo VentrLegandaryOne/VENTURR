@@ -21,7 +21,7 @@ export default function Profile() {
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      window.location.href = getLoginUrl();
+      window.location.href = "/";
     }
   }, [authLoading, isAuthenticated]);
 

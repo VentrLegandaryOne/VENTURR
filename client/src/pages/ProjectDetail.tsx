@@ -56,7 +56,7 @@ export default function ProjectDetail() {
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      window.location.href = getLoginUrl();
+      window.location.href = "/";
     }
   }, [authLoading, isAuthenticated]);
 

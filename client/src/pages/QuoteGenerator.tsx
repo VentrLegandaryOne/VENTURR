@@ -93,7 +93,7 @@ Validity: 30 days from quote date`,
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      window.location.href = getLoginUrl();
+      window.location.href = "/";
     }
   }, [authLoading, isAuthenticated]);
 

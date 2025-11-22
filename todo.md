@@ -2679,3 +2679,16 @@
 - [ ] Ensure mobile responsiveness
 - [ ] Test cross-browser compatibility
 
+
+
+
+## Remove Manus OAuth & Implement Simple Auth - COMPLETED ✅
+- [x] Remove Manus OAuth callback endpoint
+- [x] Simplify simple-signin to bypass account selection
+- [x] Update auth context to not require OAuth
+- [x] Remove account selection redirect
+- [x] Update dashboard to accept simple auth
+- [x] Test direct sign-in flow
+- [x] Verify no OAuth errors
+- [x] Build and deploy simplified auth
+

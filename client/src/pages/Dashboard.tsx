@@ -31,9 +31,10 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
-      window.location.href = getLoginUrl();
+      // Redirect to home page for sign-in
+      setLocation("/");
     }
-  }, [loading, isAuthenticated]);
+  }, [loading, isAuthenticated, setLocation]);
 
   useEffect(() => {
     if (organizations && organizations.length > 0 && !selectedOrg) {
