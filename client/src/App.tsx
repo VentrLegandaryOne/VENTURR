@@ -7,7 +7,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { lazy, Suspense } from "react";
 
 // CORE BUSINESS FEATURES ONLY - All experimental features removed for stability
-const Home = lazy(() => import("./pages/Home"));
+import Home from "./pages/Home"; // Load Home eagerly to avoid loading state
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const NewProject = lazy(() => import("./pages/NewProject"));
 const Projects = lazy(() => import("./pages/Projects"));
