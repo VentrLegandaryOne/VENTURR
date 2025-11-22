@@ -8,6 +8,7 @@ import { lazy, Suspense } from "react";
 
 // CORE BUSINESS FEATURES ONLY - All experimental features removed for stability
 import Home from "./pages/Home"; // Load Home eagerly to avoid loading state
+import Login from "./pages/Login"; // Load Login eagerly for immediate access
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const NewProject = lazy(() => import("./pages/NewProject"));
 const Projects = lazy(() => import("./pages/Projects"));
@@ -38,6 +39,7 @@ const LoadingFallback = () => (
 function Router() {
   return (
     <Suspense fallback={<LoadingFallback />}>
+      <Route path="/login" component={Login} />
       <Switch>
         {/* Public Routes */}
         <Route path={"/"} component={Home} />

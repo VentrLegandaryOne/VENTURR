@@ -2722,3 +2722,30 @@
 - [x] Test all enhancements
 - [x] Build and deploy
 
+
+
+
+## Separate Sign-In Page from Platform - COMPLETED ✅
+- [x] Create dedicated /login page
+- [x] Move landing page to / (public marketing site)
+- [x] Create clean sign-in UI
+- [x] Implement sign-in → dashboard redirect
+- [x] Ensure platform requires authentication
+- [x] Test complete flow: landing → login → dashboard
+- [x] Verify separation is clear
+
+## Project Templates Feature - TODO
+- [ ] Create templates database schema
+- [ ] Add residential re-roof template
+- [ ] Add commercial installation template
+- [ ] Add repairs template
+- [ ] Create template selection UI
+- [ ] Implement template application logic
+
+## Quote Customization Feature - TODO
+- [ ] Add company logo upload to settings
+- [ ] Create custom terms & conditions editor
+- [ ] Add payment schedule builder
+- [ ] Update quote generator to use custom branding
+- [ ] Test PDF generation with customizations
+

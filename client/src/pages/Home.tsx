@@ -19,43 +19,26 @@ import {
   BarChart3
 } from "lucide-react";
 import { useLocation } from "wouter";
-import { useState } from "react";
 
 export default function Home() {
   const { user, isAuthenticated, loading } = useAuth();
   const [, setLocation] = useLocation();
-  const [isSigningIn, setIsSigningIn] = useState(false);
 
-  const handleSignIn = async () => {
-    setIsSigningIn(true);
-    try {
-      const response = await fetch("/api/auth/simple-signin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-      
-      if (response.ok) {
-        window.location.href = "/dashboard";
-      } else {
-        console.error("Sign-in failed");
-        setIsSigningIn(false);
-      }
-    } catch (error) {
-      console.error("Sign-in error:", error);
-      setIsSigningIn(false);
-    }
+  const handleSignIn = () => {
+    // Redirect to dedicated login page
+    setLocation("/login");
   };
 
   const handleGetStarted = () => {
     if (isAuthenticated) {
       setLocation("/dashboard");
     } else {
-      handleSignIn();
+      setLocation("/login");
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
         <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
@@ -88,10 +71,9 @@ export default function Home() {
             ) : (
               <Button
                 onClick={handleSignIn}
-                disabled={isSigningIn || loading}
                 className="bg-blue-600 hover:bg-blue-700 text-white"
               >
-                {isSigningIn ? "Signing In..." : "Sign In"}
+                Sign In
               </Button>
             )}
           </nav>
@@ -127,13 +109,10 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
               <Button
                 onClick={handleGetStarted}
-                disabled={isSigningIn || loading}
                 size="lg"
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5"
               >
-                {isSigningIn ? (
-                  <>Signing In...</>
-                ) : isAuthenticated ? (
+                {isAuthenticated ? (
                   <>
                     Go to Dashboard
                     <ArrowRight className="ml-2 w-5 h-5" />
