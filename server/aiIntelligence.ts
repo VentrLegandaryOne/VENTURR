@@ -11,13 +11,13 @@ export interface SiteNotes {
 }
 
 export interface NormalizedMeasurements {
-  area: number;
-  linearMeters: number;
-  roofPitch?: number;
-  roofType?: string;
-  accessIssues?: string[];
-  materialHints?: string[];
-  complianceNotes?: string[];
+  area: number | null;
+  linearMeters: number | null;
+  roofPitch: number | null;
+  roofType: string | null;
+  accessIssues: string[];
+  materialHints: string[];
+  complianceNotes: string[];
 }
 
 /**
@@ -98,7 +98,7 @@ If a value is not mentioned, use null for numbers and empty arrays for lists.`;
     });
 
     const content = response.choices[0].message.content;
-    if (!content) {
+    if (!content || typeof content !== 'string') {
       throw new Error("No content in LLM response");
     }
 
@@ -194,7 +194,7 @@ Return ONLY valid JSON with this structure:
     });
 
     const content = response.choices[0].message.content;
-    if (!content) {
+    if (!content || typeof content !== 'string') {
       throw new Error("No content in LLM response");
     }
 
@@ -249,7 +249,7 @@ Return the document as formatted markdown text.`;
     });
 
     const content = response.choices[0].message.content;
-    if (!content) {
+    if (!content || typeof content !== 'string') {
       throw new Error("No content in LLM response");
     }
 

@@ -81,17 +81,17 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6">
+      <section className="pt-32 pb-20 px-6 animate-fade-in">
         <div className="container mx-auto max-w-5xl text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-blue-700 text-sm font-medium mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-blue-700 text-sm font-medium mb-8 elevation-sm">
             <Zap className="w-4 h-4" />
             AI-Powered Trade Business Platform
           </div>
           
-          <h1 className="text-6xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+          <h1 className="text-display text-gray-900 mb-6 leading-tight text-balance">
             Your Complete
             <br />
-            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            <span className="gradient-primary bg-clip-text text-transparent">
               Roofing Business
             </span>
             <br />

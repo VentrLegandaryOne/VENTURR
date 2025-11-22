@@ -3,6 +3,7 @@
 @import "./styles/design-system.css";
 @import "./styles/wcag-aaa-colors.css";
 @import "./styles/futuristic-background.css";
+@import "./styles/minimalistic-modern.css";
 
 @custom-variant dark (&:is(.dark *));
 

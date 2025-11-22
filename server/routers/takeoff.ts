@@ -50,16 +50,18 @@ export const takeoffRouter = router({
         : takeoff;
 
       // Save to database
+      const takeoffId = `takeoff_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       const saved = await createTakeoff({
+        id: takeoffId,
         projectId: input.projectId,
         items: JSON.stringify({
           materials: finalTakeoff.materials,
           labour: finalTakeoff.labour,
           plant: finalTakeoff.plant,
         }),
-        subtotal: finalTakeoff.subtotal,
-        gst: finalTakeoff.gst,
-        total: finalTakeoff.total,
+        subtotal: finalTakeoff.subtotal.toString(),
+        gst: finalTakeoff.gst.toString(),
+        total: finalTakeoff.total.toString(),
         complianceNotes: JSON.stringify(finalTakeoff.complianceNotes),
       });
 
@@ -104,9 +106,9 @@ export const takeoffRouter = router({
     .mutation(async ({ input }) => {
       const updated = await updateTakeoff(input.takeoffId, {
         items: input.items,
-        subtotal: input.subtotal,
-        gst: input.gst,
-        total: input.total,
+        subtotal: input.subtotal.toString(),
+        gst: input.gst.toString(),
+        total: input.total.toString(),
         complianceNotes: input.complianceNotes,
       });
       return updated;

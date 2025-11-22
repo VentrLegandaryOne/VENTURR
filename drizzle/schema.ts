@@ -88,6 +88,11 @@ export const takeoffs = mysqlTable("takeoffs", {
   includeGst: varchar("includeGst", { length: 10 }),
   materials: text("materials"),
   calculations: text("calculations"),
+  items: text("items"),
+  subtotal: varchar("subtotal", { length: 20 }),
+  gst: varchar("gst", { length: 20 }),
+  total: varchar("total", { length: 20 }),
+  complianceNotes: text("complianceNotes"),
   createdAt: timestamp("createdAt").defaultNow(),
 });
 

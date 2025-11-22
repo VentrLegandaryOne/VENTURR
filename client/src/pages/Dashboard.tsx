@@ -43,17 +43,17 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-orange-50">
-        <div className="text-center">
+      <div className="min-h-screen flex items-center justify-center gradient-subtle">
+        <div className="text-center animate-scale-in">
           <div className="relative w-20 h-20 mx-auto mb-6">
-            <div className="absolute inset-0 border-4 border-blue-200 rounded-full"></div>
-            <div className="absolute inset-0 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="absolute inset-0 border-4 border-primary/20 rounded-full"></div>
+            <div className="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
             <div className="absolute inset-0 flex items-center justify-center">
-              <Sparkles className="w-8 h-8 text-blue-600 animate-pulse" />
+              <Sparkles className="w-8 h-8 text-primary animate-pulse" />
             </div>
           </div>
-          <p className="text-lg font-medium text-slate-700">Loading your workspace...</p>
-          <p className="text-sm text-slate-500 mt-2">Preparing your projects</p>
+          <p className="text-h3 font-medium text-foreground">Loading your workspace...</p>
+          <p className="text-small text-muted-foreground mt-2">Preparing your projects</p>
         </div>
       </div>
     );
