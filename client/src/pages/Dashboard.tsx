@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 // import { QuickProjectModal } from "@/components/QuickProjectModal";
 import { SubscriptionStatus } from "@/components/SubscriptionStatus";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { DashboardSkeleton } from "@/components/SkeletonLoaders";
 import { trpc } from "@/lib/trpc";
 import { Folder, Plus, Ruler, Calculator, FileText, TrendingUp, Settings, Users, Sparkles, Zap, Target, Award } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -42,20 +43,10 @@ export default function Dashboard() {
     }
   }, [organizations, selectedOrg]);
 
-  if (loading) {
+  if (loading || !selectedOrg) {
     return (
-      <div className="min-h-screen flex items-center justify-center gradient-subtle">
-        <div className="text-center animate-scale-in">
-          <div className="relative w-20 h-20 mx-auto mb-6">
-            <div className="absolute inset-0 border-4 border-primary/20 rounded-full"></div>
-            <div className="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <Sparkles className="w-8 h-8 text-primary animate-pulse" />
-            </div>
-          </div>
-          <p className="text-h3 font-medium text-foreground">Loading your workspace...</p>
-          <p className="text-small text-muted-foreground mt-2">Preparing your projects</p>
-        </div>
+      <div className="container mx-auto p-6">
+        <DashboardSkeleton />
       </div>
     );
   }

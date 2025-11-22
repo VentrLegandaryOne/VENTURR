@@ -1,6 +1,7 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 // Import/Export functionality temporarily disabled
 import { Button } from "@/components/ui/button";
+import { ProjectsListSkeleton } from "@/components/SkeletonLoaders";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -85,10 +86,18 @@ export default function Projects() {
     return status.replace("_", " ").toUpperCase();
   };
 
-  if (authLoading) {
+  if (authLoading || isLoading || !selectedOrg) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+        <div className="background-glow fixed inset-0 z-0" />
+        <header className="relative z-40 bg-white/80 backdrop-blur-lg border-b border-slate-200/50">
+          <div className="container mx-auto px-4 py-4">
+            <h1 className="text-2xl font-bold text-slate-900">Projects</h1>
+          </div>
+        </header>
+        <main className="relative z-10 container mx-auto px-4 py-8">
+          <ProjectsListSkeleton />
+        </main>
       </div>
     );
   }
