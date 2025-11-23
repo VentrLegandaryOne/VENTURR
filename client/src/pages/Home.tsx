@@ -90,8 +90,8 @@ export default function Home() {
               AI-Powered Operating System for Trade Businesses
             </div>
             
-            {/* Main Heading */}
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-slate-900 mb-6 leading-tight">
+            {/* Main Heading - Mobile Optimized */}
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 mb-4 sm:mb-6 leading-tight px-2">
               Run Your Roofing Business
               <br />
               <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
@@ -99,18 +99,18 @@ export default function Home() {
               </span>
             </h1>
             
-            {/* Subtitle */}
-            <p className="text-xl sm:text-2xl text-slate-600 mb-12 max-w-3xl mx-auto leading-relaxed">
+            {/* Subtitle - Mobile Optimized */}
+            <p className="text-base sm:text-xl md:text-2xl text-slate-600 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed px-4">
               From satellite measurements to invoices in minutes. 
               AI-powered quoting, compliance, and project management—all in one platform.
             </p>
             
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+            {/* CTA Buttons - Mobile Optimized */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 mb-8 sm:mb-12 px-4 w-full max-w-md sm:max-w-none mx-auto">
               <Button
                 onClick={handleGetStarted}
                 size="lg"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 min-h-[56px] w-full sm:w-auto"
               >
                 {isAuthenticated ? (
                   <>
@@ -128,7 +128,7 @@ export default function Home() {
                 onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
                 variant="outline"
                 size="lg"
-                className="px-8 py-6 text-lg rounded-xl border-2 border-slate-300 hover:border-slate-400"
+                className="px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg rounded-xl border-2 border-slate-300 hover:border-slate-400 min-h-[56px] w-full sm:w-auto"
               >
                 See How It Works
               </Button>
@@ -318,11 +318,11 @@ export default function Home() {
           </p>
           <Button
             onClick={handleGetStarted}
-            disabled={isSigningIn || loading}
+            disabled={loading}
             size="lg"
             className="bg-white text-blue-600 hover:bg-blue-50 px-10 py-6 text-lg rounded-xl shadow-2xl hover:shadow-3xl transition-all transform hover:-translate-y-1"
           >
-            {isSigningIn ? "Signing In..." : isAuthenticated ? "Go to Dashboard" : "Start Free Trial"}
+            {loading ? "Loading..." : isAuthenticated ? "Go to Dashboard" : "Start Free Trial"}
             <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
           <p className="text-blue-100 text-sm mt-6">

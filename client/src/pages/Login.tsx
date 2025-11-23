@@ -27,8 +27,10 @@ export default function Login() {
       const data = await response.json();
       
       if (response.ok) {
-        // Successful sign-in - redirect to dashboard
-        window.location.href = "/dashboard";
+        // Successful sign-in - wait a moment then redirect to dashboard
+        setTimeout(() => {
+          setLocation("/dashboard");
+        }, 500);
       } else {
         setError(data.error || "Sign-in failed. Please try again.");
         setIsSigningIn(false);
@@ -41,8 +43,12 @@ export default function Login() {
   };
 
   // Auto-sign-in on page load for demo purposes
+  // Add slight delay to ensure page is fully loaded
   useEffect(() => {
-    handleSignIn();
+    const timer = setTimeout(() => {
+      handleSignIn();
+    }, 300);
+    return () => clearTimeout(timer);
   }, []);
 
   return (

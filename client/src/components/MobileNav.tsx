@@ -1,10 +1,17 @@
 import { Home, FolderKanban, FileText, Settings, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { APP_LOGO, APP_TITLE } from "@/const";
 
-export function MobileNav() {
+interface MobileNavProps {
+  variant?: "landing" | "dashboard";
+}
+
+export function MobileNav({ variant = "dashboard" }: MobileNavProps) {
   const [location, setLocation] = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   const navItems = [
     { icon: Home, label: "Home", path: "/dashboard" },
