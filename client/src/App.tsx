@@ -8,8 +8,11 @@ import { lazy, Suspense } from "react";
 
 // CORE BUSINESS FEATURES ONLY - All experimental features removed for stability
 import Home from "./pages/Home"; // Load Home eagerly to avoid loading state
+import HomeEnhanced from "./pages/HomeEnhanced"; // Enhanced version with world-class UI/UX
 import Login from "./pages/Login"; // Load Login eagerly for immediate access
+import LoginEnhanced from "./pages/LoginEnhanced"; // Enhanced version with delightful animations
 const Dashboard = lazy(() => import("./pages/Dashboard"));
+const DashboardEnhanced = lazy(() => import("./pages/DashboardEnhanced"));
 const NewProject = lazy(() => import("./pages/NewProject"));
 const Projects = lazy(() => import("./pages/Projects"));
 const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
@@ -39,15 +42,15 @@ const LoadingFallback = () => (
 function Router() {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <Route path="/login" component={Login} />
+      <Route path="/login" component={LoginEnhanced} />
       <Switch>
         {/* Public Routes */}
-        <Route path={"/"} component={Home} />
+        <Route path={"/"} component={HomeEnhanced} />
         <Route path={"/pricing"} component={Pricing} />
         <Route path={"/client-portal"} component={ClientPortal} />
 
         {/* Core Dashboard */}
-        <Route path={"/dashboard"} component={Dashboard} />
+        <Route path={"/dashboard"} component={DashboardEnhanced} />
 
         {/* Project Management */}
         <Route path={"/projects"} component={Projects} />
