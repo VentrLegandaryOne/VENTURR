@@ -10,6 +10,7 @@ import "./index.css";
 import "./styles/mobile.css";
 import "./styles/print.css";
 import "./styles/animations.css";
+import "./styles/minimal-design.css";
 import { performanceMonitor } from "./lib/performance";
 import { registerServiceWorker } from "./lib/serviceWorker";
 import { toast } from "sonner";

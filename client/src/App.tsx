@@ -6,11 +6,12 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { lazy, Suspense } from "react";
 
-// CORE BUSINESS FEATURES ONLY - All experimental features removed for stability
-import Home from "./pages/Home"; // Load Home eagerly to avoid loading state
-import HomeEnhanced from "./pages/HomeEnhanced"; // Enhanced version with world-class UI/UX
-import Login from "./pages/Login"; // Load Login eagerly for immediate access
-import LoginEnhanced from "./pages/LoginEnhanced"; // Enhanced version with delightful animations
+// MINIMAL APPLE-STYLE INTERFACE
+import HomeMinimal from "./pages/HomeMinimal"; // Clean, minimal landing page
+import LoginMinimal from "./pages/LoginMinimal"; // Centered login card
+import DashboardMinimal from "./pages/DashboardMinimal"; // Dashboard with sidebar
+import ProjectFlow from "./pages/ProjectFlow"; // Project flow with pill stepper
+// Original pages kept for reference
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const DashboardEnhanced = lazy(() => import("./pages/DashboardEnhanced"));
 const NewProject = lazy(() => import("./pages/NewProject"));
@@ -42,20 +43,21 @@ const LoadingFallback = () => (
 function Router() {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <Route path="/login" component={LoginEnhanced} />
+      <Route path="/login" component={LoginMinimal} />
       <Switch>
         {/* Public Routes */}
-        <Route path={"/"} component={HomeEnhanced} />
+        <Route path={"/"} component={HomeMinimal} />
         <Route path={"/pricing"} component={Pricing} />
         <Route path={"/client-portal"} component={ClientPortal} />
 
         {/* Core Dashboard */}
-        <Route path={"/dashboard"} component={DashboardEnhanced} />
+        <Route path={"/dashboard"} component={DashboardMinimal} />
 
         {/* Project Management */}
         <Route path={"/projects"} component={Projects} />
         <Route path={"/projects/new"} component={NewProject} />
-        <Route path={"/projects/:id"} component={ProjectDetail} />
+        <Route path={"/projects/:id"} component={ProjectFlow} />
+        <Route path={"/projects/:id/detail"} component={ProjectDetail} />
 
         {/* Project Workflows */}
         <Route path="/projects/:id/compliance" component={Compliance} />
