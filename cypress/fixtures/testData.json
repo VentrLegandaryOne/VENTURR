@@ -1,0 +1,22 @@
+{
+  "testProject": {
+    "title": "Test Roofing Project",
+    "address": "123 Test Street, Sydney NSW 2000",
+    "clientName": "John Smith",
+    "clientEmail": "john.smith@example.com",
+    "clientPhone": "0412345678",
+    "propertyType": "residential"
+  },
+  "testMeasurement": {
+    "area": 150,
+    "perimeter": 50,
+    "pitch": "moderate",
+    "valleys": 2
+  },
+  "testQuote": {
+    "quoteNumber": "Q-2024-001",
+    "total": "15000.00",
+    "gstAmount": "1363.64",
+    "validDays": 30
+  }
+}
