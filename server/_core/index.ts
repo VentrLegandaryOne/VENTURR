@@ -123,7 +123,7 @@ async function startServer() {
         defaultSrc: ["'self'"],
         styleSrc: ["'self'", "'unsafe-inline'", "https://api.mapbox.com"],
         scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://api.mapbox.com", "blob:"],
-        imgSrc: ["'self'", "data:", "https:", "blob:", "https://api.mapbox.com", "https://*.tiles.mapbox.com"],
+        imgSrc: ["'self'", "data:", "blob:", "https://api.mapbox.com", "https://*.tiles.mapbox.com", "https://cdnjs.cloudflare.com"],
         connectSrc: ["'self'", "https://api.mapbox.com", "https://events.mapbox.com", "https://*.tiles.mapbox.com", "https://api.sendgrid.com"],
         fontSrc: ["'self'", "data:"],
         objectSrc: ["'none'"],
@@ -182,18 +182,7 @@ async function startServer() {
   });
   
   app.use('/api/oauth/', authLimiter);
-  
-  // Stricter rate limiting for sensitive operations (quote sending, etc.)
-  const sensitiveOperationLimiter = rateLimit({
-    windowMs: 60 * 60 * 1000, // 1 hour
-    max: 20, // 20 operations per hour
-    message: { error: 'Too many sensitive operations. Please try again later.' },
-    standardHeaders: true,
-    legacyHeaders: false,
-  });
-  
-  // Apply to quote/email endpoints (via path matching in tRPC)
-  app.use('/api/trpc/quotes.send', sensitiveOperationLimiter);
+  app.use('/api/auth/', authLimiter);
   
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));

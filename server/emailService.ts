@@ -40,6 +40,22 @@ async function sendViaSendGrid(options: EmailOptions): Promise<boolean> {
     return false;
   }
 
+  // Build content array - always include plain text first, then HTML if provided
+  const content: Array<{ type: string; value: string }> = [
+    {
+      type: 'text/plain',
+      value: options.body,
+    },
+  ];
+
+  // Add HTML version if provided
+  if (options.html) {
+    content.push({
+      type: 'text/html',
+      value: options.html,
+    });
+  }
+
   const emailPayload: SendGridEmailParams = {
     personalizations: [
       {
@@ -48,21 +64,8 @@ async function sendViaSendGrid(options: EmailOptions): Promise<boolean> {
       },
     ],
     from: { email: fromEmail, name: fromName },
-    content: [
-      {
-        type: options.html ? 'text/html' : 'text/plain',
-        value: options.html || options.body,
-      },
-    ],
+    content,
   };
-
-  // Add plain text version if HTML is provided
-  if (options.html) {
-    emailPayload.content.unshift({
-      type: 'text/plain',
-      value: options.body,
-    });
-  }
 
   try {
     const response = await fetch('https://api.sendgrid.com/v3/mail/send', {

@@ -96,10 +96,12 @@ describe('Email Service', () => {
       const fetchCall = mockFetch.mock.calls[0];
       const body = JSON.parse(fetchCall[1].body);
       
-      // Should have both plain text and HTML content
+      // Should have both plain text (first) and HTML content (second)
       expect(body.content).toHaveLength(2);
       expect(body.content[0].type).toBe('text/plain');
+      expect(body.content[0].value).toBe('Plain text version');
       expect(body.content[1].type).toBe('text/html');
+      expect(body.content[1].value).toBe('<p>HTML version</p>');
     });
 
     it('should fall back to notification on SendGrid failure', async () => {

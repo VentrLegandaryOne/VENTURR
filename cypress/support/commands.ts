@@ -11,7 +11,7 @@ Cypress.Commands.add('login', (email?: string, name?: string) => {
   
   cy.request({
     method: 'POST',
-    url: '/api/simple-auth',
+    url: '/api/auth/simple-signin',
     body: {
       email: testEmail,
       name: testName,
