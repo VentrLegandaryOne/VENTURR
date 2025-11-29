@@ -105,3 +105,8 @@ temp/
 *.db
 *.sqlite
 *.sqlite3
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
