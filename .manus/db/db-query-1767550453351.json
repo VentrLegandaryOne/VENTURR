@@ -1,0 +1,9 @@
+{
+  "query": "CREATE INDEX feedback_user_id_idx ON feedback(user_id);\nCREATE INDEX feedback_type_idx ON feedback(type);\nCREATE INDEX feedback_status_idx ON feedback(status);\nCREATE INDEX feedback_created_at_idx ON feedback(created_at);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute CREATE INDEX feedback_user_id_idx ON feedback(user_id);\nCREATE INDEX feedback_type_idx ON feedback(type);\nCREATE INDEX feedback_status_idx ON feedback(status);\nCREATE INDEX feedback_created_at_idx ON feedback(created_at);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 3767
+}

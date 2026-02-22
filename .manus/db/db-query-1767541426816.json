@@ -1,0 +1,19 @@
+{
+  "query": "SELECT \n  (SELECT COUNT(*) FROM contractors) as contractors,\n  (SELECT COUNT(*) FROM quotes) as quotes,\n  (SELECT COUNT(*) FROM verifications) as verifications,\n  (SELECT COUNT(*) FROM portfolio_projects) as portfolio_projects,\n  (SELECT COUNT(*) FROM contractor_certifications) as certifications,\n  (SELECT COUNT(*) FROM price_benchmarks) as price_benchmarks,\n  (SELECT COUNT(*) FROM market_rates) as market_rates;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SELECT \n  (SELECT COUNT(*) FROM contractors) as contractors,\n  (SELECT COUNT(*) FROM quotes) as quotes,\n  (SELECT COUNT(*) FROM verifications) as verifications,\n  (SELECT COUNT(*) FROM portfolio_projects) as portfolio_projects,\n  (SELECT COUNT(*) FROM contractor_certifications) as certifications,\n  (SELECT COUNT(*) FROM price_benchmarks) as price_benchmarks,\n  (SELECT COUNT(*) FROM market_rates) as market_rates;",
+  "rows": [
+    {
+      "contractors": "25",
+      "quotes": "497",
+      "verifications": "11",
+      "portfolio_projects": "4",
+      "certifications": "7",
+      "price_benchmarks": "25",
+      "market_rates": "193"
+    }
+  ],
+  "messages": [],
+  "stdout": "contractors\tquotes\tverifications\tportfolio_projects\tcertifications\tprice_benchmarks\tmarket_rates\n25\t497\t11\t4\t7\t25\t193\n",
+  "stderr": "",
+  "execution_time_ms": 1553
+}

@@ -1,0 +1,17 @@
+{
+  "query": "SELECT c.id, c.name, c.avg_score, c.total_reviews, \n       (SELECT AVG(rating) FROM contractor_reviews WHERE contractor_id = c.id) as calculated_avg\nFROM contractors c \nWHERE c.id = 30001;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SELECT c.id, c.name, c.avg_score, c.total_reviews, \n       (SELECT AVG(rating) FROM contractor_reviews WHERE contractor_id = c.id) as calculated_avg\nFROM contractors c \nWHERE c.id = 30001;",
+  "rows": [
+    {
+      "id": "30001",
+      "name": "Test Contractor",
+      "avg_score": "5",
+      "total_reviews": "1",
+      "calculated_avg": "5.0000"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tavg_score\ttotal_reviews\tcalculated_avg\n30001\tTest Contractor\t5\t1\t5.0000\n",
+  "stderr": "",
+  "execution_time_ms": 1593
+}

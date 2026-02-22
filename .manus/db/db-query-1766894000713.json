@@ -1,0 +1,9 @@
+{
+  "query": "CREATE INDEX IF NOT EXISTS `upload_analytics_user_id_idx` ON `upload_analytics` (`user_id`);\nCREATE INDEX IF NOT EXISTS `upload_analytics_quote_id_idx` ON `upload_analytics` (`quote_id`);\nCREATE INDEX IF NOT EXISTS `upload_analytics_status_idx` ON `upload_analytics` (`status`);\nCREATE INDEX IF NOT EXISTS `upload_analytics_created_at_idx` ON `upload_analytics` (`created_at`);\nCREATE INDEX IF NOT EXISTS `upload_analytics_error_type_idx` ON `upload_analytics` (`error_type`);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute CREATE INDEX IF NOT EXISTS `upload_analytics_user_id_idx` ON `upload_analytics` (`user_id`);\nCREATE INDEX IF NOT EXISTS `upload_analytics_quote_id_idx` ON `upload_analytics` (`quote_id`);\nCREATE INDEX IF NOT EXISTS `upload_analytics_status_idx` ON `upload_analytics` (`status`);\nCREATE INDEX IF NOT EXISTS `upload_analytics_created_at_idx` ON `upload_analytics` (`created_at`);\nCREATE INDEX IF NOT EXISTS `upload_analytics_error_type_idx` ON `upload_analytics` (`error_type`);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 4477
+}

@@ -1,0 +1,258 @@
+
+ RUN  v2.1.9 /home/ubuntu/venturr_valdt
+
+ ❯ server/pressure.test.ts (17 tests | 17 failed) 37ms
+   × Platform Pressure Tests > Database Performance > should handle simple queries under threshold 11ms
+     → Cannot read properties of undefined (reading 'select')
+   × Platform Pressure Tests > Database Performance > should handle complex joins efficiently 1ms
+     → Cannot read properties of undefined (reading 'select')
+   × Platform Pressure Tests > Database Performance > should handle concurrent read operations 1ms
+     → Cannot read properties of undefined (reading 'select')
+   × Platform Pressure Tests > Database Performance > should count records efficiently 1ms
+     → Cannot read properties of undefined (reading 'select')
+   × Platform Pressure Tests > Australian Standards Data Integrity > should have all required standards categories 1ms
+     → Cannot read properties of undefined (reading 'select')
+   × Platform Pressure Tests > Australian Standards Data Integrity > should have valid standard codes 1ms
+     → Cannot read properties of undefined (reading 'select')
+   × Platform Pressure Tests > Australian Standards Data Integrity > should have compliance requirements for each standard 1ms
+     → Cannot read properties of undefined (reading 'select')
+   × Platform Pressure Tests > Query Performance Under Load > should handle rapid sequential queries 1ms
+     → Cannot read properties of undefined (reading 'select')
+   × Platform Pressure Tests > Query Performance Under Load > should maintain performance with filtered queries 1ms
+     → Cannot read properties of undefined (reading 'select')
+   × Platform Pressure Tests > Data Consistency Checks > should have no orphaned quote records 1ms
+     → Cannot read properties of undefined (reading 'select')
+   × Platform Pressure Tests > Data Consistency Checks > should have valid status values for all quotes 1ms
+     → Cannot read properties of undefined (reading 'select')
+   × Platform Pressure Tests > Data Consistency Checks > should have valid contractor data structure 1ms
+     → Cannot read properties of undefined (reading 'select')
+   × Platform Pressure Tests > Memory and Resource Usage > should handle large result sets without memory issues 1ms
+     → Cannot read properties of undefined (reading 'select')
+   × Platform Pressure Tests > Memory and Resource Usage > should efficiently paginate results 1ms
+     → Cannot read properties of undefined (reading 'select')
+   × Service Layer Stress Tests > Market Rates Service > should return consistent market rates 8ms
+     → Failed to load url ./marketRates (resolved id: ./marketRates) in /home/ubuntu/venturr_valdt/server/pressure.test.ts. Does the file exist?
+   × Service Layer Stress Tests > Compliance Verification > should verify compliance for all standard categories 3ms
+     → Failed to load url ./complianceService (resolved id: ./complianceService) in /home/ubuntu/venturr_valdt/server/pressure.test.ts. Does the file exist?
+   × End-to-End Flow Tests > should complete a full quote verification flow 1ms
+     → Cannot read properties of undefined (reading 'select')
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 17 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  server/pressure.test.ts > Platform Pressure Tests > Database Performance > should handle simple queries under threshold
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ server/pressure.test.ts:43:19
+     41|     it("should handle simple queries under threshold", async () => {
+     42|       const { duration } = await measureTime(async () => {
+     43|         return db.select().from(users).limit(10);
+       |                   ^
+     44|       });
+     45|       
+ ❯ measureTime server/pressure.test.ts:23:10
+ ❯ server/pressure.test.ts:42:34
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/17]⎯
+
+ FAIL  server/pressure.test.ts > Platform Pressure Tests > Database Performance > should handle complex joins efficiently
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ server/pressure.test.ts:53:12
+     51|       const { duration } = await measureTime(async () => {
+     52|         return db
+     53|           .select()
+       |            ^
+     54|           .from(quotes)
+     55|           .leftJoin(users, eq(quotes.userId, users.id))
+ ❯ measureTime server/pressure.test.ts:23:10
+ ❯ server/pressure.test.ts:51:34
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/17]⎯
+
+ FAIL  server/pressure.test.ts > Platform Pressure Tests > Database Performance > should handle concurrent read operations
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ server/pressure.test.ts:66:19
+     64|       const concurrentReads = 10;
+     65|       const tasks = Array(concurrentReads).fill(null).map(() => async …
+     66|         return db.select().from(australianStandards).limit(5);
+       |                   ^
+     67|       });
+     68| 
+ ❯ server/pressure.test.ts:70:45
+ ❯ server/pressure.test.ts:70:34
+ ❯ measureTime server/pressure.test.ts:23:10
+ ❯ server/pressure.test.ts:69:34
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/17]⎯
+
+ FAIL  server/pressure.test.ts > Platform Pressure Tests > Database Performance > should count records efficiently
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ server/pressure.test.ts:80:12
+     78|       const { duration, result } = await measureTime(async () => {
+     79|         const [countResult] = await db
+     80|           .select({ count: sql<number>`count(*)` })
+       |            ^
+     81|           .from(australianStandards);
+     82|         return countResult?.count || 0;
+ ❯ measureTime server/pressure.test.ts:23:10
+ ❯ server/pressure.test.ts:78:42
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/17]⎯
+
+ FAIL  server/pressure.test.ts > Platform Pressure Tests > Australian Standards Data Integrity > should have all required standards categories
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ server/pressure.test.ts:92:34
+     90|   describe("Australian Standards Data Integrity", () => {
+     91|     it("should have all required standards categories", async () => {
+     92|       const standards = await db.select().from(australianStandards);
+       |                                  ^
+     93|       
+     94|       const categories = new Set(standards.map((s) => s.category));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/17]⎯
+
+ FAIL  server/pressure.test.ts > Platform Pressure Tests > Australian Standards Data Integrity > should have valid standard codes
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ server/pressure.test.ts:116:34
+    114| 
+    115|     it("should have valid standard codes", async () => {
+    116|       const standards = await db.select().from(australianStandards);
+       |                                  ^
+    117|       
+    118|       for (const standard of standards) {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/17]⎯
+
+ FAIL  server/pressure.test.ts > Platform Pressure Tests > Australian Standards Data Integrity > should have compliance requirements for each standard
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ server/pressure.test.ts:127:34
+    125| 
+    126|     it("should have compliance requirements for each standard", async …
+    127|       const standards = await db.select().from(australianStandards);
+       |                                  ^
+    128|       
+    129|       let withRequirements = 0;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/17]⎯
+
+ FAIL  server/pressure.test.ts > Platform Pressure Tests > Query Performance Under Load > should handle rapid sequential queries
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ server/pressure.test.ts:149:21
+    147|       for (let i = 0; i < queryCount; i++) {
+    148|         const { duration } = await measureTime(async () => {
+    149|           return db.select().from(australianStandards).where(eq(austra…
+       |                     ^
+    150|         });
+    151|         durations.push(duration);
+ ❯ measureTime server/pressure.test.ts:23:10
+ ❯ server/pressure.test.ts:148:36
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/17]⎯
+
+ FAIL  server/pressure.test.ts > Platform Pressure Tests > Query Performance Under Load > should maintain performance with filtered queries
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ server/pressure.test.ts:168:21
+    166|       for (const category of categories) {
+    167|         const { duration, result } = await measureTime(async () => {
+    168|           return db.select().from(australianStandards).where(eq(austra…
+       |                     ^
+    169|         });
+    170|         results.push({ category, duration, count: result.length });
+ ❯ measureTime server/pressure.test.ts:23:10
+ ❯ server/pressure.test.ts:167:44
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/17]⎯
+
+ FAIL  server/pressure.test.ts > Platform Pressure Tests > Data Consistency Checks > should have no orphaned quote records
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ server/pressure.test.ts:186:10
+    184|     it("should have no orphaned quote records", async () => {
+    185|       const quotesWithoutUsers = await db
+    186|         .select({ quoteId: quotes.id })
+       |          ^
+    187|         .from(quotes)
+    188|         .leftJoin(users, eq(quotes.userId, users.id))
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/17]⎯
+
+ FAIL  server/pressure.test.ts > Platform Pressure Tests > Data Consistency Checks > should have valid status values for all quotes
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ server/pressure.test.ts:195:34
+    193| 
+    194|     it("should have valid status values for all quotes", async () => {
+    195|       const allQuotes = await db.select({ status: quotes.status }).fro…
+       |                                  ^
+    196|       const validStatuses = ["pending", "processing", "completed", "fa…
+    197| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/17]⎯
+
+ FAIL  server/pressure.test.ts > Platform Pressure Tests > Data Consistency Checks > should have valid contractor data structure
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ server/pressure.test.ts:204:39
+    202| 
+    203|     it("should have valid contractor data structure", async () => {
+    204|       const allContractors = await db.select().from(contractors);
+       |                                       ^
+    205| 
+    206|       for (const contractor of allContractors) {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/17]⎯
+
+ FAIL  server/pressure.test.ts > Platform Pressure Tests > Memory and Resource Usage > should handle large result sets without memory issues
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ server/pressure.test.ts:219:19
+    217|     it("should handle large result sets without memory issues", async …
+    218|       const { duration, result } = await measureTime(async () => {
+    219|         return db.select().from(australianStandards);
+       |                   ^
+    220|       });
+    221| 
+ ❯ measureTime server/pressure.test.ts:23:10
+ ❯ server/pressure.test.ts:218:42
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/17]⎯
+
+ FAIL  server/pressure.test.ts > Platform Pressure Tests > Memory and Resource Usage > should efficiently paginate results
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ server/pressure.test.ts:235:14
+    233|         const { duration } = await measureTime(async () => {
+    234|           return db
+    235|             .select()
+       |              ^
+    236|             .from(australianStandards)
+    237|             .limit(pageSize)
+ ❯ measureTime server/pressure.test.ts:23:10
+ ❯ server/pressure.test.ts:233:36
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/17]⎯
+
+ FAIL  server/pressure.test.ts > Service Layer Stress Tests > Market Rates Service > should return consistent market rates
+Error: Failed to load url ./marketRates (resolved id: ./marketRates) in /home/ubuntu/venturr_valdt/server/pressure.test.ts. Does the file exist?
+ ❯ loadAndTransform node_modules/.pnpm/vite@5.4.20_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite/dist/node/chunks/dep-D_zLpgQd.js:51968:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/17]⎯
+
+ FAIL  server/pressure.test.ts > Service Layer Stress Tests > Compliance Verification > should verify compliance for all standard categories
+Error: Failed to load url ./complianceService (resolved id: ./complianceService) in /home/ubuntu/venturr_valdt/server/pressure.test.ts. Does the file exist?
+ ❯ loadAndTransform node_modules/.pnpm/vite@5.4.20_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite/dist/node/chunks/dep-D_zLpgQd.js:51968:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/17]⎯
+
+ FAIL  server/pressure.test.ts > End-to-End Flow Tests > should complete a full quote verification flow
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ server/pressure.test.ts:310:31
+    308|     // Step 1: Check database connectivity
+    309|     const dbCheck = await measureTime(async () => {
+    310|       const result = await db.select().from(users).limit(1);
+       |                               ^
+    311|       return result.length >= 0;
+    312|     });
+ ❯ measureTime server/pressure.test.ts:23:10
+ ❯ server/pressure.test.ts:309:27
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/17]⎯
+
+ Test Files  1 failed (1)
+      Tests  17 failed (17)
+   Start at  06:25:08
+   Duration  844ms (transform 165ms, setup 0ms, collect 501ms, tests 37ms, environment 0ms, prepare 85ms)
+

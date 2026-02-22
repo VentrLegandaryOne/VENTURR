@@ -1,0 +1,9 @@
+{
+  "query": "UPDATE quotes SET userId = (SELECT id FROM users WHERE name = 'Jaye Thompson' LIMIT 1) WHERE userId = 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute UPDATE quotes SET userId = (SELECT id FROM users WHERE name = 'Jaye Thompson' LIMIT 1) WHERE userId = 1;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1552
+}

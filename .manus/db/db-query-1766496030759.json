@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS shared_comparisons (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  user_id INT NOT NULL,\n  share_token VARCHAR(64) NOT NULL UNIQUE,\n  contractor_ids JSON NOT NULL,\n  title VARCHAR(255),\n  notes TEXT,\n  expires_at DATETIME,\n  view_count INT NOT NULL DEFAULT 0,\n  last_viewed_at DATETIME,\n  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  INDEX idx_share_token (share_token),\n  INDEX idx_user_id (user_id)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute CREATE TABLE IF NOT EXISTS shared_comparisons (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  user_id INT NOT NULL,\n  share_token VARCHAR(64) NOT NULL UNIQUE,\n  contractor_ids JSON NOT NULL,\n  title VARCHAR(255),\n  notes TEXT,\n  expires_at DATETIME,\n  view_count INT NOT NULL DEFAULT 0,\n  last_viewed_at DATETIME,\n  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  INDEX idx_share_token (share_token),\n  INDEX idx_user_id (user_id)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1698
+}

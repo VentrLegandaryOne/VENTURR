@@ -1,0 +1,1 @@
+ALTER TABLE `verifications` ADD `potentialSavings` int DEFAULT 0;

@@ -1,0 +1,1 @@
+ALTER TABLE `quotes` ADD `isFreeCheck` int DEFAULT 0 NOT NULL;

@@ -1,0 +1,45 @@
+{
+  "query": "SELECT standard_code, title, category FROM australian_standards ORDER BY category, standard_code;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SELECT standard_code, title, category FROM australian_standards ORDER BY category, standard_code;",
+  "rows": [
+    {
+      "standard_code": "NCC-2022-Vol1",
+      "title": "National Construction Code 2022 - Volume One",
+      "category": "NCC"
+    },
+    {
+      "standard_code": "NCC-2022-Vol2",
+      "title": "National Construction Code 2022 - Volume Two",
+      "category": "NCC"
+    },
+    {
+      "standard_code": "HB39-2015",
+      "title": "Compendium of Australian Standards for Construction Materials",
+      "category": "HB39"
+    },
+    {
+      "standard_code": "AS4100-2020",
+      "title": "Steel structures",
+      "category": "AS"
+    },
+    {
+      "standard_code": "AS1657-2018",
+      "title": "Fixed platforms, walkways, stairways and ladders",
+      "category": "ASNZS"
+    },
+    {
+      "standard_code": "AS3600-2018",
+      "title": "Concrete structures",
+      "category": "ASNZS"
+    },
+    {
+      "standard_code": "WHS-ACT-2011",
+      "title": "Work Health and Safety Act 2011",
+      "category": "WHS"
+    }
+  ],
+  "messages": [],
+  "stdout": "standard_code\ttitle\tcategory\nNCC-2022-Vol1\tNational Construction Code 2022 - Volume One\tNCC\nNCC-2022-Vol2\tNational Construction Code 2022 - Volume Two\tNCC\nHB39-2015\tCompendium of Australian Standards for Construction Materials\tHB39\nAS4100-2020\tSteel structures\tAS\nAS1657-2018\tFixed platforms, walkways, stairways and ladders\tASNZS\nAS3600-2018\tConcrete structures\tASNZS\nWHS-ACT-2011\tWork Health and Safety Act 2011\tWHS\n",
+  "stderr": "",
+  "execution_time_ms": 1512
+}

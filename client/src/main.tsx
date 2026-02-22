@@ -7,45 +7,6 @@ import superjson from "superjson";
 import App from "./App";
 import { getLoginUrl } from "./const";
 import "./index.css";
-import "./styles/mobile.css";
-import "./styles/print.css";
-import "./styles/animations.css";
-import "./styles/minimal-design.css";
-import { performanceMonitor } from "./lib/performance";
-import { registerServiceWorker } from "./lib/serviceWorker";
-import { toast } from "sonner";
-
-// Initialize performance monitoring
-if (typeof window !== "undefined") {
-  window.addEventListener("load", () => {
-    performanceMonitor.reportMetrics();
-    
-    // Service worker disabled temporarily for mobile compatibility
-    // TODO: Re-enable after fixing mobile Safari compatibility
-    // registerServiceWorker({
-    //   onSuccess: () => {
-    //     console.log('[PWA] App is ready for offline use');
-    //   },
-    //   onUpdate: () => {
-    //     toast.info('New version available!', {
-    //       description: 'Refresh to update the app',
-    //       action: {
-    //         label: 'Refresh',
-    //         onClick: () => window.location.reload(),
-    //       },
-    //     });
-    //   },
-    //   onOffline: () => {
-    //     toast.warning('You are offline', {
-    //       description: 'Some features may be limited',
-    //     });
-    //   },
-    //   onOnline: () => {
-    //     toast.success('Back online!');
-    //   },
-    // });
-  });
-}
 
 const queryClient = new QueryClient();
 
@@ -57,7 +18,7 @@ const redirectToLoginIfUnauthorized = (error: unknown) => {
 
   if (!isUnauthorized) return;
 
-  window.location.href = "/";
+  window.location.href = getLoginUrl();
 };
 
 queryClient.getQueryCache().subscribe(event => {

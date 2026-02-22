@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS `terms_acceptance` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `user_id` int NOT NULL,\n  `terms_version` varchar(32) NOT NULL,\n  `accepted_at` timestamp NOT NULL DEFAULT (now()),\n  `ip_address` varchar(45),\n  `user_agent` text,\n  CONSTRAINT `terms_acceptance_id` PRIMARY KEY(`id`),\n  INDEX `user_id_idx` (`user_id`),\n  INDEX `version_idx` (`terms_version`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute CREATE TABLE IF NOT EXISTS `terms_acceptance` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `user_id` int NOT NULL,\n  `terms_version` varchar(32) NOT NULL,\n  `accepted_at` timestamp NOT NULL DEFAULT (now()),\n  `ip_address` varchar(45),\n  `user_agent` text,\n  CONSTRAINT `terms_acceptance_id` PRIMARY KEY(`id`),\n  INDEX `user_id_idx` (`user_id`),\n  INDEX `version_idx` (`terms_version`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1601
+}

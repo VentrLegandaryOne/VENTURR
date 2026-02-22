@@ -1,0 +1,13 @@
+{
+  "query": "SELECT share_token FROM shared_comparisons ORDER BY created_at DESC LIMIT 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SELECT share_token FROM shared_comparisons ORDER BY created_at DESC LIMIT 1;",
+  "rows": [
+    {
+      "share_token": "fbf2917b7eead7b1a378183a56ce4f926062c48eededa24aaf0b13ddada034d3"
+    }
+  ],
+  "messages": [],
+  "stdout": "share_token\nfbf2917b7eead7b1a378183a56ce4f926062c48eededa24aaf0b13ddada034d3\n",
+  "stderr": "",
+  "execution_time_ms": 1613
+}

@@ -1,0 +1,21 @@
+CREATE TABLE `contractor_performance_metrics` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`contractor_id` int NOT NULL,
+	`quote_accuracy_score` int NOT NULL DEFAULT 0,
+	`average_variance` int NOT NULL DEFAULT 0,
+	`compliance_score` int NOT NULL DEFAULT 0,
+	`compliance_issues_count` int NOT NULL DEFAULT 0,
+	`average_response_time` int NOT NULL DEFAULT 0,
+	`response_rate` int NOT NULL DEFAULT 0,
+	`completion_rate` int NOT NULL DEFAULT 0,
+	`on_time_delivery_rate` int NOT NULL DEFAULT 0,
+	`average_rating` int NOT NULL DEFAULT 0,
+	`total_reviews` int NOT NULL DEFAULT 0,
+	`total_quotes_submitted` int NOT NULL DEFAULT 0,
+	`total_projects_completed` int NOT NULL DEFAULT 0,
+	`period_start` timestamp NOT NULL,
+	`period_end` timestamp NOT NULL,
+	`created_at` timestamp NOT NULL DEFAULT (now()),
+	`updated_at` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `contractor_performance_metrics_id` PRIMARY KEY(`id`)
+);

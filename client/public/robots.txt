@@ -1,0 +1,17 @@
+# VENTURR VALDT - Quote Verification & Compliance Intelligence Platform
+# https://venturr-valdt.manus.space
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://venturr-valdt.manus.space/sitemap.xml
+
+# Disallow admin and private routes
+Disallow: /admin/
+Disallow: /api/
+Disallow: /processing/
+Disallow: /upgrade/
+
+# Crawl delay for polite crawling
+Crawl-delay: 1

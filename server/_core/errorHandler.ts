@@ -1,193 +1,242 @@
-import { TRPCError } from "@trpc/server";
-
 /**
- * Standardized error handling for tRPC procedures
- * Provides consistent error responses and logging
+ * Global error handling utilities
  */
+
+import { TRPCError } from "@trpc/server";
+import { logSecurityEvent } from "./securityLogger";
 
 export class AppError extends Error {
   constructor(
-    public code: 'BAD_REQUEST' | 'UNAUTHORIZED' | 'FORBIDDEN' | 'NOT_FOUND' | 'INTERNAL_SERVER_ERROR',
+    public code: string,
     message: string,
-    public details?: unknown
+    public statusCode: number = 500,
+    public isOperational: boolean = true,
+    public details?: Record<string, any>
   ) {
     super(message);
-    this.name = 'AppError';
+    this.name = this.constructor.name;
+    Error.captureStackTrace(this, this.constructor);
   }
 }
 
-export function handleError(error: unknown): never {
-  // Log error for debugging
-  console.error('[Error Handler]', error);
+/**
+ * Convert various error types to TRPC errors
+ */
+export function toTRPCError(error: unknown): TRPCError {
+  // Already a TRPC error
+  if (error instanceof TRPCError) {
+    return error;
+  }
 
-  // Handle known AppError
+  // App error
   if (error instanceof AppError) {
-    throw new TRPCError({
-      code: error.code,
+    return new TRPCError({
+      code: mapStatusCodeToTRPCCode(error.statusCode),
       message: error.message,
-      cause: error.details,
+      cause: error,
     });
   }
 
-  // Handle TRPCError (already formatted)
-  if (error instanceof TRPCError) {
-    throw error;
-  }
-
-  // Handle database errors
+  // Standard error
   if (error instanceof Error) {
-    if (error.message.includes('duplicate key') || error.message.includes('UNIQUE constraint')) {
-      throw new TRPCError({
-        code: 'CONFLICT',
-        message: 'A record with this information already exists',
+    // Check for specific error patterns
+    if (error.message.includes("not found")) {
+      return new TRPCError({
+        code: "NOT_FOUND",
+        message: error.message,
       });
     }
 
-    if (error.message.includes('foreign key constraint')) {
-      throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: 'Cannot perform this action due to related records',
+    if (error.message.includes("unauthorized") || error.message.includes("forbidden")) {
+      return new TRPCError({
+        code: "FORBIDDEN",
+        message: error.message,
       });
     }
 
-    if (error.message.includes('not found') || error.message.includes('does not exist')) {
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: 'The requested resource was not found',
-      });
-    }
+    // Generic internal error
+    return new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "An unexpected error occurred",
+      cause: error,
+    });
   }
 
-  // Generic error fallback
-  throw new TRPCError({
-    code: 'INTERNAL_SERVER_ERROR',
-    message: 'An unexpected error occurred. Please try again.',
-    cause: error,
+  // Unknown error
+  return new TRPCError({
+    code: "INTERNAL_SERVER_ERROR",
+    message: "An unknown error occurred",
   });
 }
 
 /**
- * Validates required fields
+ * Map HTTP status codes to TRPC error codes
  */
-export function validateRequired<T>(value: T | null | undefined, fieldName: string): T {
-  if (value === null || value === undefined || value === '') {
-    throw new AppError('BAD_REQUEST', `${fieldName} is required`);
-  }
-  return value;
-}
-
-/**
- * Validates string length
- */
-export function validateLength(
-  value: string,
-  fieldName: string,
-  min?: number,
-  max?: number
-): void {
-  if (min !== undefined && value.length < min) {
-    throw new AppError('BAD_REQUEST', `${fieldName} must be at least ${min} characters`);
-  }
-  if (max !== undefined && value.length > max) {
-    throw new AppError('BAD_REQUEST', `${fieldName} must be at most ${max} characters`);
-  }
-}
-
-/**
- * Validates email format
- */
-export function validateEmail(email: string): void {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    throw new AppError('BAD_REQUEST', 'Invalid email format');
+function mapStatusCodeToTRPCCode(statusCode: number): TRPCError["code"] {
+  switch (statusCode) {
+    case 400:
+      return "BAD_REQUEST";
+    case 401:
+      return "UNAUTHORIZED";
+    case 403:
+      return "FORBIDDEN";
+    case 404:
+      return "NOT_FOUND";
+    case 409:
+      return "CONFLICT";
+    case 429:
+      return "TOO_MANY_REQUESTS";
+    case 500:
+      return "INTERNAL_SERVER_ERROR";
+    default:
+      return "INTERNAL_SERVER_ERROR";
   }
 }
 
 /**
- * Validates number range
+ * Log error with appropriate severity
  */
-export function validateRange(
-  value: number,
-  fieldName: string,
-  min?: number,
-  max?: number
-): void {
-  if (min !== undefined && value < min) {
-    throw new AppError('BAD_REQUEST', `${fieldName} must be at least ${min}`);
-  }
-  if (max !== undefined && value > max) {
-    throw new AppError('BAD_REQUEST', `${fieldName} must be at most ${max}`);
-  }
-}
-
-/**
- * Safely parse JSON with error handling
- */
-export function safeJsonParse<T>(json: string, fallback: T): T {
-  try {
-    return JSON.parse(json) as T;
-  } catch {
-    return fallback;
-  }
-}
-
-/**
- * Safely stringify JSON
- */
-export function safeJsonStringify(data: unknown): string {
-  try {
-    return JSON.stringify(data);
-  } catch {
-    return '{}';
-  }
-}
-
-/**
- * Retry logic for database operations
- */
-export async function retryOperation<T>(
-  operation: () => Promise<T>,
-  maxRetries = 3,
-  delayMs = 1000
-): Promise<T> {
-  let lastError: unknown;
+export function logError(error: unknown, context?: Record<string, any>): void {
+  const timestamp = new Date().toISOString();
   
+  if (error instanceof AppError) {
+    console.error(`[${timestamp}] [${error.code}]`, error.message, {
+      statusCode: error.statusCode,
+      isOperational: error.isOperational,
+      details: error.details,
+      context,
+      stack: error.stack,
+    });
+  } else if (error instanceof TRPCError) {
+    console.error(`[${timestamp}] [TRPC:${error.code}]`, error.message, {
+      context,
+      cause: error.cause,
+    });
+  } else if (error instanceof Error) {
+    console.error(`[${timestamp}] [ERROR]`, error.message, {
+      context,
+      stack: error.stack,
+    });
+  } else {
+    console.error(`[${timestamp}] [UNKNOWN_ERROR]`, error, { context });
+  }
+
+  // Log security events for certain error types
+  if (error instanceof TRPCError && error.code === "FORBIDDEN") {
+    logSecurityEvent({
+      type: "unauthorized_access",
+      details: { error: error.message, context },
+      severity: "high",
+    });
+  }
+}
+
+/**
+ * Retry logic for transient failures
+ */
+export async function withRetry<T>(
+  fn: () => Promise<T>,
+  options: {
+    maxRetries?: number;
+    delayMs?: number;
+    backoff?: boolean;
+    onRetry?: (error: Error, attempt: number) => void;
+  } = {}
+): Promise<T> {
+  const {
+    maxRetries = 3,
+    delayMs = 1000,
+    backoff = true,
+    onRetry,
+  } = options;
+
+  let lastError: Error;
+
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      return await operation();
+      return await fn();
     } catch (error) {
-      lastError = error;
-      
-      // Don't retry on validation errors
-      if (error instanceof AppError && error.code === 'BAD_REQUEST') {
+      lastError = error instanceof Error ? error : new Error(String(error));
+
+      // Don't retry on operational errors
+      if (error instanceof AppError && error.isOperational) {
         throw error;
       }
-      
-      // Don't retry on the last attempt
-      if (attempt === maxRetries) {
-        break;
+
+      // Don't retry on TRPC client errors
+      if (error instanceof TRPCError && 
+          ["BAD_REQUEST", "UNAUTHORIZED", "FORBIDDEN", "NOT_FOUND"].includes(error.code)) {
+        throw error;
       }
-      
-      // Wait before retrying
-      await new Promise(resolve => setTimeout(resolve, delayMs * attempt));
+
+      if (attempt < maxRetries) {
+        const delay = backoff ? delayMs * Math.pow(2, attempt - 1) : delayMs;
+        
+        if (onRetry) {
+          onRetry(lastError, attempt);
+        }
+
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
     }
   }
-  
-  throw lastError;
+
+  throw lastError!;
 }
 
 /**
- * Async error wrapper for procedures
+ * Graceful error recovery with fallback
  */
-export function asyncHandler<T extends (...args: any[]) => Promise<any>>(
-  fn: T
-): T {
-  return (async (...args: Parameters<T>) => {
-    try {
-      return await fn(...args);
-    } catch (error) {
-      handleError(error);
+export async function withFallback<T>(
+  fn: () => Promise<T>,
+  fallback: T | (() => T | Promise<T>),
+  options: {
+    logError?: boolean;
+    context?: Record<string, any>;
+  } = {}
+): Promise<T> {
+  try {
+    return await fn();
+  } catch (error) {
+    if (options.logError !== false) {
+      logError(error, options.context);
     }
-  }) as T;
+
+    return typeof fallback === "function" ? await (fallback as () => T | Promise<T>)() : fallback;
+  }
 }
 
+/**
+ * Validate and sanitize error messages for user display
+ */
+export function getUserFriendlyError(error: unknown): string {
+  if (error instanceof TRPCError) {
+    switch (error.code) {
+      case "UNAUTHORIZED":
+        return "Please log in to continue";
+      case "FORBIDDEN":
+        return "You don't have permission to perform this action";
+      case "NOT_FOUND":
+        return "The requested resource was not found";
+      case "BAD_REQUEST":
+        return error.message || "Invalid request";
+      case "TOO_MANY_REQUESTS":
+        return "Too many requests. Please try again later";
+      case "INTERNAL_SERVER_ERROR":
+        return "An unexpected error occurred. Please try again";
+      default:
+        return "Something went wrong. Please try again";
+    }
+  }
+
+  if (error instanceof AppError) {
+    return error.message;
+  }
+
+  if (error instanceof Error) {
+    // Don't expose internal error details to users
+    return "An error occurred. Please try again";
+  }
+
+  return "Something went wrong. Please try again";
+}

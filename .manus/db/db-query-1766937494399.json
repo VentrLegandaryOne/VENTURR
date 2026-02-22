@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS compliance_verifications (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  quote_id VARCHAR(255) NOT NULL,\n  standard_id INT NOT NULL,\n  status ENUM('compliant', 'non_compliant', 'requires_review', 'not_applicable') NOT NULL,\n  confidence_score DECIMAL(5,2),\n  findings JSON,\n  recommendations JSON,\n  verified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  verified_by VARCHAR(50) DEFAULT 'AI',\n  FOREIGN KEY (standard_id) REFERENCES australian_standards(id),\n  INDEX idx_quote_id (quote_id),\n  INDEX idx_standard_id (standard_id),\n  INDEX idx_status (status)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute CREATE TABLE IF NOT EXISTS compliance_verifications (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  quote_id VARCHAR(255) NOT NULL,\n  standard_id INT NOT NULL,\n  status ENUM('compliant', 'non_compliant', 'requires_review', 'not_applicable') NOT NULL,\n  confidence_score DECIMAL(5,2),\n  findings JSON,\n  recommendations JSON,\n  verified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  verified_by VARCHAR(50) DEFAULT 'AI',\n  FOREIGN KEY (standard_id) REFERENCES australian_standards(id),\n  INDEX idx_quote_id (quote_id),\n  INDEX idx_standard_id (standard_id),\n  INDEX idx_status (status)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1748
+}

@@ -1,249 +1,22 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "1f5cc735-848e-40c4-aebc-a6f53a30a991",
-  "prevId": "eca2ecc8-c6e7-4b28-8a1d-b50c51542d2c",
+  "id": "858b6dd1-6e24-4fb1-9e1b-83d564b020fa",
+  "prevId": "02631d24-757f-41a4-be8d-c8bca7859603",
   "tables": {
-    "measurements": {
-      "name": "measurements",
+    "complianceRules": {
+      "name": "complianceRules",
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(64)",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": true
         },
-        "projectId": {
-          "name": "projectId",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "deviceId": {
-          "name": "deviceId",
+        "ruleCode": {
+          "name": "ruleCode",
           "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "measurementData": {
-          "name": "measurementData",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "drawingData": {
-          "name": "drawingData",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "scale": {
-          "name": "scale",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "notes": {
-          "name": "notes",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "createdBy": {
-          "name": "createdBy",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "(now())"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "measurements_id": {
-          "name": "measurements_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "checkConstraint": {}
-    },
-    "memberships": {
-      "name": "memberships",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "userId": {
-          "name": "userId",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "organizationId": {
-          "name": "organizationId",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "role": {
-          "name": "role",
-          "type": "enum('owner','admin','member')",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'member'"
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "(now())"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "memberships_id": {
-          "name": "memberships_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "checkConstraint": {}
-    },
-    "organizations": {
-      "name": "organizations",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "ownerId": {
-          "name": "ownerId",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "subscriptionPlan": {
-          "name": "subscriptionPlan",
-          "type": "enum('starter','pro','growth','enterprise')",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'starter'"
-        },
-        "subscriptionStatus": {
-          "name": "subscriptionStatus",
-          "type": "enum('active','trialing','canceled','incomplete','past_due')",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'trialing'"
-        },
-        "stripeCustomerId": {
-          "name": "stripeCustomerId",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "stripeSubscriptionId": {
-          "name": "stripeSubscriptionId",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "currentPeriodEnd": {
-          "name": "currentPeriodEnd",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "(now())"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "onUpdate": true,
-          "default": "(now())"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "organizations_id": {
-          "name": "organizations_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "checkConstraint": {}
-    },
-    "projects": {
-      "name": "projects",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "organizationId": {
-          "name": "organizationId",
-          "type": "varchar(64)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -255,62 +28,54 @@
           "notNull": true,
           "autoincrement": false
         },
-        "address": {
-          "name": "address",
+        "description": {
+          "name": "description",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
-        "clientName": {
-          "name": "clientName",
+        "category": {
+          "name": "category",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "authority": {
+          "name": "authority",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
-        "clientEmail": {
-          "name": "clientEmail",
-          "type": "varchar(320)",
+        "applicableRegions": {
+          "name": "applicableRegions",
+          "type": "json",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "clientPhone": {
-          "name": "clientPhone",
-          "type": "varchar(50)",
+        "requirements": {
+          "name": "requirements",
+          "type": "json",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "propertyType": {
-          "name": "propertyType",
-          "type": "enum('residential','commercial','industrial')",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'residential'"
-        },
-        "status": {
-          "name": "status",
-          "type": "enum('draft','quoted','approved','in_progress','completed','canceled')",
+        "isActive": {
+          "name": "isActive",
+          "type": "boolean",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'draft'"
-        },
-        "createdBy": {
-          "name": "createdBy",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "default": true
         },
         "createdAt": {
           "name": "createdAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "(now())"
         },
@@ -318,7 +83,7 @@
           "name": "updatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "onUpdate": true,
           "default": "(now())"
@@ -327,8 +92,120 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {
-        "projects_id": {
-          "name": "projects_id",
+        "complianceRules_id": {
+          "name": "complianceRules_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "complianceRules_ruleCode_unique": {
+          "name": "complianceRules_ruleCode_unique",
+          "columns": [
+            "ruleCode"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "materials": {
+      "name": "materials",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "category": {
+          "name": "category",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "supplier": {
+          "name": "supplier",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "specifications": {
+          "name": "specifications",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "unitPrice": {
+          "name": "unitPrice",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "unit": {
+          "name": "unit",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "installationRequirements": {
+          "name": "installationRequirements",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "complianceNotes": {
+          "name": "complianceNotes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "isActive": {
+          "name": "isActive",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "onUpdate": true,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "materials_id": {
+          "name": "materials_id",
           "columns": [
             "id"
           ]
@@ -342,109 +219,88 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(64)",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "projectId": {
-          "name": "projectId",
-          "type": "varchar(64)",
+        "fileName": {
+          "name": "fileName",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "quoteNumber": {
-          "name": "quoteNumber",
+        "fileKey": {
+          "name": "fileKey",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fileUrl": {
+          "name": "fileUrl",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fileType": {
+          "name": "fileType",
           "type": "varchar(50)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "version": {
-          "name": "version",
-          "type": "varchar(10)",
-          "primaryKey": false,
           "notNull": false,
-          "autoincrement": false,
-          "default": "'1'"
-        },
-        "subtotal": {
-          "name": "subtotal",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": true,
           "autoincrement": false
         },
-        "gst": {
-          "name": "gst",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "total": {
-          "name": "total",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "deposit": {
-          "name": "deposit",
-          "type": "varchar(20)",
+        "fileSize": {
+          "name": "fileSize",
+          "type": "int",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "validUntil": {
-          "name": "validUntil",
-          "type": "timestamp",
+        "extractedData": {
+          "name": "extractedData",
+          "type": "json",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
         "status": {
           "name": "status",
-          "type": "enum('draft','sent','viewed','accepted','rejected')",
+          "type": "enum('uploaded','processing','completed','failed')",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'draft'"
+          "default": "'uploaded'"
         },
-        "items": {
-          "name": "items",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "terms": {
-          "name": "terms",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "notes": {
-          "name": "notes",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "createdBy": {
-          "name": "createdBy",
-          "type": "varchar(64)",
+        "progressPercentage": {
+          "name": "progressPercentage",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "errorMessage": {
+          "name": "errorMessage",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "createdAt": {
           "name": "createdAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "(now())"
         },
@@ -452,10 +308,17 @@
           "name": "updatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "onUpdate": true,
           "default": "(now())"
+        },
+        "processedAt": {
+          "name": "processedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {},
@@ -471,120 +334,93 @@
       "uniqueConstraints": {},
       "checkConstraint": {}
     },
-    "takeoffs": {
-      "name": "takeoffs",
+    "reports": {
+      "name": "reports",
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(64)",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "verificationId": {
+          "name": "verificationId",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "projectId": {
-          "name": "projectId",
-          "type": "varchar(64)",
+        "pdfKey": {
+          "name": "pdfKey",
+          "type": "varchar(500)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "roofLength": {
-          "name": "roofLength",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "roofWidth": {
-          "name": "roofWidth",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "roofArea": {
-          "name": "roofArea",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "roofType": {
-          "name": "roofType",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "roofPitch": {
-          "name": "roofPitch",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "wastePercentage": {
-          "name": "wastePercentage",
-          "type": "varchar(10)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "labourRate": {
-          "name": "labourRate",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "profitMargin": {
-          "name": "profitMargin",
-          "type": "varchar(10)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "includeGst": {
-          "name": "includeGst",
-          "type": "varchar(10)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "materials": {
-          "name": "materials",
+        "pdfUrl": {
+          "name": "pdfUrl",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
-        "calculations": {
-          "name": "calculations",
-          "type": "text",
+        "pdfSize": {
+          "name": "pdfSize",
+          "type": "int",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "sharedWith": {
+          "name": "sharedWith",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "downloadCount": {
+          "name": "downloadCount",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
         },
         "createdAt": {
           "name": "createdAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "(now())"
+        },
+        "expiresAt": {
+          "name": "expiresAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {
-        "takeoffs_id": {
-          "name": "takeoffs_id",
+        "reports_id": {
+          "name": "reports_id",
           "columns": [
             "id"
           ]
         }
       },
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "reports_verificationId_unique": {
+          "name": "reports_verificationId_unique",
+          "columns": [
+            "verificationId"
+          ]
+        }
+      },
       "checkConstraint": {}
     },
     "users": {
@@ -592,6 +428,13 @@
       "columns": {
         "id": {
           "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "openId": {
+          "name": "openId",
           "type": "varchar(64)",
           "primaryKey": false,
           "notNull": true,
@@ -630,15 +473,24 @@
           "name": "createdAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
+          "default": "(now())"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "onUpdate": true,
           "default": "(now())"
         },
         "lastSignedIn": {
           "name": "lastSignedIn",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "(now())"
         }
@@ -653,7 +505,144 @@
           ]
         }
       },
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "users_openId_unique": {
+          "name": "users_openId_unique",
+          "columns": [
+            "openId"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "verifications": {
+      "name": "verifications",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "quoteId": {
+          "name": "quoteId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "overallScore": {
+          "name": "overallScore",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "pricingScore": {
+          "name": "pricingScore",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "materialsScore": {
+          "name": "materialsScore",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "complianceScore": {
+          "name": "complianceScore",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "warrantyScore": {
+          "name": "warrantyScore",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "statusBadge": {
+          "name": "statusBadge",
+          "type": "enum('green','amber','red')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "pricingDetails": {
+          "name": "pricingDetails",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "materialsDetails": {
+          "name": "materialsDetails",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "complianceDetails": {
+          "name": "complianceDetails",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "warrantyDetails": {
+          "name": "warrantyDetails",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "flags": {
+          "name": "flags",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "recommendations": {
+          "name": "recommendations",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "verifications_id": {
+          "name": "verifications_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "verifications_quoteId_unique": {
+          "name": "verifications_quoteId_unique",
+          "columns": [
+            "quoteId"
+          ]
+        }
+      },
       "checkConstraint": {}
     }
   },

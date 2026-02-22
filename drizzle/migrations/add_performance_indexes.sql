@@ -1,43 +1,43 @@
--- Performance Optimization: Add Database Indexes
--- This migration adds indexes to frequently queried columns
--- to improve query performance by 50-80%
+-- Add Performance Indexes for VENTURR VALIDT
+-- Migration Date: 2024-12-24
+-- Purpose: Optimize frequently queried columns
 
--- Users table indexes
-CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
-CREATE INDEX IF NOT EXISTS idx_users_created_at ON users(createdAt);
-CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
-
--- Projects table indexes (if exists)
-CREATE INDEX IF NOT EXISTS idx_projects_user_id ON projects(userId);
-CREATE INDEX IF NOT EXISTS idx_projects_status ON projects(status);
-CREATE INDEX IF NOT EXISTS idx_projects_created_at ON projects(createdAt);
-CREATE INDEX IF NOT EXISTS idx_projects_updated_at ON projects(updatedAt);
-
--- Clients table indexes (if exists)
-CREATE INDEX IF NOT EXISTS idx_clients_user_id ON clients(userId);
-CREATE INDEX IF NOT EXISTS idx_clients_email ON clients(email);
-CREATE INDEX IF NOT EXISTS idx_clients_created_at ON clients(createdAt);
-
--- Measurements table indexes (if exists)
-CREATE INDEX IF NOT EXISTS idx_measurements_project_id ON measurements(projectId);
-CREATE INDEX IF NOT EXISTS idx_measurements_created_at ON measurements(createdAt);
-
--- Quotes table indexes (if exists)
-CREATE INDEX IF NOT EXISTS idx_quotes_project_id ON quotes(projectId);
+-- Quotes table indexes
+CREATE INDEX IF NOT EXISTS idx_quotes_userId ON quotes(userId);
 CREATE INDEX IF NOT EXISTS idx_quotes_status ON quotes(status);
-CREATE INDEX IF NOT EXISTS idx_quotes_created_at ON quotes(createdAt);
+CREATE INDEX IF NOT EXISTS idx_quotes_createdAt ON quotes(createdAt);
+CREATE INDEX IF NOT EXISTS idx_quotes_user_status ON quotes(userId, status);
+CREATE INDEX IF NOT EXISTS idx_quotes_user_created ON quotes(userId, createdAt DESC);
 
--- Subscriptions table indexes (if exists)
-CREATE INDEX IF NOT EXISTS idx_subscriptions_user_id ON subscriptions(userId);
-CREATE INDEX IF NOT EXISTS idx_subscriptions_status ON subscriptions(status);
-CREATE INDEX IF NOT EXISTS idx_subscriptions_stripe_customer_id ON subscriptions(stripeCustomerId);
+-- Verifications table indexes
+CREATE INDEX IF NOT EXISTS idx_verifications_quoteId ON verifications(quoteId);
+CREATE INDEX IF NOT EXISTS idx_verifications_statusBadge ON verifications(statusBadge);
+CREATE INDEX IF NOT EXISTS idx_verifications_createdAt ON verifications(createdAt);
 
--- Composite indexes for common queries
-CREATE INDEX IF NOT EXISTS idx_projects_user_status ON projects(userId, status);
-CREATE INDEX IF NOT EXISTS idx_quotes_project_status ON quotes(projectId, status);
+-- Comparisons table indexes (snake_case columns)
+CREATE INDEX IF NOT EXISTS idx_comparison_groups_user_id ON comparison_groups(user_id);
+CREATE INDEX IF NOT EXISTS idx_comparison_groups_created_at ON comparison_groups(created_at);
+CREATE INDEX IF NOT EXISTS idx_comparison_items_group_id ON comparison_items(group_id);
 
--- Full-text search indexes (MySQL)
--- Uncomment if using MySQL 5.7+ or MariaDB 10.0+
--- ALTER TABLE projects ADD FULLTEXT INDEX ft_projects_search (name, address);
--- ALTER TABLE clients ADD FULLTEXT INDEX ft_clients_search (name, email, companyName);
+-- Contractors table indexes (snake_case columns)
+CREATE INDEX IF NOT EXISTS idx_contractors_is_verified ON contractors(is_verified);
+CREATE INDEX IF NOT EXISTS idx_contractors_avg_score ON contractors(avg_score);
+CREATE INDEX IF NOT EXISTS idx_contractors_total_reviews ON contractors(total_reviews);
 
+-- Contractor reviews table indexes (snake_case columns)
+CREATE INDEX IF NOT EXISTS idx_contractor_reviews_contractor_id ON contractor_reviews(contractor_id);
+CREATE INDEX IF NOT EXISTS idx_contractor_reviews_user_id ON contractor_reviews(user_id);
+CREATE INDEX IF NOT EXISTS idx_contractor_reviews_created_at ON contractor_reviews(created_at);
+
+-- Notifications table indexes (snake_case columns)
+CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id);
+CREATE INDEX IF NOT EXISTS idx_notifications_is_read ON notifications(is_read);
+CREATE INDEX IF NOT EXISTS idx_notifications_user_read ON notifications(user_id, is_read);
+CREATE INDEX IF NOT EXISTS idx_notifications_created_at ON notifications(created_at);
+
+-- Shared reports table indexes (snake_case columns)
+CREATE INDEX IF NOT EXISTS idx_shared_reports_share_token ON shared_reports(share_token);
+CREATE INDEX IF NOT EXISTS idx_shared_reports_expires_at ON shared_reports(expires_at);
+CREATE INDEX IF NOT EXISTS idx_shared_reports_quote_id ON shared_reports(quote_id);
+
+-- Audit trail table indexes skipped (table doesn't exist in this version)

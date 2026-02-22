@@ -1,0 +1,32 @@
+{
+  "query": "SHOW CREATE TABLE state_licensing_authorities;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SHOW CREATE TABLE state_licensing_authorities;",
+  "rows": [
+    {
+      "Table": "state_licensing_authorities",
+      "Create Table": "CREATE TABLE `state_licensing_authorities` ("
+    }
+  ],
+  "messages": [
+    "  `id` int(11) NOT NULL AUTO_INCREMENT,",
+    "  `state` enum('nsw','vic','qld','sa','wa','tas','nt','act') COLLATE utf8mb4_unicode_ci NOT NULL,",
+    "  `authority_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,",
+    "  `authority_code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,",
+    "  `website_url` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `api_endpoint` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `api_type` enum('rest','soap','scrape','manual') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'manual',",
+    "  `license_types` json DEFAULT NULL,",
+    "  `lookup_instructions` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `contact_phone` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `contact_email` varchar(320) COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `is_active` tinyint(1) NOT NULL DEFAULT '1',",
+    "  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,",
+    "  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,",
+    "  PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */,",
+    "  UNIQUE KEY `state_licensing_authorities_authority_code_unique` (`authority_code`)",
+    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=30001"
+  ],
+  "stdout": "Table\tCreate Table\nstate_licensing_authorities\tCREATE TABLE `state_licensing_authorities` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `state` enum('nsw','vic','qld','sa','wa','tas','nt','act') COLLATE utf8mb4_unicode_ci NOT NULL,\n  `authority_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `authority_code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `website_url` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `api_endpoint` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `api_type` enum('rest','soap','scrape','manual') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'manual',\n  `license_types` json DEFAULT NULL,\n  `lookup_instructions` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `contact_phone` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `contact_email` varchar(320) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `is_active` tinyint(1) NOT NULL DEFAULT '1',\n  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */,\n  UNIQUE KEY `state_licensing_authorities_authority_code_unique` (`authority_code`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=30001\n",
+  "stderr": "",
+  "execution_time_ms": 1512
+}

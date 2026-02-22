@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS `quote_comparison_items` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `comparison_id` int NOT NULL,\n  `quote_id` int NOT NULL,\n  `display_order` int DEFAULT 0 NOT NULL,\n  `pricing_rank` int,\n  `materials_rank` int,\n  `compliance_rank` int,\n  `warranty_rank` int,\n  `overall_rank` int,\n  `is_recommended` boolean DEFAULT false NOT NULL,\n  `is_best_value` boolean DEFAULT false NOT NULL,\n  `is_cheapest` boolean DEFAULT false NOT NULL,\n  `notes` text,\n  `added_at` timestamp NOT NULL DEFAULT (now()),\n  CONSTRAINT `quote_comparison_items_id` PRIMARY KEY(`id`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute CREATE TABLE IF NOT EXISTS `quote_comparison_items` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `comparison_id` int NOT NULL,\n  `quote_id` int NOT NULL,\n  `display_order` int DEFAULT 0 NOT NULL,\n  `pricing_rank` int,\n  `materials_rank` int,\n  `compliance_rank` int,\n  `warranty_rank` int,\n  `overall_rank` int,\n  `is_recommended` boolean DEFAULT false NOT NULL,\n  `is_best_value` boolean DEFAULT false NOT NULL,\n  `is_cheapest` boolean DEFAULT false NOT NULL,\n  `notes` text,\n  `added_at` timestamp NOT NULL DEFAULT (now()),\n  CONSTRAINT `quote_comparison_items_id` PRIMARY KEY(`id`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1634
+}

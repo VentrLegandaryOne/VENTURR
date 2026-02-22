@@ -1,202 +1,134 @@
-/**
- * Venturr Service Worker
- * Provides offline support and caching for PWA functionality
- */
+const CACHE_NAME = 'venturr-valdt-v1';
+const RUNTIME_CACHE = 'venturr-runtime-v1';
 
-const CACHE_VERSION = 'v1.0.0';
-const CACHE_NAME = `venturr-cache-${CACHE_VERSION}`;
-
-// Assets to cache immediately on install
-const STATIC_ASSETS = [
+// Assets to cache on install
+const PRECACHE_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-];
-
-// Cache strategies
-const CACHE_FIRST_PATTERNS = [
-  /\.(?:png|jpg|jpeg|svg|gif|webp|avif)$/,
-  /\.(?:woff|woff2|ttf|eot)$/,
-  /\.(?:css|js)$/,
-];
-
-const NETWORK_FIRST_PATTERNS = [
-  /\/api\//,
-  /\/trpc\//,
+  '/icon-192.png',
+  '/icon-512.png',
 ];
 
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing service worker...');
-  
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SW] Caching static assets');
-      return cache.addAll(STATIC_ASSETS);
-    }).then(() => {
-      // Force the waiting service worker to become the active service worker
-      return self.skipWaiting();
-    })
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(PRECACHE_ASSETS))
+      .then(() => self.skipWaiting())
   );
 });
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating service worker...');
-  
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('[SW] Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
+        cacheNames
+          .filter((name) => name !== CACHE_NAME && name !== RUNTIME_CACHE)
+          .map((name) => caches.delete(name))
       );
-    }).then(() => {
-      // Take control of all pages immediately
-      return self.clients.claim();
+    }).then(() => self.clients.claim())
+  );
+});
+
+// Fetch event - serve from cache, fallback to network
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  const url = new URL(request.url);
+
+  // Skip cross-origin requests
+  if (url.origin !== location.origin) {
+    return;
+  }
+
+  // API requests - network first, cache fallback
+  if (url.pathname.startsWith('/api/')) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          // Clone the response before caching
+          const responseClone = response.clone();
+          caches.open(RUNTIME_CACHE).then((cache) => {
+            cache.put(request, responseClone);
+          });
+          return response;
+        })
+        .catch(() => {
+          // Fallback to cache if network fails
+          return caches.match(request);
+        })
+    );
+    return;
+  }
+
+  // Static assets - cache first, network fallback
+  event.respondWith(
+    caches.match(request).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+
+      return fetch(request).then((response) => {
+        // Don't cache non-successful responses
+        if (!response || response.status !== 200 || response.type !== 'basic') {
+          return response;
+        }
+
+        // Clone the response before caching
+        const responseClone = response.clone();
+        caches.open(RUNTIME_CACHE).then((cache) => {
+          cache.put(request, responseClone);
+        });
+
+        return response;
+      }).catch(() => {
+        // Return offline fallback page for navigation requests
+        if (request.mode === 'navigate') {
+          return caches.match('/offline.html');
+        }
+      });
     })
   );
 });
 
-// Fetch event - implement caching strategies
-self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  const url = new URL(request.url);
-  
-  // Skip non-GET requests
-  if (request.method !== 'GET') {
-    return;
-  }
-  
-  // Skip chrome-extension and other non-http(s) requests
-  if (!url.protocol.startsWith('http')) {
-    return;
-  }
-  
-  // Network-first strategy for API calls
-  if (NETWORK_FIRST_PATTERNS.some(pattern => pattern.test(url.pathname))) {
-    event.respondWith(networkFirst(request));
-    return;
-  }
-  
-  // Cache-first strategy for static assets
-  if (CACHE_FIRST_PATTERNS.some(pattern => pattern.test(url.pathname))) {
-    event.respondWith(cacheFirst(request));
-    return;
-  }
-  
-  // Stale-while-revalidate for everything else
-  event.respondWith(staleWhileRevalidate(request));
+// Push notification event
+self.addEventListener('push', (event) => {
+  const options = {
+    body: event.data ? event.data.text() : 'New notification from VENTURR VALDT',
+    icon: '/icon-192.png',
+    badge: '/icon-192.png',
+    vibrate: [200, 100, 200],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1
+    },
+    actions: [
+      {
+        action: 'explore',
+        title: 'View',
+        icon: '/icon-192.png'
+      },
+      {
+        action: 'close',
+        title: 'Close',
+        icon: '/icon-192.png'
+      }
+    ]
+  };
+
+  event.waitUntil(
+    self.registration.showNotification('VENTURR VALDT', options)
+  );
 });
 
-/**
- * Cache-first strategy
- * Try cache first, fall back to network
- */
-async function cacheFirst(request) {
-  const cache = await caches.open(CACHE_NAME);
-  const cached = await cache.match(request);
-  
-  if (cached) {
-    return cached;
-  }
-  
-  try {
-    const response = await fetch(request);
-    
-    // Cache successful responses
-    if (response.ok) {
-      cache.put(request, response.clone());
-    }
-    
-    return response;
-  } catch (error) {
-    console.error('[SW] Fetch failed:', error);
-    
-    // Return offline page if available
-    const offlinePage = await cache.match('/offline.html');
-    if (offlinePage) {
-      return offlinePage;
-    }
-    
-    throw error;
-  }
-}
+// Notification click event
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
 
-/**
- * Network-first strategy
- * Try network first, fall back to cache
- */
-async function networkFirst(request) {
-  const cache = await caches.open(CACHE_NAME);
-  
-  try {
-    const response = await fetch(request);
-    
-    // Cache successful responses
-    if (response.ok) {
-      cache.put(request, response.clone());
-    }
-    
-    return response;
-  } catch (error) {
-    console.error('[SW] Network failed, trying cache:', error);
-    
-    const cached = await cache.match(request);
-    if (cached) {
-      return cached;
-    }
-    
-    throw error;
-  }
-}
-
-/**
- * Stale-while-revalidate strategy
- * Return cache immediately, update cache in background
- */
-async function staleWhileRevalidate(request) {
-  const cache = await caches.open(CACHE_NAME);
-  const cached = await cache.match(request);
-  
-  // Fetch in background and update cache
-  const fetchPromise = fetch(request).then((response) => {
-    if (response.ok) {
-      cache.put(request, response.clone());
-    }
-    return response;
-  }).catch((error) => {
-    console.error('[SW] Background fetch failed:', error);
-  });
-  
-  // Return cached version immediately if available
-  if (cached) {
-    return cached;
-  }
-  
-  // Otherwise wait for network
-  return fetchPromise;
-}
-
-// Handle messages from clients
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-  
-  if (event.data && event.data.type === 'CLEAR_CACHE') {
+  if (event.action === 'explore') {
     event.waitUntil(
-      caches.keys().then((cacheNames) => {
-        return Promise.all(
-          cacheNames.map((cacheName) => caches.delete(cacheName))
-        );
-      })
+      clients.openWindow('/')
     );
   }
 });
-
-console.log('[SW] Service worker loaded');
-

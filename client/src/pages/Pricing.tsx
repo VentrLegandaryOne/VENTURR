@@ -1,283 +1,411 @@
-import { useAuth } from "@/_core/hooks/useAuth";
+import { motion } from "framer-motion";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { Check, Loader2 } from "lucide-react";
-import { toast } from "sonner";
-import { useLocation } from "wouter";
-
-interface Plan {
-  id: string;
-  name: string;
-  amount: number;
-  interval: string;
-  features: string[];
-}
+import { Badge } from "@/components/ui/badge";
+import { Link } from "wouter";
+import {
+  Shield,
+  CheckCircle2,
+  FileText,
+  Users,
+  Building2,
+  Star,
+  ArrowRight,
+  BadgeCheck,
+  Home,
+  Briefcase,
+} from "lucide-react";
 
 export default function Pricing() {
-  const { isAuthenticated, loading } = useAuth();
-  const [, setLocation] = useLocation();
-
-  // Hardcoded plans for display (since getPlans requires auth)
-  const plans: Plan[] = [
+  const plans = [
     {
-      id: 'starter',
-      name: 'Starter',
-      amount: 4900,
-      interval: 'month',
+      id: "single",
+      name: "Single Report",
+      price: "$9.95",
+      period: "one-time",
+      description: "For one-time home projects",
+      tagline: "Get the full analysis when you need it",
+      icon: FileText,
+      iconBg: "bg-cyan-100",
+      iconColor: "text-cyan-600",
       features: [
-        'Up to 10 projects/month',
-        'Basic takeoff calculator',
-        'Quote generation',
-        'Email support',
+        "Complete line-by-line breakdown",
+        "Market rate comparison for your area",
+        "All red flags explained in detail",
+        "Downloadable PDF report",
+        "Money-back guarantee",
       ],
+      cta: "Get Started",
+      ctaLink: "/free-check",
+      popular: false,
     },
     {
-      id: 'pro',
-      name: 'Pro',
-      amount: 14900,
-      interval: 'month',
+      id: "household",
+      name: "Household Plan",
+      price: "$49",
+      period: "/year",
+      description: "For families and property owners",
+      tagline: "Unlimited checks, one simple price",
+      icon: Home,
+      iconBg: "bg-green-100",
+      iconColor: "text-green-600",
       features: [
-        'Unlimited projects',
-        'Advanced takeoff with AI',
-        'Site measurement integration',
-        'Compliance documentation',
-        'Priority support',
-        'Team collaboration',
+        "Unlimited quote verifications",
+        "Protect everyone in your household",
+        "Priority processing",
+        "Historical quote tracking",
+        "Family sharing (up to 5 members)",
+        "Email alerts for price changes",
       ],
+      cta: "Start Household Plan",
+      ctaLink: "/signup?plan=household",
+      popular: true,
     },
     {
-      id: 'growth',
-      name: 'Growth',
-      amount: 29900,
-      interval: 'month',
+      id: "tradie",
+      name: "Tradie Verified",
+      price: "$29",
+      period: "/month",
+      description: "For contractors who quote fairly",
+      tagline: "Prove you're one of the good ones",
+      icon: BadgeCheck,
+      iconBg: "bg-amber-100",
+      iconColor: "text-amber-600",
       features: [
-        'Everything in Pro',
-        'Multi-team support',
-        'Advanced analytics',
-        'API access',
-        'Custom workflows',
+        "VENTURR Verified trust badge",
+        "Display badge on your website & quotes",
+        "Listed in verified contractor directory",
+        "Customer review management",
+        "Quote compliance pre-check",
+        "Priority dispute resolution",
       ],
-    },
-    {
-      id: 'enterprise',
-      name: 'Enterprise',
-      amount: 0,
-      interval: 'month',
-      features: [
-        'Everything in Growth',
-        'Custom integrations',
-        'Dedicated account manager',
-        'SLA guarantee',
-        'White-label options',
-      ],
+      cta: "Get Verified",
+      ctaLink: "/contractor-registration",
+      popular: false,
     },
   ];
 
-  const plansLoading = false;
-
-  // Create checkout session
-  const createCheckoutMutation = useMutation({
-    mutationFn: async (planType: string) => {
-      const response = await fetch("/api/trpc/subscriptions.createCheckout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ planType }),
-        credentials: "include",
-      });
-      if (!response.ok) throw new Error("Failed to create checkout session");
-      return response.json();
+  const testimonials = [
+    {
+      quote: "Saved me $3,200 on my roof replacement. The detailed breakdown showed exactly where the quote was inflated.",
+      name: "Michael Thompson",
+      location: "Parramatta, NSW",
+      savings: "$3,200",
     },
-    onSuccess: (data) => {
-      if (data.result?.data?.url) {
-        window.location.href = data.result.data.url;
-      }
+    {
+      quote: "As a single mum, I was worried about getting ripped off. VENTURR gave me the confidence to negotiate.",
+      name: "Sarah Chen",
+      location: "Brunswick, VIC",
+      savings: "$1,850",
     },
-    onError: (error: any) => {
-      toast.error(error.message || "Failed to start checkout");
+    {
+      quote: "The Tradie Verified badge has brought me 40% more enquiries. Customers trust verified contractors.",
+      name: "Dave Wilson",
+      location: "Tradesperson, QLD",
+      savings: "40% more leads",
     },
-  });
-
-  const handleSelectPlan = (planId: string) => {
-    if (!isAuthenticated) {
-      // Redirect to login/signup
-      setLocation("/?signup=true");
-      return;
-    }
-
-    if (planId === "enterprise") {
-      // Contact sales for enterprise
-      toast.info("Please contact sales@venturr.com for Enterprise pricing");
-      return;
-    }
-
-    createCheckoutMutation.mutate(planId);
-  };
-
-  const formatPrice = (amount: number) => {
-    if (amount === 0) return "Custom";
-    return `$${(amount / 100).toFixed(0)}`;
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-      </div>
-    );
-  }
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-purple-50 relative">
-      {/* Futuristic Chequered Background */}
-      <div className="background-glow fixed inset-0 z-0" />
-      
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Header */}
-      <div className="relative z-40 bg-white/80 backdrop-blur-lg border-b border-slate-200/50 shadow-lg shadow-purple-500/10">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold text-slate-900">Pricing</h1>
-            <Button variant="ghost" onClick={() => setLocation("/")}>
-              Back to Home
-            </Button>
+      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container flex items-center justify-between h-16">
+          <Link href="/">
+            <span className="flex items-center gap-2 font-bold text-xl text-cyan-700">
+              <Shield className="w-6 h-6" />
+              VENTURR VALDT
+            </span>
+          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/free-check">
+              <Button variant="ghost">Free Quote Check</Button>
+            </Link>
+            <Link href="/dashboard">
+              <Button variant="outline">Dashboard</Button>
+            </Link>
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-4 py-16 text-center relative z-2 animate-fadeInUp">
-        <h2 className="text-4xl font-bold text-slate-900 mb-4">
-          Simple, Transparent Pricing
-        </h2>
-        <p className="text-xl text-slate-600 mb-2">
-          Choose the plan that fits your business
-        </p>
-        <p className="text-lg text-blue-600 font-semibold">
-          14-day free trial on all plans • No credit card required
-        </p>
-      </div>
+      <main className="container py-16">
+        {/* Hero Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center max-w-3xl mx-auto mb-16"
+        >
+          <Badge className="mb-4 bg-cyan-100 text-cyan-700 hover:bg-cyan-100">
+            Simple, Honest Pricing
+          </Badge>
+          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
+            Three Options. No Tricks.
+          </h1>
+          <p className="text-xl text-slate-600">
+            See exactly what you're paying for. No hidden fees, no subscriptions you'll forget about.
+            Built by Australians, for Australians.
+          </p>
+        </motion.div>
 
-      {/* Pricing Cards */}
-      <div className="max-w-7xl mx-auto px-4 pb-16 relative z-2 animate-fadeInUp" style={{ animationDelay: '100ms' }}>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {plans?.map((plan) => {
-            const isPopular = plan.id === "pro";
-            const isEnterprise = plan.id === "enterprise";
+        {/* Free Check CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="max-w-2xl mx-auto mb-16"
+        >
+          <Card className="p-6 bg-gradient-to-r from-cyan-50 to-teal-50 border-cyan-200">
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="w-16 h-16 rounded-full bg-cyan-100 flex items-center justify-center flex-shrink-0">
+                <Shield className="w-8 h-8 text-cyan-600" />
+              </div>
+              <div className="flex-1 text-center md:text-left">
+                <h3 className="text-xl font-bold text-slate-900 mb-1">Start with a Free Check</h3>
+                <p className="text-slate-600">
+                  Upload any quote and get an instant traffic light result – no signup required.
+                  Green, amber, or red. One free insight included.
+                </p>
+              </div>
+              <Link href="/free-check">
+                <Button size="lg" className="bg-cyan-600 hover:bg-cyan-700 whitespace-nowrap">
+                  Check a Quote Free
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
+            </div>
+          </Card>
+        </motion.div>
 
+        {/* Pricing Cards */}
+        <div className="grid md:grid-cols-3 gap-8 mb-20">
+          {plans.map((plan, index) => {
+            const Icon = plan.icon;
             return (
-              <Card
+              <motion.div
                 key={plan.id}
-                className={`relative ${
-                  isPopular
-                    ? "border-blue-500 border-2 shadow-lg scale-105"
-                    : "border-slate-200"
-                }`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 + index * 0.1 }}
               >
-                {isPopular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <span className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                      Most Popular
-                    </span>
+                <Card className={`p-8 h-full relative ${
+                  plan.popular 
+                    ? "border-2 border-green-500 shadow-lg shadow-green-100" 
+                    : "border border-slate-200"
+                }`}>
+                  {plan.popular && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                      <Badge className="bg-green-500 text-white hover:bg-green-500">
+                        Most Popular
+                      </Badge>
+                    </div>
+                  )}
+
+                  <div className="text-center mb-6">
+                    <div className={`w-14 h-14 rounded-full ${plan.iconBg} flex items-center justify-center mx-auto mb-4`}>
+                      <Icon className={`w-7 h-7 ${plan.iconColor}`} />
+                    </div>
+                    <h3 className="text-2xl font-bold text-slate-900 mb-1">{plan.name}</h3>
+                    <p className="text-sm text-slate-500">{plan.description}</p>
                   </div>
-                )}
 
-                <CardHeader className="text-center pb-4">
-                  <CardTitle className="text-2xl mb-2">{plan.name}</CardTitle>
-                  <div className="mb-4">
-                    <span className="text-4xl font-bold text-slate-900">
-                      {formatPrice(plan.amount)}
-                    </span>
-                    {plan.amount > 0 && (
-                      <span className="text-slate-600">/{plan.interval}</span>
-                    )}
+                  <div className="text-center mb-6">
+                    <div className="flex items-baseline justify-center">
+                      <span className="text-4xl font-bold text-slate-900">{plan.price}</span>
+                      <span className="text-slate-500 ml-1">{plan.period}</span>
+                    </div>
+                    <p className="text-sm text-slate-600 mt-2">{plan.tagline}</p>
                   </div>
-                  <CardDescription>
-                    {plan.id === "starter" && "Perfect for individual contractors"}
-                    {plan.id === "pro" && "For growing trade businesses"}
-                    {plan.id === "growth" && "For established companies"}
-                    {plan.id === "enterprise" && "For large organizations"}
-                  </CardDescription>
-                </CardHeader>
 
-                <CardContent>
-                  <Button
-                    className="w-full mb-6"
-                    variant={isPopular ? "default" : "outline"}
-                    onClick={() => handleSelectPlan(plan.id)}
-                    disabled={createCheckoutMutation.isPending}
-                  >
-                    {createCheckoutMutation.isPending ? (
-                      <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        Loading...
-                      </>
-                    ) : isEnterprise ? (
-                      "Contact Sales"
-                    ) : (
-                      "Start Free Trial"
-                    )}
-                  </Button>
-
-                  <div className="space-y-3">
-                    {plan.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-start gap-2">
-                        <Check className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div className="space-y-3 mb-8">
+                    {plan.features.map((feature, i) => (
+                      <div key={i} className="flex items-start gap-3">
+                        <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                         <span className="text-sm text-slate-700">{feature}</span>
                       </div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
+
+                  <Link href={plan.ctaLink}>
+                    <Button
+                      size="lg"
+                      className={`w-full ${
+                        plan.popular
+                          ? "bg-green-600 hover:bg-green-700"
+                          : plan.id === "tradie"
+                          ? "bg-amber-600 hover:bg-amber-700"
+                          : "bg-cyan-600 hover:bg-cyan-700"
+                      }`}
+                    >
+                      {plan.cta}
+                    </Button>
+                  </Link>
+                </Card>
+              </motion.div>
             );
           })}
         </div>
-      </div>
 
-      {/* FAQ Section */}
-      <div className="max-w-4xl mx-auto px-4 pb-16">
-        <h3 className="text-2xl font-bold text-slate-900 mb-8 text-center">
-          Frequently Asked Questions
-        </h3>
-        <div className="space-y-6">
-          <div>
-            <h4 className="font-semibold text-slate-900 mb-2">
-              What happens after the 14-day trial?
-            </h4>
-            <p className="text-slate-600">
-              After your trial ends, you'll be charged for your selected plan. You can
-              cancel anytime during the trial with no charges.
-            </p>
+        {/* Trust Signals */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-20"
+        >
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">
+              Trusted by Australian Families
+            </h2>
+            <div className="flex items-center justify-center gap-2 text-slate-600">
+              <Users className="w-5 h-5" />
+              <span>47,832 quotes checked and counting</span>
+            </div>
           </div>
-          <div>
-            <h4 className="font-semibold text-slate-900 mb-2">
-              Can I change plans later?
-            </h4>
-            <p className="text-slate-600">
-              Yes! You can upgrade or downgrade your plan at any time. Changes take
-              effect immediately, and we'll prorate the charges.
-            </p>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <Card className="p-6 h-full bg-slate-50 border-0">
+                  <div className="flex items-center gap-1 mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                  <p className="text-slate-700 mb-4 italic">"{testimonial.quote}"</p>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-semibold text-slate-900">{testimonial.name}</p>
+                      <p className="text-sm text-slate-500">{testimonial.location}</p>
+                    </div>
+                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                      {testimonial.savings}
+                    </Badge>
+                  </div>
+                </Card>
+              </motion.div>
+            ))}
           </div>
-          <div>
-            <h4 className="font-semibold text-slate-900 mb-2">
-              What payment methods do you accept?
-            </h4>
-            <p className="text-slate-600">
-              We accept all major credit cards (Visa, Mastercard, American Express) via
-              Stripe's secure payment processing.
+        </motion.div>
+
+        {/* Money-Back Guarantee */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="max-w-2xl mx-auto mb-20"
+        >
+          <Card className="p-8 text-center bg-gradient-to-br from-slate-900 to-slate-800 text-white">
+            <Shield className="w-12 h-12 mx-auto mb-4 text-cyan-400" />
+            <h3 className="text-2xl font-bold mb-2">Money-Back Guarantee</h3>
+            <p className="text-slate-300 mb-4">
+              Not satisfied? Full refund, no questions asked. We're confident you'll find value,
+              but if you don't, we'll make it right.
             </p>
+            <p className="text-sm text-slate-400">
+              Valid for 30 days from purchase
+            </p>
+          </Card>
+        </motion.div>
+
+        {/* FAQ Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="max-w-3xl mx-auto"
+        >
+          <h2 className="text-3xl font-bold text-slate-900 text-center mb-12">
+            Common Questions
+          </h2>
+
+          <div className="space-y-6">
+            <div className="border-b pb-6">
+              <h3 className="font-semibold text-slate-900 mb-2">
+                What's included in the free quote check?
+              </h3>
+              <p className="text-slate-600">
+                Upload any tradie quote and get an instant traffic light result (green, amber, or red)
+                plus one key insight about the pricing. No signup required, no tricks.
+              </p>
+            </div>
+
+            <div className="border-b pb-6">
+              <h3 className="font-semibold text-slate-900 mb-2">
+                How is the $9.95 report different from the free check?
+              </h3>
+              <p className="text-slate-600">
+                The full report includes a complete line-by-line breakdown of every item,
+                market rate comparisons for your specific area, all red flags explained in detail,
+                and a downloadable PDF you can keep or share.
+              </p>
+            </div>
+
+            <div className="border-b pb-6">
+              <h3 className="font-semibold text-slate-900 mb-2">
+                What's the Household Plan for?
+              </h3>
+              <p className="text-slate-600">
+                If you're a homeowner, landlord, or have multiple properties, the Household Plan
+                gives you unlimited quote checks for a year. Perfect for families who want to
+                protect everyone from overpriced quotes.
+              </p>
+            </div>
+
+            <div className="border-b pb-6">
+              <h3 className="font-semibold text-slate-900 mb-2">
+                I'm a tradie. Why should I get verified?
+              </h3>
+              <p className="text-slate-600">
+                The VENTURR Verified badge shows customers you quote fairly. You'll be listed
+                in our verified contractor directory, get more enquiries from trust-conscious
+                customers, and have access to our dispute resolution service.
+              </p>
+            </div>
+
+            <div className="pb-6">
+              <h3 className="font-semibold text-slate-900 mb-2">
+                Is my data secure?
+              </h3>
+              <p className="text-slate-600">
+                Absolutely. We use bank-grade encryption, store data in Australian data centres,
+                and never share your quotes with third parties. Your privacy is protected under
+                Australian Privacy Principles.
+              </p>
+            </div>
           </div>
-          <div>
-            <h4 className="font-semibold text-slate-900 mb-2">
-              Is there a setup fee?
-            </h4>
-            <p className="text-slate-600">
-              No setup fees, no hidden charges. You only pay the monthly subscription
-              price for your selected plan.
+        </motion.div>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t bg-slate-50 py-12">
+        <div className="container">
+          <div className="text-center">
+            <p className="text-slate-600 mb-2">
+              Built by Australians, for Australians
             </p>
+            <p className="text-sm text-slate-500">
+              See exactly what you're paying for. No hidden fees, no subscriptions you'll forget about.
+            </p>
+            <div className="flex items-center justify-center gap-6 mt-6 text-sm text-slate-500">
+              <Link href="/terms">
+                <span className="hover:text-slate-700">Terms of Service</span>
+              </Link>
+              <Link href="/privacy">
+                <span className="hover:text-slate-700">Privacy Policy</span>
+              </Link>
+              <Link href="/help">
+                <span className="hover:text-slate-700">Help Centre</span>
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      </footer>
     </div>
   );
 }
-

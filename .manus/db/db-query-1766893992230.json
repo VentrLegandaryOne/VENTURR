@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS `upload_analytics` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`user_id` varchar(255) NOT NULL,\n\t`quote_id` int,\n\t`file_name` varchar(500) NOT NULL,\n\t`file_size` int NOT NULL,\n\t`file_type` varchar(100) NOT NULL,\n\t`upload_started_at` bigint NOT NULL,\n\t`upload_completed_at` bigint,\n\t`processing_started_at` bigint,\n\t`processing_completed_at` bigint,\n\t`status` enum('uploading','processing','completed','failed') NOT NULL DEFAULT 'uploading',\n\t`error_type` varchar(255),\n\t`error_message` text,\n\t`upload_duration_ms` int,\n\t`processing_duration_ms` int,\n\t`total_duration_ms` int,\n\t`retry_count` int NOT NULL DEFAULT 0,\n\t`created_at` bigint NOT NULL,\n\tCONSTRAINT `upload_analytics_id` PRIMARY KEY(`id`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute CREATE TABLE IF NOT EXISTS `upload_analytics` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`user_id` varchar(255) NOT NULL,\n\t`quote_id` int,\n\t`file_name` varchar(500) NOT NULL,\n\t`file_size` int NOT NULL,\n\t`file_type` varchar(100) NOT NULL,\n\t`upload_started_at` bigint NOT NULL,\n\t`upload_completed_at` bigint,\n\t`processing_started_at` bigint,\n\t`processing_completed_at` bigint,\n\t`status` enum('uploading','processing','completed','failed') NOT NULL DEFAULT 'uploading',\n\t`error_type` varchar(255),\n\t`error_message` text,\n\t`upload_duration_ms` int,\n\t`processing_duration_ms` int,\n\t`total_duration_ms` int,\n\t`retry_count` int NOT NULL DEFAULT 0,\n\t`created_at` bigint NOT NULL,\n\tCONSTRAINT `upload_analytics_id` PRIMARY KEY(`id`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1670
+}

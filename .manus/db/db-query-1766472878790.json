@@ -1,0 +1,16 @@
+{
+  "query": "SELECT id, openId, name, email FROM users LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SELECT id, openId, name, email FROM users LIMIT 5;",
+  "rows": [
+    {
+      "id": "1",
+      "openId": "BmUmWZipLTenLNwjWtfuQW",
+      "name": "Jaye Thompson",
+      "email": "jaye.thompson.52@hotmail.com"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\topenId\tname\temail\n1\tBmUmWZipLTenLNwjWtfuQW\tJaye Thompson\tjaye.thompson.52@hotmail.com\n",
+  "stderr": "",
+  "execution_time_ms": 1497
+}

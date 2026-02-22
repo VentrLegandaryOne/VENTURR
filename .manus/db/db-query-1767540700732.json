@@ -1,0 +1,26 @@
+{
+  "query": "SELECT COUNT(*) as count, status FROM quotes GROUP BY status;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SELECT COUNT(*) as count, status FROM quotes GROUP BY status;",
+  "rows": [
+    {
+      "count": "5",
+      "status": "uploaded"
+    },
+    {
+      "count": "450",
+      "status": "processing"
+    },
+    {
+      "count": "9",
+      "status": "completed"
+    },
+    {
+      "count": "25",
+      "status": "failed"
+    }
+  ],
+  "messages": [],
+  "stdout": "count\tstatus\n5\tuploaded\n450\tprocessing\n9\tcompleted\n25\tfailed\n",
+  "stderr": "",
+  "execution_time_ms": 1543
+}

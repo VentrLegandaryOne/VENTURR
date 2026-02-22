@@ -1,0 +1,40 @@
+{
+  "query": "SELECT id, userId, fileName, status FROM quotes LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SELECT id, userId, fileName, status FROM quotes LIMIT 5;",
+  "rows": [
+    {
+      "id": "180003",
+      "userId": "1",
+      "fileName": "roof-replacement-colorbond.pdf",
+      "status": "completed"
+    },
+    {
+      "id": "180004",
+      "userId": "1",
+      "fileName": "kitchen-renovation-modern.pdf",
+      "status": "completed"
+    },
+    {
+      "id": "180005",
+      "userId": "1",
+      "fileName": "deck-construction-hardwood.pdf",
+      "status": "processing"
+    },
+    {
+      "id": "180006",
+      "userId": "1",
+      "fileName": "bathroom-remodel-ensuite.pdf",
+      "status": "completed"
+    },
+    {
+      "id": "180007",
+      "userId": "1",
+      "fileName": "driveway-concrete-double.pdf",
+      "status": "uploaded"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tuserId\tfileName\tstatus\n180003\t1\troof-replacement-colorbond.pdf\tcompleted\n180004\t1\tkitchen-renovation-modern.pdf\tcompleted\n180005\t1\tdeck-construction-hardwood.pdf\tprocessing\n180006\t1\tbathroom-remodel-ensuite.pdf\tcompleted\n180007\t1\tdriveway-concrete-double.pdf\tuploaded\n",
+  "stderr": "",
+  "execution_time_ms": 1581
+}

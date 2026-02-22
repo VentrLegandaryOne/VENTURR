@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS regional_rate_adjustments (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  postcode_start VARCHAR(4) NOT NULL,\n  postcode_end VARCHAR(4) NOT NULL,\n  region_name VARCHAR(100) NOT NULL,\n  region_type ENUM('metro', 'regional', 'remote', 'very_remote') NOT NULL,\n  state VARCHAR(10) NOT NULL,\n  labour_multiplier DECIMAL(4,2) DEFAULT 1.00,\n  material_multiplier DECIMAL(4,2) DEFAULT 1.00,\n  travel_surcharge DECIMAL(10,2) DEFAULT 0.00,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute CREATE TABLE IF NOT EXISTS regional_rate_adjustments (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  postcode_start VARCHAR(4) NOT NULL,\n  postcode_end VARCHAR(4) NOT NULL,\n  region_name VARCHAR(100) NOT NULL,\n  region_type ENUM('metro', 'regional', 'remote', 'very_remote') NOT NULL,\n  state VARCHAR(10) NOT NULL,\n  labour_multiplier DECIMAL(4,2) DEFAULT 1.00,\n  material_multiplier DECIMAL(4,2) DEFAULT 1.00,\n  travel_surcharge DECIMAL(10,2) DEFAULT 0.00,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1537
+}

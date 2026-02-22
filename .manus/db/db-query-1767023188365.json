@@ -1,0 +1,49 @@
+{
+  "query": "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'regional_rate_adjustments';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'regional_rate_adjustments';",
+  "rows": [
+    {
+      "COLUMN_NAME": "id"
+    },
+    {
+      "COLUMN_NAME": "state"
+    },
+    {
+      "COLUMN_NAME": "region_name"
+    },
+    {
+      "COLUMN_NAME": "region_type"
+    },
+    {
+      "COLUMN_NAME": "postcode_range_start"
+    },
+    {
+      "COLUMN_NAME": "postcode_range_end"
+    },
+    {
+      "COLUMN_NAME": "labour_multiplier"
+    },
+    {
+      "COLUMN_NAME": "material_multiplier"
+    },
+    {
+      "COLUMN_NAME": "travel_surcharge"
+    },
+    {
+      "COLUMN_NAME": "notes"
+    },
+    {
+      "COLUMN_NAME": "is_active"
+    },
+    {
+      "COLUMN_NAME": "created_at"
+    },
+    {
+      "COLUMN_NAME": "updated_at"
+    }
+  ],
+  "messages": [],
+  "stdout": "COLUMN_NAME\nid\nstate\nregion_name\nregion_type\npostcode_range_start\npostcode_range_end\nlabour_multiplier\nmaterial_multiplier\ntravel_surcharge\nnotes\nis_active\ncreated_at\nupdated_at\n",
+  "stderr": "",
+  "execution_time_ms": 1567
+}

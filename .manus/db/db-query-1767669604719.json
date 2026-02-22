@@ -1,0 +1,28 @@
+{
+  "query": "SELECT c.id, c.name, c.avg_score, c.total_reviews FROM contractors c WHERE c.id = 30001;\nSELECT id, contractor_id, rating, comment FROM contractor_reviews WHERE contractor_id = 30001;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SELECT c.id, c.name, c.avg_score, c.total_reviews FROM contractors c WHERE c.id = 30001;\nSELECT id, contractor_id, rating, comment FROM contractor_reviews WHERE contractor_id = 30001;",
+  "rows": [
+    {
+      "id": "30001",
+      "name": "Test Contractor",
+      "avg_score": "5",
+      "total_reviews": "1"
+    },
+    {
+      "id": "id",
+      "name": "contractor_id",
+      "avg_score": "rating",
+      "total_reviews": "comment"
+    },
+    {
+      "id": "1",
+      "name": "30001",
+      "avg_score": "5",
+      "total_reviews": "Excellent work on our electrical rewiring project. Professional, on time, and compliant with all AS/NZS 3000 standards."
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tavg_score\ttotal_reviews\n30001\tTest Contractor\t5\t1\nid\tcontractor_id\trating\tcomment\n1\t30001\t5\tExcellent work on our electrical rewiring project. Professional, on time, and compliant with all AS/NZS 3000 standards.\n",
+  "stderr": "",
+  "execution_time_ms": 1729
+}

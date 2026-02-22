@@ -1,0 +1,38 @@
+{
+  "query": "SELECT 'contractors' as table_name, COUNT(*) as count FROM contractors\nUNION ALL\nSELECT 'quotes' as table_name, COUNT(*) as count FROM quotes\nUNION ALL\nSELECT 'verifications' as table_name, COUNT(*) as count FROM verifications\nUNION ALL\nSELECT 'portfolio_projects' as table_name, COUNT(*) as count FROM portfolio_projects\nUNION ALL\nSELECT 'contractor_certifications' as table_name, COUNT(*) as count FROM contractor_certifications\nUNION ALL\nSELECT 'price_benchmarks' as table_name, COUNT(*) as count FROM price_benchmarks\nUNION ALL\nSELECT 'market_rates' as table_name, COUNT(*) as count FROM market_rates;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SELECT 'contractors' as table_name, COUNT(*) as count FROM contractors\nUNION ALL\nSELECT 'quotes' as table_name, COUNT(*) as count FROM quotes\nUNION ALL\nSELECT 'verifications' as table_name, COUNT(*) as count FROM verifications\nUNION ALL\nSELECT 'portfolio_projects' as table_name, COUNT(*) as count FROM portfolio_projects\nUNION ALL\nSELECT 'contractor_certifications' as table_name, COUNT(*) as count FROM contractor_certifications\nUNION ALL\nSELECT 'price_benchmarks' as table_name, COUNT(*) as count FROM price_benchmarks\nUNION ALL\nSELECT 'market_rates' as table_name, COUNT(*) as count FROM market_rates;",
+  "rows": [
+    {
+      "table_name": "quotes",
+      "count": "497"
+    },
+    {
+      "table_name": "contractor_certifications",
+      "count": "7"
+    },
+    {
+      "table_name": "portfolio_projects",
+      "count": "4"
+    },
+    {
+      "table_name": "verifications",
+      "count": "11"
+    },
+    {
+      "table_name": "contractors",
+      "count": "25"
+    },
+    {
+      "table_name": "market_rates",
+      "count": "193"
+    },
+    {
+      "table_name": "price_benchmarks",
+      "count": "25"
+    }
+  ],
+  "messages": [],
+  "stdout": "table_name\tcount\nquotes\t497\ncontractor_certifications\t7\nportfolio_projects\t4\nverifications\t11\ncontractors\t25\nmarket_rates\t193\nprice_benchmarks\t25\n",
+  "stderr": "",
+  "execution_time_ms": 1548
+}

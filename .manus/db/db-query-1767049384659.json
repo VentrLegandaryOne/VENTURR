@@ -1,0 +1,55 @@
+{
+  "query": "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'state_building_codes'",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'state_building_codes'",
+  "rows": [
+    {
+      "COLUMN_NAME": "id"
+    },
+    {
+      "COLUMN_NAME": "state"
+    },
+    {
+      "COLUMN_NAME": "code_type"
+    },
+    {
+      "COLUMN_NAME": "title"
+    },
+    {
+      "COLUMN_NAME": "reference"
+    },
+    {
+      "COLUMN_NAME": "summary"
+    },
+    {
+      "COLUMN_NAME": "requirements"
+    },
+    {
+      "COLUMN_NAME": "applicable_trades"
+    },
+    {
+      "COLUMN_NAME": "effective_date"
+    },
+    {
+      "COLUMN_NAME": "expiry_date"
+    },
+    {
+      "COLUMN_NAME": "source_url"
+    },
+    {
+      "COLUMN_NAME": "regulatory_body"
+    },
+    {
+      "COLUMN_NAME": "is_active"
+    },
+    {
+      "COLUMN_NAME": "created_at"
+    },
+    {
+      "COLUMN_NAME": "updated_at"
+    }
+  ],
+  "messages": [],
+  "stdout": "COLUMN_NAME\nid\nstate\ncode_type\ntitle\nreference\nsummary\nrequirements\napplicable_trades\neffective_date\nexpiry_date\nsource_url\nregulatory_body\nis_active\ncreated_at\nupdated_at\n",
+  "stderr": "",
+  "execution_time_ms": 1491
+}

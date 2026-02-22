@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS user_templates (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  user_id INT NOT NULL,\n  name VARCHAR(255) NOT NULL,\n  description TEXT,\n  category VARCHAR(100) NOT NULL,\n  source_quote_id INT,\n  specifications JSON NOT NULL,\n  compliance_requirements JSON NOT NULL,\n  estimated_cost BIGINT NOT NULL,\n  usage_count INT DEFAULT 0 NOT NULL,\n  is_public BOOLEAN DEFAULT FALSE NOT NULL,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,\n  INDEX idx_user_id (user_id),\n  INDEX idx_category (category),\n  INDEX idx_created_at (created_at)\n)",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute CREATE TABLE IF NOT EXISTS user_templates (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  user_id INT NOT NULL,\n  name VARCHAR(255) NOT NULL,\n  description TEXT,\n  category VARCHAR(100) NOT NULL,\n  source_quote_id INT,\n  specifications JSON NOT NULL,\n  compliance_requirements JSON NOT NULL,\n  estimated_cost BIGINT NOT NULL,\n  usage_count INT DEFAULT 0 NOT NULL,\n  is_public BOOLEAN DEFAULT FALSE NOT NULL,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,\n  INDEX idx_user_id (user_id),\n  INDEX idx_category (category),\n  INDEX idx_created_at (created_at)\n)",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1724
+}

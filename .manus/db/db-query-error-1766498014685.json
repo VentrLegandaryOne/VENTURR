@@ -1,0 +1,8 @@
+{
+  "query": "SELECT v.id, v.quoteId, v.overallScore, v.status, q.fileName FROM verifications v JOIN quotes q ON v.quoteId = q.id LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SELECT v.id, v.quoteId, v.overallScore, v.status, q.fileName FROM verifications v JOIN quotes q ON v.quoteId = q.id LIMIT 5;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'v.status' in 'field list'"
+  ]
+}

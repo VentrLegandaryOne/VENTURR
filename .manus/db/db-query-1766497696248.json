@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS pillar_findings (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  verification_id INT NOT NULL,\n  pillar ENUM('pricing', 'materials', 'compliance', 'terms') NOT NULL,\n  finding_id VARCHAR(10) NOT NULL,\n  fact TEXT NOT NULL,\n  evidence_ref VARCHAR(100),\n  benchmark_ref VARCHAR(100),\n  interpretation VARCHAR(100),\n  risk_statement TEXT,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  INDEX idx_verification_pillar (verification_id, pillar)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute CREATE TABLE IF NOT EXISTS pillar_findings (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  verification_id INT NOT NULL,\n  pillar ENUM('pricing', 'materials', 'compliance', 'terms') NOT NULL,\n  finding_id VARCHAR(10) NOT NULL,\n  fact TEXT NOT NULL,\n  evidence_ref VARCHAR(100),\n  benchmark_ref VARCHAR(100),\n  interpretation VARCHAR(100),\n  risk_statement TEXT,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  INDEX idx_verification_pillar (verification_id, pillar)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1717
+}

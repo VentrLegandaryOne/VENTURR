@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS audit_logs (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  user_id VARCHAR(255) NOT NULL,\n  action VARCHAR(100) NOT NULL,\n  resource VARCHAR(100) NOT NULL,\n  resource_id VARCHAR(255),\n  details JSON,\n  ip_address VARCHAR(45),\n  user_agent TEXT,\n  timestamp BIGINT NOT NULL,\n  status ENUM('success', 'failure') NOT NULL,\n  error_message TEXT,\n  INDEX idx_user_id (user_id),\n  INDEX idx_resource (resource, resource_id),\n  INDEX idx_timestamp (timestamp),\n  INDEX idx_action_status (action, status)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute CREATE TABLE IF NOT EXISTS audit_logs (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  user_id VARCHAR(255) NOT NULL,\n  action VARCHAR(100) NOT NULL,\n  resource VARCHAR(100) NOT NULL,\n  resource_id VARCHAR(255),\n  details JSON,\n  ip_address VARCHAR(45),\n  user_agent TEXT,\n  timestamp BIGINT NOT NULL,\n  status ENUM('success', 'failure') NOT NULL,\n  error_message TEXT,\n  INDEX idx_user_id (user_id),\n  INDEX idx_resource (resource, resource_id),\n  INDEX idx_timestamp (timestamp),\n  INDEX idx_action_status (action, status)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 2452
+}

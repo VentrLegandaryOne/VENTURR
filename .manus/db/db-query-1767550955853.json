@@ -1,0 +1,30 @@
+{
+  "query": "SELECT DISTINCT trade, COUNT(*) as count FROM market_rates GROUP BY trade;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SELECT DISTINCT trade, COUNT(*) as count FROM market_rates GROUP BY trade;",
+  "rows": [
+    {
+      "trade": "plumber",
+      "count": "60"
+    },
+    {
+      "trade": "landscaper",
+      "count": "14"
+    },
+    {
+      "trade": "electrician",
+      "count": "75"
+    },
+    {
+      "trade": "builder",
+      "count": "22"
+    },
+    {
+      "trade": "roofer",
+      "count": "22"
+    }
+  ],
+  "messages": [],
+  "stdout": "trade\tcount\nplumber\t60\nlandscaper\t14\nelectrician\t75\nbuilder\t22\nroofer\t22\n",
+  "stderr": "",
+  "execution_time_ms": 1569
+}

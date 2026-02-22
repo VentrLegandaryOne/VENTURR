@@ -1,0 +1,40 @@
+{
+  "query": "SHOW CREATE TABLE australian_standards;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SHOW CREATE TABLE australian_standards;",
+  "rows": [
+    {
+      "Table": "australian_standards",
+      "Create Table": "CREATE TABLE `australian_standards` ("
+    }
+  ],
+  "messages": [
+    "  `id` int(11) NOT NULL AUTO_INCREMENT,",
+    "  `standard_code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,",
+    "  `title` text COLLATE utf8mb4_unicode_ci NOT NULL,",
+    "  `category` enum('structural','electrical','plumbing','roofing','fire_safety','accessibility','general_construction','safety','energy_efficiency') COLLATE utf8mb4_unicode_ci NOT NULL,",
+    "  `trade` enum('electrician','plumber','roofer','builder','landscaper','general') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'general',",
+    "  `version` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT '1.0',",
+    "  `effective_date` date DEFAULT (CURRENT_DATE),",
+    "  `superseded_date` date DEFAULT NULL,",
+    "  `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `requirements` json DEFAULT NULL,",
+    "  `state_variations` json DEFAULT NULL,",
+    "  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,",
+    "  `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,",
+    "  `edition` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `supersedes` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `key_requirements` json DEFAULT NULL,",
+    "  `applicable_states` json DEFAULT NULL,",
+    "  `summary` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `source_url` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */,",
+    "  KEY `idx_standard_code` (`standard_code`),",
+    "  KEY `idx_category` (`category`),",
+    "  KEY `idx_effective_date` (`effective_date`),",
+    "  UNIQUE KEY `standard_code` (`standard_code`)",
+    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=240001"
+  ],
+  "stdout": "Table\tCreate Table\naustralian_standards\tCREATE TABLE `australian_standards` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `standard_code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `title` text COLLATE utf8mb4_unicode_ci NOT NULL,\n  `category` enum('structural','electrical','plumbing','roofing','fire_safety','accessibility','general_construction','safety','energy_efficiency') COLLATE utf8mb4_unicode_ci NOT NULL,\n  `trade` enum('electrician','plumber','roofer','builder','landscaper','general') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'general',\n  `version` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT '1.0',\n  `effective_date` date DEFAULT (CURRENT_DATE),\n  `superseded_date` date DEFAULT NULL,\n  `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `requirements` json DEFAULT NULL,\n  `state_variations` json DEFAULT NULL,\n  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,\n  `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  `edition` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `supersedes` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `key_requirements` json DEFAULT NULL,\n  `applicable_states` json DEFAULT NULL,\n  `summary` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `source_url` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */,\n  KEY `idx_standard_code` (`standard_code`),\n  KEY `idx_category` (`category`),\n  KEY `idx_effective_date` (`effective_date`),\n  UNIQUE KEY `standard_code` (`standard_code`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=240001\n",
+  "stderr": "",
+  "execution_time_ms": 1496
+}

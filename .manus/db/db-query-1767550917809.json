@@ -1,0 +1,18 @@
+{
+  "query": "SELECT \n  'price_benchmarks' as table_name, COUNT(*) as count FROM price_benchmarks\nUNION ALL\nSELECT \n  'market_rates' as table_name, COUNT(*) as count FROM market_rates;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SELECT \n  'price_benchmarks' as table_name, COUNT(*) as count FROM price_benchmarks\nUNION ALL\nSELECT \n  'market_rates' as table_name, COUNT(*) as count FROM market_rates;",
+  "rows": [
+    {
+      "table_name": "market_rates",
+      "count": "193"
+    },
+    {
+      "table_name": "price_benchmarks",
+      "count": "25"
+    }
+  ],
+  "messages": [],
+  "stdout": "table_name\tcount\nmarket_rates\t193\nprice_benchmarks\t25\n",
+  "stderr": "",
+  "execution_time_ms": 1542
+}

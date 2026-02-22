@@ -1,0 +1,32 @@
+{
+  "query": "SHOW CREATE TABLE state_building_codes",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SHOW CREATE TABLE state_building_codes",
+  "rows": [
+    {
+      "Table": "state_building_codes",
+      "Create Table": "CREATE TABLE `state_building_codes` ("
+    }
+  ],
+  "messages": [
+    "  `id` int(11) NOT NULL AUTO_INCREMENT,",
+    "  `state` enum('nsw','vic','qld','sa','wa','tas','nt','act') COLLATE utf8mb4_unicode_ci NOT NULL,",
+    "  `code_type` enum('building_code','plumbing_code','electrical_code','fire_safety','energy_efficiency','accessibility','environmental') COLLATE utf8mb4_unicode_ci NOT NULL,",
+    "  `title` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,",
+    "  `reference` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,",
+    "  `summary` text COLLATE utf8mb4_unicode_ci NOT NULL,",
+    "  `requirements` json DEFAULT NULL,",
+    "  `applicable_trades` json DEFAULT NULL,",
+    "  `effective_date` timestamp NULL DEFAULT NULL,",
+    "  `expiry_date` timestamp NULL DEFAULT NULL,",
+    "  `source_url` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `regulatory_body` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `is_active` tinyint(1) NOT NULL DEFAULT '1',",
+    "  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,",
+    "  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,",
+    "  PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */",
+    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+  ],
+  "stdout": "Table\tCreate Table\nstate_building_codes\tCREATE TABLE `state_building_codes` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `state` enum('nsw','vic','qld','sa','wa','tas','nt','act') COLLATE utf8mb4_unicode_ci NOT NULL,\n  `code_type` enum('building_code','plumbing_code','electrical_code','fire_safety','energy_efficiency','accessibility','environmental') COLLATE utf8mb4_unicode_ci NOT NULL,\n  `title` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `reference` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `summary` text COLLATE utf8mb4_unicode_ci NOT NULL,\n  `requirements` json DEFAULT NULL,\n  `applicable_trades` json DEFAULT NULL,\n  `effective_date` timestamp NULL DEFAULT NULL,\n  `expiry_date` timestamp NULL DEFAULT NULL,\n  `source_url` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `regulatory_body` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `is_active` tinyint(1) NOT NULL DEFAULT '1',\n  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci\n",
+  "stderr": "",
+  "execution_time_ms": 1597
+}

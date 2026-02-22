@@ -1,0 +1,162 @@
+{
+  "query": "DESCRIBE australian_standards;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute DESCRIBE australian_standards;",
+  "rows": [
+    {
+      "Field": "id",
+      "Type": "int(11)",
+      "Null": "NO",
+      "Key": "PRI",
+      "Default": "NULL",
+      "Extra": "auto_increment"
+    },
+    {
+      "Field": "standard_code",
+      "Type": "varchar(50)",
+      "Null": "NO",
+      "Key": "UNI",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "title",
+      "Type": "text",
+      "Null": "NO",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "category",
+      "Type": "enum('structural','electrical','plumbing','roofing','fire_safety','accessibility','general_construction','safety','energy_efficiency')",
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "trade",
+      "Type": "enum('electrician','plumber','roofer','builder','landscaper','general')",
+      "Null": "NO",
+      "Key": "",
+      "Default": "general",
+      "Extra": ""
+    },
+    {
+      "Field": "version",
+      "Type": "varchar(50)",
+      "Null": "YES",
+      "Key": "",
+      "Default": "1.0",
+      "Extra": ""
+    },
+    {
+      "Field": "effective_date",
+      "Type": "date",
+      "Null": "YES",
+      "Key": "MUL",
+      "Default": "CURRENT_DATE",
+      "Extra": ""
+    },
+    {
+      "Field": "superseded_date",
+      "Type": "date",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "description",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "requirements",
+      "Type": "json",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "state_variations",
+      "Type": "json",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "created_at",
+      "Type": "timestamp",
+      "Null": "YES",
+      "Key": "",
+      "Default": "CURRENT_TIMESTAMP",
+      "Extra": ""
+    },
+    {
+      "Field": "updated_at",
+      "Type": "timestamp",
+      "Null": "YES",
+      "Key": "",
+      "Default": "CURRENT_TIMESTAMP",
+      "Extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP"
+    },
+    {
+      "Field": "edition",
+      "Type": "varchar(20)",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "supersedes",
+      "Type": "varchar(50)",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "key_requirements",
+      "Type": "json",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "applicable_states",
+      "Type": "json",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "summary",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "source_url",
+      "Type": "varchar(500)",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    }
+  ],
+  "messages": [],
+  "stdout": "Field\tType\tNull\tKey\tDefault\tExtra\nid\tint(11)\tNO\tPRI\tNULL\tauto_increment\nstandard_code\tvarchar(50)\tNO\tUNI\tNULL\t\ntitle\ttext\tNO\t\tNULL\t\ncategory\tenum('structural','electrical','plumbing','roofing','fire_safety','accessibility','general_construction','safety','energy_efficiency')\tNO\tMUL\tNULL\t\ntrade\tenum('electrician','plumber','roofer','builder','landscaper','general')\tNO\t\tgeneral\t\nversion\tvarchar(50)\tYES\t\t1.0\t\neffective_date\tdate\tYES\tMUL\tCURRENT_DATE\t\nsuperseded_date\tdate\tYES\t\tNULL\t\ndescription\ttext\tYES\t\tNULL\t\nrequirements\tjson\tYES\t\tNULL\t\nstate_variations\tjson\tYES\t\tNULL\t\ncreated_at\ttimestamp\tYES\t\tCURRENT_TIMESTAMP\t\nupdated_at\ttimestamp\tYES\t\tCURRENT_TIMESTAMP\tDEFAULT_GENERATED on update CURRENT_TIMESTAMP\nedition\tvarchar(20)\tYES\t\tNULL\t\nsupersedes\tvarchar(50)\tYES\t\tNULL\t\nkey_requirements\tjson\tYES\t\tNULL\t\napplicable_states\tjson\tYES\t\tNULL\t\nsummary\ttext\tYES\t\tNULL\t\nsource_url\tvarchar(500)\tYES\t\tNULL\t\n",
+  "stderr": "",
+  "execution_time_ms": 1543
+}

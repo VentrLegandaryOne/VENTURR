@@ -1,12 +1,13 @@
 {
-  "name": "Venturr - AI-Powered Operating System for Trade Businesses",
-  "short_name": "Venturr",
-  "description": "From satellite measurements to invoices in minutes. AI-powered quoting, compliance, and project management for Australian roofing contractors.",
+  "name": "VENTURR VALDT - Quote Verification Intelligence",
+  "short_name": "VENTURR VALDT",
+  "description": "AI-powered quote verification in 60 seconds. Get instant insights on pricing, materials, and compliance.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#2563eb",
+  "background_color": "#F8F9FA",
+  "theme_color": "#4A90E2",
   "orientation": "portrait-primary",
+  "scope": "/",
   "icons": [
     {
       "src": "/icon-192.png",
@@ -21,31 +22,64 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["business", "productivity", "utilities"],
+  "categories": ["business", "productivity", "finance"],
   "screenshots": [
     {
-      "src": "/screenshot-1.png",
-      "sizes": "1280x720",
+      "src": "/screenshot-mobile.png",
+      "sizes": "540x720",
       "type": "image/png",
-      "label": "Dashboard Overview"
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide"
     }
   ],
   "shortcuts": [
     {
-      "name": "New Project",
-      "short_name": "New Project",
-      "description": "Create a new roofing project",
-      "url": "/dashboard?action=new",
+      "name": "Verify Quote",
+      "short_name": "Verify",
+      "description": "Upload and verify a new quote",
+      "url": "/quote/upload",
       "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Projects",
-      "short_name": "Projects",
-      "description": "View all projects",
-      "url": "/projects",
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "View your quote history",
+      "url": "/dashboard",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Compare Quotes",
+      "short_name": "Compare",
+      "description": "Compare multiple quotes side-by-side",
+      "url": "/compare",
       "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     }
   ],
-  "prefer_related_applications": false
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "share_target": {
+    "action": "/quote/upload",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "quote",
+          "accept": ["image/*", "application/pdf"]
+        }
+      ]
+    }
+  },
+  "protocol_handlers": [],
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
 }
-

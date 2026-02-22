@@ -1,0 +1,2 @@
+ALTER TABLE `quotes` MODIFY COLUMN `status` enum('draft','uploaded','processing','completed','failed') NOT NULL DEFAULT 'uploaded';--> statement-breakpoint
+ALTER TABLE `quotes` ADD `isDraft` int DEFAULT 0 NOT NULL;

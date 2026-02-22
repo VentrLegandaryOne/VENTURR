@@ -1,0 +1,40 @@
+{
+  "query": "SELECT id, fileName, extractedData, status FROM quotes ORDER BY id DESC LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SELECT id, fileName, extractedData, status FROM quotes ORDER BY id DESC LIMIT 5;",
+  "rows": [
+    {
+      "id": "1410006",
+      "fileName": "Quote QU0166.pdf",
+      "extractedData": "NULL",
+      "status": "failed"
+    },
+    {
+      "id": "1410005",
+      "fileName": "Quote QU0156.pdf",
+      "extractedData": "NULL",
+      "status": "failed"
+    },
+    {
+      "id": "1410004",
+      "fileName": "Quote QU0163.pdf",
+      "extractedData": "NULL",
+      "status": "failed"
+    },
+    {
+      "id": "1410003",
+      "fileName": "Quote QU0163.pdf",
+      "extractedData": "NULL",
+      "status": "failed"
+    },
+    {
+      "id": "1410002",
+      "fileName": "Quote QU0156.pdf",
+      "extractedData": "NULL",
+      "status": "processing"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tfileName\textractedData\tstatus\n1410006\tQuote QU0166.pdf\tNULL\tfailed\n1410005\tQuote QU0156.pdf\tNULL\tfailed\n1410004\tQuote QU0163.pdf\tNULL\tfailed\n1410003\tQuote QU0163.pdf\tNULL\tfailed\n1410002\tQuote QU0156.pdf\tNULL\tprocessing\n",
+  "stderr": "",
+  "execution_time_ms": 1558
+}

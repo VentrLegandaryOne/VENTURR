@@ -1,0 +1,9 @@
+{
+  "query": "SELECT id, name, business_name FROM contractors WHERE id IN (2, 3) LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SELECT id, name, business_name FROM contractors WHERE id IN (2, 3) LIMIT 10;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1544
+}

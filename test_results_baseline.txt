@@ -1,0 +1,993 @@
+
+> venturr_valdt@1.0.0 test /home/ubuntu/venturr_valdt
+> vitest run
+
+
+ RUN  v2.1.9 /home/ubuntu/venturr_valdt
+
+ ✓ server/pressureTests.test.ts (25 tests) 20ms
+stdout | server/integration.test.ts > Integration Tests > Report Generation Pipeline > should generate court report with audit trail
+[Audit] Created entry audit-999-1767612234690 for quote 999
+[Audit] Logged extraction for quote 999: pdf-parse, 5000 chars, high confidence
+[Audit] Logged prompt for quote 999: pricing
+[Audit] Logged outputs for quote 999: score=85, findings=4
+
+stdout | server/integration.test.ts > Integration Tests > Audit Trail Integration > should track complete verification workflow
+[Audit] Created entry audit-888-1767612234694 for quote 888
+[Audit] Logged extraction for quote 888: pdf-parse, 8500 chars, high confidence
+[Audit] Logged prompt for quote 888: pricing
+[Audit] Logged prompt for quote 888: materials
+[Audit] Logged prompt for quote 888: compliance
+[Audit] Logged prompt for quote 888: warranty
+[Audit] Logged sources for quote 888: 3 retrieved
+[Audit] Logged outputs for quote 888: score=82, findings=12
+
+stdout | server/integration.test.ts > E2E Simulation Tests > Complete Verification Flow Simulation > should simulate complete quote verification
+[Audit] Created entry audit-777-1767612234732 for quote 777
+[Audit] Logged extraction for quote 777: pdf-parse, 12000 chars, high confidence
+[Audit] Logged prompt for quote 777: pricing
+[Audit] Logged prompt for quote 777: materials
+[Audit] Logged prompt for quote 777: compliance
+[Audit] Logged prompt for quote 777: warranty
+[Audit] Logged sources for quote 777: 5 retrieved
+[Audit] Logged outputs for quote 777: score=87, findings=5
+
+ ✓ server/integration.test.ts (12 tests) 54ms
+stdout | server/knowledgeBase.test.ts > Knowledge Base Verification System > Verification Service Integration > should process a quote and return verification result
+[Verification] Parsing quote 999999...
+[Verification] Parameters: state=NSW, metro=true, area=150sqm, type=Roof Replacement
+[Verification] Calculating compliance score...
+
+stdout | server/pressureTest.test.ts > License Verification Pressure Test > License Verification Service > should verify licenses for all states
+[Redis] Upstash client initialized successfully
+
+ ✓ server/securityHardening.test.ts (36 tests) 121ms
+ ✓ server/tier1Features.test.ts (23 tests) 16ms
+stdout | server/pressureTest.test.ts > License Verification Pressure Test > License Verification Service > should verify licenses for all states
+[Cache] HIT: license:nsw:123456C
+
+stdout | server/pressureTest.test.ts > License Verification Pressure Test > License Verification Service > should verify licenses for all states
+[Cache] HIT: license:vic:DB-12345
+
+stdout | server/pressureTest.test.ts > License Verification Pressure Test > License Verification Service > should verify licenses for all states
+[Cache] HIT: license:qld:1234567
+
+stdout | server/pressureTest.test.ts > License Verification Pressure Test > License Verification Service > should verify licenses for all states
+[Cache] HIT: license:sa:BLD12345
+
+stdout | server/enhancedFeatures.test.ts > Market Rates Service > getMarketRates > should accept valid city and trade parameters
+[Redis] Upstash client initialized successfully
+
+stdout | server/pressureTest.test.ts > License Verification Pressure Test > License Verification Service > should verify licenses for all states
+[Cache] HIT: license:wa:BC12345
+
+stdout | server/enhancedFeatures.test.ts > Market Rates Service > getMarketRates > should accept valid city and trade parameters
+[Cache] HIT: market:rates:sydney:electrician
+
+stdout | server/pressureTest.test.ts > License Verification Pressure Test > License Verification Service > should verify licenses for all states
+[Cache] HIT: license:tas:BLD1234
+
+stdout | server/enhancedFeatures.test.ts > Market Rates Service > getMarketRates > should handle Melbourne rates
+[Cache] HIT: market:rates:melbourne:plumber
+
+stdout | server/pressureTest.test.ts > License Verification Pressure Test > License Verification Service > should verify licenses for all states
+[Cache] HIT: license:nt:B12345
+
+stdout | server/enhancedFeatures.test.ts > Market Rates Service > getMarketRates > should handle Brisbane rates
+[Cache] HIT: market:rates:brisbane:roofer
+
+stdout | server/pressureTest.test.ts > License Verification Pressure Test > License Verification Service > should verify licenses for all states
+[Cache] HIT: license:act:123456
+
+stdout | server/enhancedFeatures.test.ts > Market Rates Service > getMarketRates > should handle Adelaide rates
+[Cache] HIT: market:rates:adelaide:builder
+
+stdout | server/knowledgeBase.test.ts > Knowledge Base Verification System > Verification Service Integration > should process a quote and return verification result
+[Verification] Generating report...
+[Verification] Complete in 1465ms. Score: 56/100
+
+stdout | server/enhancedFeatures.test.ts > Market Rates Service > getMarketRates > should handle Perth rates
+[Cache] HIT: market:rates:perth:landscaper
+
+stdout | server/enhancedFeatures.test.ts > Market Rates Service > getRegionalAdjustment > should return adjustment for Sydney metro postcode
+[Cache] HIT: market:regional:2000
+
+stdout | server/enhancedFeatures.test.ts > Market Rates Service > getRegionalAdjustment > should return adjustment for regional postcode
+[Cache] MISS: market:regional:2850
+[MarketRates] Fetching regional adjustment for postcode 2850
+
+stderr | server/enhancedFeatures.test.ts > Market Rates Service > getRegionalAdjustment > should return adjustment for regional postcode
+[MarketRates] Error fetching regional adjustment: TypeError: Cannot read properties of undefined (reading 'length')
+    at /home/ubuntu/venturr_valdt/server/marketRatesService.ts:98:18
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at Module.getOrSetCached (/home/ubuntu/venturr_valdt/server/_core/redis.ts:177:17)
+    at Module.getRegionalAdjustment (/home/ubuntu/venturr_valdt/server/marketRatesService.ts:81:10)
+    at /home/ubuntu/venturr_valdt/server/enhancedFeatures.test.ts:53:22
+    at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5
+    at runTest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+
+stdout | server/enhancedFeatures.test.ts > Market Rates Service > getRegionalAdjustment > should return adjustment for regional postcode
+[Cache] SET: market:regional:2850 (TTL: 3600s)
+
+stdout | server/enhancedFeatures.test.ts > Market Rates Service > getRegionalAdjustment > should return null for invalid postcode
+[Cache] MISS: market:regional:0000
+[MarketRates] Fetching regional adjustment for postcode 0000
+
+stderr | server/enhancedFeatures.test.ts > Market Rates Service > getRegionalAdjustment > should return null for invalid postcode
+[MarketRates] Error fetching regional adjustment: TypeError: Cannot read properties of undefined (reading 'length')
+    at /home/ubuntu/venturr_valdt/server/marketRatesService.ts:98:18
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at Module.getOrSetCached (/home/ubuntu/venturr_valdt/server/_core/redis.ts:177:17)
+    at Module.getRegionalAdjustment (/home/ubuntu/venturr_valdt/server/marketRatesService.ts:81:10)
+    at /home/ubuntu/venturr_valdt/server/enhancedFeatures.test.ts:58:22
+    at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5
+    at runTest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+
+stdout | server/enhancedFeatures.test.ts > Market Rates Service > getRegionalAdjustment > should return null for invalid postcode
+[Cache] SET: market:regional:0000 (TTL: 3600s)
+
+stdout | server/enhancedFeatures.test.ts > Market Rates Service > comparePrice > should compare quoted price against market rates
+[Cache] MISS: market:rate:sydney:electrician:ELEC-001
+[MarketRates] Fetching rate for sydney/electrician/ELEC-001
+
+stderr | server/enhancedFeatures.test.ts > Market Rates Service > comparePrice > should compare quoted price against market rates
+[MarketRates] Error fetching rate: TypeError: Cannot read properties of undefined (reading 'length')
+    at /home/ubuntu/venturr_valdt/server/marketRatesService.ts:171:20
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at Module.getOrSetCached (/home/ubuntu/venturr_valdt/server/_core/redis.ts:177:17)
+    at Module.comparePrice (/home/ubuntu/venturr_valdt/server/marketRatesService.ts:155:16)
+    at /home/ubuntu/venturr_valdt/server/enhancedFeatures.test.ts:65:22
+    at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5
+    at runTest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+
+stdout | server/knowledgeBase.test.ts > Knowledge Base Verification System > Verification Service Integration > should process a quote and return verification result
+[Verification] Report data stored in verification record for quote 999999
+[Verification] Results saved for quote 999999
+
+stdout | server/knowledgeBase.test.ts > Knowledge Base Verification System > Verification Service Integration > should handle empty quote text gracefully
+[Verification] Parsing quote 999998...
+[Verification] Parameters: state=NSW, metro=false, area=150sqm, type=Roof Replacement
+[Verification] Calculating compliance score...
+[Verification] Generating report...
+[Verification] Complete in 1ms. Score: 26/100
+
+stdout | server/enhancedFeatures.test.ts > Market Rates Service > comparePrice > should compare quoted price against market rates
+[Cache] SET: market:rate:sydney:electrician:ELEC-001 (TTL: 3600s)
+
+stdout | server/enhancedFeatures.test.ts > Market Rates Service > comparePrice > should identify above market prices
+[Cache] MISS: market:rate:sydney:electrician:ELEC-001
+[MarketRates] Fetching rate for sydney/electrician/ELEC-001
+
+stderr | server/enhancedFeatures.test.ts > Market Rates Service > comparePrice > should identify above market prices
+[MarketRates] Error fetching rate: TypeError: Cannot read properties of undefined (reading 'length')
+    at /home/ubuntu/venturr_valdt/server/marketRatesService.ts:171:20
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at Module.getOrSetCached (/home/ubuntu/venturr_valdt/server/_core/redis.ts:177:17)
+    at Module.comparePrice (/home/ubuntu/venturr_valdt/server/marketRatesService.ts:155:16)
+    at /home/ubuntu/venturr_valdt/server/enhancedFeatures.test.ts:71:22
+    at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5
+    at runTest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+
+stdout | server/enhancedFeatures.test.ts > Market Rates Service > comparePrice > should identify above market prices
+[Cache] SET: market:rate:sydney:electrician:ELEC-001 (TTL: 3600s)
+
+stdout | server/enhancedFeatures.test.ts > Market Rates Service > comparePrice > should identify below market prices
+[Cache] MISS: market:rate:sydney:electrician:ELEC-001
+[MarketRates] Fetching rate for sydney/electrician/ELEC-001
+
+stderr | server/enhancedFeatures.test.ts > Market Rates Service > comparePrice > should identify below market prices
+[MarketRates] Error fetching rate: TypeError: Cannot read properties of undefined (reading 'length')
+    at /home/ubuntu/venturr_valdt/server/marketRatesService.ts:171:20
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at Module.getOrSetCached (/home/ubuntu/venturr_valdt/server/_core/redis.ts:177:17)
+    at Module.comparePrice (/home/ubuntu/venturr_valdt/server/marketRatesService.ts:155:16)
+    at /home/ubuntu/venturr_valdt/server/enhancedFeatures.test.ts:76:22
+    at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5
+    at runTest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+
+stdout | server/enhancedFeatures.test.ts > Market Rates Service > comparePrice > should identify below market prices
+[Cache] SET: market:rate:sydney:electrician:ELEC-001 (TTL: 3600s)
+
+stdout | server/enhancedFeatures.test.ts > Credential Verification Service > verifyLicense > should verify NSW license
+[Cache] HIT: license:nsw:EC12345
+
+stdout | server/enhancedFeatures.test.ts > Credential Verification Service > verifyLicense > should verify VIC license
+[Cache] HIT: license:vic:REC-12345
+
+stdout | server/knowledgeBase.test.ts > Knowledge Base Verification System > Verification Service Integration > should handle empty quote text gracefully
+[Verification] Report data stored in verification record for quote 999998
+[Verification] Results saved for quote 999998
+
+stdout | server/knowledgeBase.test.ts > Knowledge Base Verification System > Verification Service Integration > should detect risk level based on compliance score
+[Verification] Parsing quote 999997...
+[Verification] Parameters: state=WA, metro=false, area=150sqm, type=Roof Replacement
+[Verification] Calculating compliance score...
+
+stdout | server/enhancedFeatures.test.ts > Credential Verification Service > verifyLicense > should verify QLD license
+[Cache] HIT: license:qld:QBCC-12345
+
+stdout | server/enhancedFeatures.test.ts > Credential Verification Service > verifyLicense > should handle all Australian states
+[Cache] HIT: license:nsw:TEST-12345
+
+stdout | server/knowledgeBase.test.ts > Knowledge Base Verification System > Verification Service Integration > should detect risk level based on compliance score
+[Verification] Generating report...
+[Verification] Complete in 219ms. Score: 54/100
+
+stdout | server/hardening.test.ts > Service Layer Hardening > Market Rates Service > should return rates for all supported cities
+[Redis] Upstash client initialized successfully
+
+stdout | server/enhancedFeatures.test.ts > Credential Verification Service > verifyLicense > should handle all Australian states
+[Cache] HIT: license:vic:TEST-12345
+
+stdout | server/enhancedFeatures.test.ts > Credential Verification Service > verifyLicense > should handle all Australian states
+[Cache] HIT: license:qld:TEST-12345
+
+stdout | server/hardening.test.ts > Service Layer Hardening > Market Rates Service > should return rates for all supported cities
+[Cache] HIT: market:rates:sydney:electrician
+
+stdout | server/enhancedFeatures.test.ts > Credential Verification Service > verifyLicense > should handle all Australian states
+[Cache] HIT: license:sa:TEST-12345
+
+stdout | server/hardening.test.ts > Service Layer Hardening > Market Rates Service > should return rates for all supported cities
+[Cache] HIT: market:rates:melbourne:electrician
+
+stdout | server/enhancedFeatures.test.ts > Credential Verification Service > verifyLicense > should handle all Australian states
+[Cache] HIT: license:wa:TEST-12345
+
+stdout | server/hardening.test.ts > Service Layer Hardening > Market Rates Service > should return rates for all supported cities
+[Cache] HIT: market:rates:brisbane:electrician
+
+stdout | server/enhancedFeatures.test.ts > Credential Verification Service > verifyLicense > should handle all Australian states
+[Cache] HIT: license:tas:TEST-12345
+
+stdout | server/hardening.test.ts > Service Layer Hardening > Market Rates Service > should return rates for all supported cities
+[Cache] HIT: market:rates:adelaide:electrician
+
+stdout | server/enhancedFeatures.test.ts > Credential Verification Service > verifyLicense > should handle all Australian states
+[Cache] HIT: license:nt:TEST-12345
+
+stdout | server/hardening.test.ts > Service Layer Hardening > Market Rates Service > should return rates for all supported cities
+[Cache] HIT: market:rates:perth:electrician
+
+stdout | server/knowledgeBase.test.ts > Knowledge Base Verification System > Verification Service Integration > should detect risk level based on compliance score
+[Verification] Report data stored in verification record for quote 999997
+[Verification] Results saved for quote 999997
+
+ ✓ server/knowledgeBase.test.ts (28 tests) 4412ms
+   ✓ Knowledge Base Verification System > Market Rate Engine > should export calculateRoofingMarketRate function 560ms
+   ✓ Knowledge Base Verification System > Verification Service Integration > should process a quote and return verification result 2124ms
+   ✓ Knowledge Base Verification System > Verification Service Integration > should handle empty quote text gracefully 655ms
+   ✓ Knowledge Base Verification System > Verification Service Integration > should detect risk level based on compliance score 873ms
+stdout | server/enhancedFeatures.test.ts > Credential Verification Service > verifyLicense > should handle all Australian states
+[Cache] HIT: license:act:TEST-12345
+
+ ✓ server/enhancedFeatures.test.ts (31 tests) 2841ms
+   ✓ Credential Verification Service > verifyLicense > should handle all Australian states 776ms
+stdout | server/hardening.test.ts > Service Layer Hardening > Market Rates Service > should return rates for all supported trades
+[Cache] HIT: market:rates:sydney:electrician
+
+stdout | server/hardening.test.ts > Service Layer Hardening > Market Rates Service > should return rates for all supported trades
+[Cache] HIT: market:rates:sydney:plumber
+
+stdout | server/hardening.test.ts > Service Layer Hardening > Market Rates Service > should return rates for all supported trades
+[Cache] HIT: market:rates:sydney:roofer
+
+ ✓ server/quoteComparison.test.ts (11 tests) 10ms
+ ✓ server/validationRules.test.ts (28 tests) 19ms
+stdout | server/hardening.test.ts > Service Layer Hardening > Market Rates Service > should return rates for all supported trades
+[Cache] HIT: market:rates:sydney:builder
+
+stdout | server/hardening.test.ts > Service Layer Hardening > Market Rates Service > should return rates for all supported trades
+[Cache] HIT: market:rates:sydney:landscaper
+
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline
+[Standards] Seeded 7 Australian Standards
+
+ ✓ server/finalTier1Features.test.ts (20 tests) 14ms
+stdout | server/hardening.test.ts > Service Layer Hardening > Market Rates Service > should handle regional adjustments
+[Cache] HIT: market:regional:2000
+
+stdout | server/hardening.test.ts > Service Layer Hardening > Market Rates Service > should handle regional adjustments
+[Cache] HIT: market:regional:3000
+
+stdout | server/hardening.test.ts > Service Layer Hardening > Market Rates Service > should handle regional adjustments
+[Cache] HIT: market:regional:4000
+
+ ✓ server/brandedPdf.test.ts (11 tests) 140ms
+stdout | server/hardening.test.ts > Service Layer Hardening > Credential Verification Service > should verify licenses for all states
+[Cache] HIT: license:nsw:TEST123
+
+stdout | server/hardening.test.ts > Service Layer Hardening > Credential Verification Service > should verify licenses for all states
+[Cache] HIT: license:vic:TEST123
+
+stdout | server/hardening.test.ts > Service Layer Hardening > Credential Verification Service > should verify licenses for all states
+[Cache] HIT: license:qld:TEST123
+
+stdout | server/hardening.test.ts > Service Layer Hardening > Credential Verification Service > should verify licenses for all states
+[Cache] HIT: license:sa:TEST123
+
+stdout | server/hardening.test.ts > Service Layer Hardening > Credential Verification Service > should verify licenses for all states
+[Cache] HIT: license:wa:TEST123
+
+stderr | server/quoteMetadata.test.ts > Quote Metadata Extraction > extractQuoteMetadata function > should return empty object on extraction failure
+Perplexity API error: TypeError: Cannot read properties of undefined (reading 'data')
+    at callPerplexityAPI (/home/ubuntu/venturr_valdt/server/aiVerification.ts:105:19)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at extractQuoteMetadata (/home/ubuntu/venturr_valdt/server/aiVerification.ts:577:22)
+    at /home/ubuntu/venturr_valdt/server/quoteMetadata.test.ts:23:22
+    at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5
+    at runTest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runFiles (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1262:5)
+[Metadata] Failed to extract quote metadata: AIAnalysisError: AI analysis service is temporarily unavailable. Please try again later.
+    at callPerplexityAPI (/home/ubuntu/venturr_valdt/server/aiVerification.ts:144:11)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at extractQuoteMetadata (/home/ubuntu/venturr_valdt/server/aiVerification.ts:577:22)
+    at /home/ubuntu/venturr_valdt/server/quoteMetadata.test.ts:23:22
+    at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5
+    at runTest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runFiles (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1262:5) {
+  category: 'service',
+  originalError: TypeError: Cannot read properties of undefined (reading 'data')
+      at callPerplexityAPI (/home/ubuntu/venturr_valdt/server/aiVerification.ts:105:19)
+      at processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at extractQuoteMetadata (/home/ubuntu/venturr_valdt/server/aiVerification.ts:577:22)
+      at /home/ubuntu/venturr_valdt/server/quoteMetadata.test.ts:23:22
+      at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5
+      at runTest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)
+      at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+      at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+      at runSuite (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+      at runFiles (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1262:5)
+}
+
+stdout | server/hardening.test.ts > Service Layer Hardening > Credential Verification Service > should verify licenses for all states
+[Cache] HIT: license:tas:TEST123
+
+ ✓ server/quoteMetadata.test.ts (10 tests) 392ms
+   ✓ Quote Metadata Extraction > extractQuoteMetadata function > should extract contractor name from quote text 322ms
+stdout | server/hardening.test.ts > Service Layer Hardening > Credential Verification Service > should verify licenses for all states
+[Cache] HIT: license:nt:TEST123
+
+stdout | server/hardening.test.ts > Service Layer Hardening > Credential Verification Service > should verify licenses for all states
+[Cache] HIT: license:act:TEST123
+
+stdout | server/hardening.test.ts > Security Hardening > Input Validation > should reject SQL injection attempts in postcode
+[Cache] MISS: market:regional:'; DROP TABLE users; --
+[MarketRates] Fetching regional adjustment for postcode '; DROP TABLE users; --
+
+ ✓ server/responsiveDesign.test.ts (28 tests) 11ms
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > uploads realistic roofing quote and returns valid response
+[Redis] Upstash client initialized successfully
+
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > uploads realistic roofing quote and returns valid response
+[Cache] INVALIDATE: user:1:analytics
+
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > uploads realistic roofing quote and returns valid response
+[Cache] INVALIDATE: global:stats
+[Upload] Starting background processing for quote 1890001
+[ProcessingV2] Starting verification for quote 1890001
+
+stdout | server/hardening.test.ts > Security Hardening > Input Validation > should reject SQL injection attempts in postcode
+[Cache] SET: market:regional:'; DROP TABLE users; -- (TTL: 3600s)
+
+stdout | server/hardening.test.ts > Security Hardening > Input Validation > should handle XSS attempts in license number
+[Cache] HIT: license:nsw:SCRIPTALERTXSSSCRIPT
+
+stdout | server/redis.test.ts > License Verification Caching > includes authority information in verification result
+[Redis] Upstash client initialized successfully
+
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > uploads realistic roofing quote and returns valid response
+[ProcessingV2] Uploading quote...
+
+stdout | server/redis.test.ts > License Verification Caching > includes authority information in verification result
+[Cache] HIT: license:nsw:EC12345
+
+ ✓ server/redis.test.ts (17 tests) 521ms
+   ✓ License Verification Caching > validates license format before caching 312ms
+stdout | server/hardening.test.ts > Error Handling Hardening > Graceful Degradation > should handle null database gracefully
+[Cache] HIT: market:rates:sydney:electrician
+
+stdout | server/hardening.test.ts > Error Handling Hardening > Graceful Degradation > should return empty array for invalid city
+[Cache] HIT: market:rates:invalid_city:electrician
+
+stdout | server/hardening.test.ts > Error Handling Hardening > Boundary Conditions > should handle very long license number
+[Cache] HIT: license:nsw:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+stdout | server/hardening.test.ts > Error Handling Hardening > Boundary Conditions > should handle special characters in postcode
+[Cache] MISS: market:regional:!@#$
+[MarketRates] Fetching regional adjustment for postcode !@#$
+
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > retrieves user quotes list
+[ProcessingV2] Extracting text...
+
+stdout | server/hardening.test.ts > Error Handling Hardening > Boundary Conditions > should handle special characters in postcode
+[Cache] SET: market:regional:!@#$ (TTL: 3600s)
+
+stdout | server/hardening.test.ts > Performance Benchmarks > should complete market rate lookup under 200ms
+[Cache] HIT: market:rates:sydney:electrician
+
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > accepts PDF file uploads
+[OCR] Extracting text from: https://d2xsxph8kpxj0f.cloudfront.net/310419663029085995/APFRAaBLqYVeRNQZ9fu2LF/quotes/1/1767612239180-902247-realistic-roofing-quote-nsw.pdf
+
+stdout | server/hardening.test.ts > Performance Benchmarks > should complete regional adjustment lookup under 100ms
+[Cache] HIT: market:regional:2000
+
+ ✓ server/hardening.test.ts (29 tests) 7154ms
+   ✓ Database Layer Hardening > Connection Pool > should handle concurrent queries 1436ms
+   ✓ Service Layer Hardening > Market Rates Service > should return rates for all supported cities 673ms
+   ✓ Service Layer Hardening > Market Rates Service > should return rates for all supported trades 489ms
+   ✓ Service Layer Hardening > Credential Verification Service > should verify licenses for all states 772ms
+   ✓ Security Hardening > Input Validation > should reject SQL injection attempts in postcode 412ms
+   ✓ Error Handling Hardening > Boundary Conditions > should handle special characters in postcode 411ms
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > accepts PDF file uploads
+[Cache] INVALIDATE: user:1:analytics
+
+stdout | server/pressureTest.test.ts > Accuracy Parameters Summary > should document all accuracy thresholds
+
+=== ACCURACY PARAMETERS ===
+{
+  "abn_validation": {
+    "checksum_accuracy": "100%",
+    "response_time": "<500ms",
+    "format_validation": "Strict 11-digit enforcement"
+  },
+  "license_verification": {
+    "state_coverage": "8/8 Australian states",
+    "format_validation": "State-specific patterns",
+    "authority_urls": "Official government sources only"
+  },
+  "market_rates": {
+    "source": "Rawlinsons Cost Guide 2024",
+    "acceptable_variance": "±15%",
+    "regional_adjustments": "ABS regional classifications",
+    "update_frequency": "Quarterly (CPI-aligned)"
+  },
+  "compliance_detection": {
+    "target_accuracy": "95%+",
+    "standards_coverage": "24+ Australian Standards",
+    "state_codes": "All 8 states covered"
+  },
+  "contractor_ratings": {
+    "rating_scale": "1-5 stars",
+    "components": "Accuracy, Compliance, Communication",
+    "verification": "Quote-linked reviews prioritized"
+  }
+}
+
+ ✓ server/pressureTest.test.ts (25 tests) 8866ms
+   ✓ License Verification Pressure Test > License Verification Service > should verify licenses for all states 1301ms
+   ✓ Market Rates Accuracy Test > Rate Range Validation > should have rates within Rawlinsons benchmark ranges 1357ms
+   ✓ Australian Standards Compliance Test > Standards Database Completeness > should have all critical Australian Standards 1536ms
+   ✓ Database Integrity Under Load > Concurrent Query Performance > should handle 100 concurrent reads 3290ms
+stdout | server/quotes.upload.test.ts > quotes.upload > creates a quote record with S3 file upload
+[Redis] Upstash client initialized successfully
+
+stdout | server/quotes.upload.test.ts > quotes.upload > creates a quote record with S3 file upload
+[Cache] INVALIDATE: user:1:analytics
+
+stdout | server/quotes.upload.test.ts > quotes.upload > creates a quote record with S3 file upload
+[Cache] INVALIDATE: global:stats
+[Upload] Starting background processing for quote 1890003
+[ProcessingV2] Starting verification for quote 1890003
+
+stdout | server/quotes.upload.test.ts > quotes.upload > prevents unauthorized access to other users' quotes
+[ProcessingV2] Uploading quote...
+
+ ✓ server/portfolio.test.ts (4 tests) 2273ms
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > accepts PDF file uploads
+[Cache] INVALIDATE: global:stats
+[Upload] Starting background processing for quote 1890002
+[ProcessingV2] Starting verification for quote 1890002
+
+stdout | server/quotes.upload.test.ts > quotes.upload > prevents unauthorized access to other users' quotes
+[ProcessingV2] Extracting text...
+
+stdout | server/quotes.upload.test.ts > quotes.upload > prevents unauthorized access to other users' quotes
+[Cache] INVALIDATE: user:1:analytics
+
+stderr | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > accepts PDF file uploads
+[OCR] Text extraction failed: InvalidPDFException: Invalid PDF structure.
+    at getException (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/Exception.ts:198:12)
+    at PDFParse.load (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:197:10)
+    at PDFParse.getText (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:155:15)
+    at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:186:26)
+    at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+  [cause]: Error: 
+      at BaseExceptionClosure (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:502:29)
+      at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:506:2
+      at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+      at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+      at VitestExecutor.interopedImport (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:421:28)
+      at VitestExecutor.directRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:280:24)
+      at VitestExecutor.cachedRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:206:14)
+      at VitestExecutor.dependencyRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:259:12)
+      at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:184:28)
+      at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+    message: 'Invalid PDF structure.',
+    name: 'InvalidPDFException'
+  }
+}
+[ProcessingV2] Text extraction failed: ExtractionError: Failed to process the uploaded file. Please ensure the file is a valid PDF or image and try again.
+    at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:242:11)
+    at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+  originalError: InvalidPDFException: Invalid PDF structure.
+      at getException (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/Exception.ts:198:12)
+      at PDFParse.load (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:197:10)
+      at PDFParse.getText (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:155:15)
+      at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:186:26)
+      at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+    [cause]: Error: 
+        at BaseExceptionClosure (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:502:29)
+        at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:506:2
+        at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+        at VitestExecutor.interopedImport (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:421:28)
+        at VitestExecutor.directRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:280:24)
+        at VitestExecutor.cachedRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:206:14)
+        at VitestExecutor.dependencyRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:259:12)
+        at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:184:28)
+        at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+      message: 'Invalid PDF structure.',
+      name: 'InvalidPDFException'
+    }
+  }
+}
+
+stdout | server/quotes.upload.test.ts > quotes.upload > prevents unauthorized access to other users' quotes
+[Cache] INVALIDATE: global:stats
+[Upload] Starting background processing for quote 1890004
+[ProcessingV2] Starting verification for quote 1890004
+
+stdout | server/quotes.upload.test.ts > quotes.upload > prevents unauthorized access to other users' quotes
+[OCR] Extracting text from: https://d2xsxph8kpxj0f.cloudfront.net/310419663029085995/APFRAaBLqYVeRNQZ9fu2LF/quotes/1/1767612243510-3kzycb-test-quote.pdf
+
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > accepts PDF file uploads
+[ProcessingV2] Uploading quote...
+
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > accepts image file uploads
+[ProcessingV2] Extracting text...
+
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > accepts image file uploads
+[OCR] Extracting text from: https://d2xsxph8kpxj0f.cloudfront.net/310419663029085995/APFRAaBLqYVeRNQZ9fu2LF/quotes/1/1767612242369-mi0ea-test-quote.pdf
+
+stderr | server/quotes.upload.test.ts > quotes.upload > allows user to list their own quotes
+[OCR] Text extraction failed: InvalidPDFException: Invalid PDF structure.
+    at getException (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/Exception.ts:198:12)
+    at PDFParse.load (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:197:10)
+    at PDFParse.getText (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:155:15)
+    at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:186:26)
+    at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+  [cause]: Error: 
+      at BaseExceptionClosure (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:502:29)
+      at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:506:2
+      at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+      at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+      at VitestExecutor.interopedImport (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:421:28)
+      at VitestExecutor.directRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:280:24)
+      at VitestExecutor.cachedRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:206:14)
+      at VitestExecutor.dependencyRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:259:12)
+      at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:184:28)
+      at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+    message: 'Invalid PDF structure.',
+    name: 'InvalidPDFException'
+  }
+}
+[ProcessingV2] Text extraction failed: ExtractionError: Failed to process the uploaded file. Please ensure the file is a valid PDF or image and try again.
+    at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:242:11)
+    at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+  originalError: InvalidPDFException: Invalid PDF structure.
+      at getException (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/Exception.ts:198:12)
+      at PDFParse.load (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:197:10)
+      at PDFParse.getText (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:155:15)
+      at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:186:26)
+      at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+    [cause]: Error: 
+        at BaseExceptionClosure (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:502:29)
+        at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:506:2
+        at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+        at VitestExecutor.interopedImport (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:421:28)
+        at VitestExecutor.directRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:280:24)
+        at VitestExecutor.cachedRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:206:14)
+        at VitestExecutor.dependencyRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:259:12)
+        at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:184:28)
+        at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+      message: 'Invalid PDF structure.',
+      name: 'InvalidPDFException'
+    }
+  }
+}
+
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > accepts image file uploads
+[Cache] INVALIDATE: user:1:analytics
+
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > accepts image file uploads
+[Cache] INVALIDATE: global:stats
+[Upload] Starting background processing for quote 1890005
+[ProcessingV2] Starting verification for quote 1890005
+
+stdout | server/quotes.upload.test.ts > quotes.upload > allows user to list their own quotes
+[Cache] INVALIDATE: user:1:analytics
+
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > accepts image file uploads
+[ProcessingV2] Running knowledge-base verification...
+[ProcessingV2] Parsing quote data...
+
+stdout | server/quotes.upload.test.ts > quotes.upload > allows user to list their own quotes
+[Cache] INVALIDATE: global:stats
+[Upload] Starting background processing for quote 1890006
+[ProcessingV2] Starting verification for quote 1890006
+
+stdout | server/quotes.upload.test.ts > quotes.upload > allows user to list their own quotes
+[ProcessingV2] Uploading quote...
+
+ ❯ server/comparisonShare.test.ts (6 tests | 1 failed) 8321ms
+   ✓ Comparison Share > should create a share link with valid data 1632ms
+   ✓ Comparison Share > should retrieve a shared comparison by token 894ms
+   ✓ Comparison Share > should return null for expired share links 654ms
+   ✓ Comparison Share > should increment view count when retrieving share 1791ms
+   × Comparison Share > should get detailed contractor data for shared comparison 1996ms
+     → expected +0 to be 2 // Object.is equality
+stderr | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > accepts image file uploads
+[OCR] Text extraction failed: InvalidPDFException: Invalid PDF structure.
+    at getException (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/Exception.ts:198:12)
+    at PDFParse.load (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:197:10)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at PDFParse.getText (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:155:15)
+    at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:186:26)
+    at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+  [cause]: Error: 
+      at BaseExceptionClosure (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:502:29)
+      at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:506:2
+      at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+      at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+      at VitestExecutor.interopedImport (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:421:28)
+      at VitestExecutor.directRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:280:24)
+      at VitestExecutor.cachedRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:206:14)
+      at VitestExecutor.dependencyRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:259:12)
+      at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:184:28)
+      at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+    message: 'Invalid PDF structure.',
+    name: 'InvalidPDFException'
+  }
+}
+[ProcessingV2] Text extraction failed: ExtractionError: Failed to process the uploaded file. Please ensure the file is a valid PDF or image and try again.
+    at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:242:11)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+  originalError: InvalidPDFException: Invalid PDF structure.
+      at getException (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/Exception.ts:198:12)
+      at PDFParse.load (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:197:10)
+      at processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at PDFParse.getText (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:155:15)
+      at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:186:26)
+      at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+    [cause]: Error: 
+        at BaseExceptionClosure (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:502:29)
+        at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:506:2
+        at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+        at VitestExecutor.interopedImport (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:421:28)
+        at VitestExecutor.directRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:280:24)
+        at VitestExecutor.cachedRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:206:14)
+        at VitestExecutor.dependencyRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:259:12)
+        at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:184:28)
+        at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+      message: 'Invalid PDF structure.',
+      name: 'InvalidPDFException'
+    }
+  }
+}
+
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > accepts image file uploads
+[ProcessingV2] Uploading quote...
+
+stdout | server/quotes.upload.test.ts > quotes.upload > allows user to list their own quotes
+[ProcessingV2] Uploading quote...
+
+stdout | server/redis.connection.test.ts > Redis Connection Validation > should connect to Upstash Redis successfully
+[Redis] Upstash client initialized successfully
+
+ ✓ server/feedback.test.ts (16 tests) 10722ms
+   ✓ Feedback System > createFeedback > should create a new feedback entry 455ms
+   ✓ Feedback System > createFeedback > should create feedback without optional fields 442ms
+   ✓ Feedback System > createFeedback > should create feedback with all feedback types 2207ms
+   ✓ Feedback System > getAllFeedback > should retrieve all feedback with pagination 1337ms
+   ✓ Feedback System > updateFeedbackStatus > should update feedback status 446ms
+   ✓ Feedback System > updateFeedbackStatus > should set resolvedAt when marking as resolved 446ms
+   ✓ Feedback System > getFeedbackStats > should return feedback statistics 1108ms
+   ✓ Feedback System > deleteFeedback > should delete feedback 889ms
+stdout | server/redis.connection.test.ts > Redis Connection Validation > should set and get cached values
+[Cache] SET: test:venturr:validation (TTL: 60s)
+
+stdout | server/redis.connection.test.ts > Redis Connection Validation > should set and get cached values
+[Cache] HIT: test:venturr:validation
+
+stdout | server/quotes.upload.test.ts > quotes.upload > allows user to list their own quotes
+[ProcessingV2] Extracting text...
+
+stdout | server/quotes.upload.test.ts > quotes.upload > allows user to list their own quotes
+[Cache] INVALIDATE: user:1:analytics
+
+ ✓ server/auth.logout.test.ts (1 test) 6ms
+stdout | server/quotes.upload.test.ts > quotes.upload > allows user to list their own quotes
+[OCR] Extracting text from: https://d2xsxph8kpxj0f.cloudfront.net/310419663029085995/APFRAaBLqYVeRNQZ9fu2LF/quotes/1/1767612246550-dth0u-test-quote.pdf
+
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > verifies Australian Standards are seeded
+[ProcessingV2] Extracting text...
+
+stdout | server/quotes.upload.test.ts > quotes.upload > allows user to list their own quotes
+[Cache] INVALIDATE: global:stats
+[Upload] Starting background processing for quote 1890007
+[ProcessingV2] Starting verification for quote 1890007
+
+ ✓ server/redis.connection.test.ts (3 tests) 1163ms
+   ✓ Redis Connection Validation > should connect to Upstash Redis successfully 464ms
+   ✓ Redis Connection Validation > should set and get cached values 368ms
+   ✓ Redis Connection Validation > should handle cache TTL correctly 329ms
+stdout | server/quotes.upload.test.ts > quotes.upload > allows user to list their own quotes
+[ProcessingV2] Running knowledge-base verification...
+[ProcessingV2] Parsing quote data...
+
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > verifies Australian Standards are seeded
+[ProcessingV2] Checking market rates...
+
+stdout | server/quotes.upload.test.ts > quotes.upload > allows user to list their own quotes
+[ProcessingV2] Extracting text...
+
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > verifies Australian Standards are seeded
+[OCR] Extracting text from: https://d2xsxph8kpxj0f.cloudfront.net/310419663029085995/APFRAaBLqYVeRNQZ9fu2LF/quotes/1/1767612248388-up5tzf-test-quote.png
+
+stdout | server/quotes.e2e.test.ts > quotes.e2e - Complete Verification Pipeline > verifies Australian Standards are seeded
+[Standards] Seeded 7 Australian Standards
+
+ ✓ server/quotes.e2e.test.ts (10 tests) 15153ms
+   ✓ quotes.e2e - Complete Verification Pipeline > uploads realistic roofing quote and returns valid response 1918ms
+   ✓ quotes.e2e - Complete Verification Pipeline > retrieves user quotes list 1271ms
+   ✓ quotes.e2e - Complete Verification Pipeline > accepts PDF file uploads 6019ms
+   ✓ quotes.e2e - Complete Verification Pipeline > accepts image file uploads 1849ms
+   ✓ quotes.e2e - Complete Verification Pipeline > verifies Australian Standards are seeded 1465ms
+stdout | server/quotes.upload.test.ts > quotes.upload > allows user to list their own quotes
+[ProcessingV2] Uploading quote...
+
+stderr | server/quotes.upload.test.ts > quotes.upload > allows user to list their own quotes
+[OCR] Text extraction failed: InvalidPDFException: Invalid PDF structure.
+    at getException (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/Exception.ts:198:12)
+    at PDFParse.load (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:197:10)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at PDFParse.getText (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:155:15)
+    at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:186:26)
+    at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+  [cause]: Error: 
+      at BaseExceptionClosure (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:502:29)
+      at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:506:2
+      at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+      at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+      at VitestExecutor.interopedImport (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:421:28)
+      at VitestExecutor.directRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:280:24)
+      at VitestExecutor.cachedRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:206:14)
+      at VitestExecutor.dependencyRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:259:12)
+      at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:184:28)
+      at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+    message: 'Invalid PDF structure.',
+    name: 'InvalidPDFException'
+  }
+}
+[ProcessingV2] Text extraction failed: ExtractionError: Failed to process the uploaded file. Please ensure the file is a valid PDF or image and try again.
+    at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:242:11)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+  originalError: InvalidPDFException: Invalid PDF structure.
+      at getException (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/Exception.ts:198:12)
+      at PDFParse.load (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:197:10)
+      at processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at PDFParse.getText (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:155:15)
+      at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:186:26)
+      at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+    [cause]: Error: 
+        at BaseExceptionClosure (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:502:29)
+        at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:506:2
+        at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+        at VitestExecutor.interopedImport (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:421:28)
+        at VitestExecutor.directRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:280:24)
+        at VitestExecutor.cachedRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:206:14)
+        at VitestExecutor.dependencyRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:259:12)
+        at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:184:28)
+        at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+      message: 'Invalid PDF structure.',
+      name: 'InvalidPDFException'
+    }
+  }
+}
+
+stdout | server/quotes.upload.test.ts > quotes.upload > allows user to update their own quote status
+[OCR] Extracting text from: https://d2xsxph8kpxj0f.cloudfront.net/310419663029085995/APFRAaBLqYVeRNQZ9fu2LF/quotes/1/1767612248677-ya55l-quote1.pdf
+
+stdout | server/quotes.upload.test.ts > quotes.upload > allows user to update their own quote status
+[Cache] INVALIDATE: user:1:analytics
+
+stdout | server/quotes.upload.test.ts > quotes.upload > allows user to update their own quote status
+[ProcessingV2] Extracting text...
+
+stdout | server/quotes.upload.test.ts > quotes.upload > allows user to update their own quote status
+[Cache] INVALIDATE: global:stats
+[Upload] Starting background processing for quote 1890008
+[ProcessingV2] Starting verification for quote 1890008
+
+stdout | server/quotes.upload.test.ts > quotes.upload > allows user to update their own quote status
+[ProcessingV2] Checking market rates...
+
+stdout | server/quotes.upload.test.ts > quotes.upload > allows user to update their own quote status
+[OCR] Extracting text from: https://d2xsxph8kpxj0f.cloudfront.net/310419663029085995/APFRAaBLqYVeRNQZ9fu2LF/quotes/1/1767612250405-vvq8xf-quote2.pdf
+
+stdout | server/quotes.upload.test.ts > quotes.upload > allows user to update their own quote status
+[ProcessingV2] Uploading quote...
+
+stderr | server/quotes.upload.test.ts > quotes.upload > allows user to update their own quote status
+[OCR] Text extraction failed: InvalidPDFException: Invalid PDF structure.
+    at getException (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/Exception.ts:198:12)
+    at PDFParse.load (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:197:10)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at PDFParse.getText (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:155:15)
+    at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:186:26)
+    at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+  [cause]: Error: 
+      at BaseExceptionClosure (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:502:29)
+      at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:506:2
+      at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+      at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+      at VitestExecutor.interopedImport (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:421:28)
+      at VitestExecutor.directRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:280:24)
+      at VitestExecutor.cachedRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:206:14)
+      at VitestExecutor.dependencyRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:259:12)
+      at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:184:28)
+      at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+    message: 'Invalid PDF structure.',
+    name: 'InvalidPDFException'
+  }
+}
+[ProcessingV2] Text extraction failed: ExtractionError: Failed to process the uploaded file. Please ensure the file is a valid PDF or image and try again.
+    at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:242:11)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+  originalError: InvalidPDFException: Invalid PDF structure.
+      at getException (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/Exception.ts:198:12)
+      at PDFParse.load (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:197:10)
+      at processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at PDFParse.getText (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:155:15)
+      at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:186:26)
+      at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+    [cause]: Error: 
+        at BaseExceptionClosure (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:502:29)
+        at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:506:2
+        at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+        at VitestExecutor.interopedImport (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:421:28)
+        at VitestExecutor.directRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:280:24)
+        at VitestExecutor.cachedRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:206:14)
+        at VitestExecutor.dependencyRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:259:12)
+        at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:184:28)
+        at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+      message: 'Invalid PDF structure.',
+      name: 'InvalidPDFException'
+    }
+  }
+}
+
+stdout | server/quotes.upload.test.ts > quotes.upload > allows user to update their own quote status
+[ProcessingV2] Running knowledge-base verification...
+[ProcessingV2] Parsing quote data...
+
+stderr | server/quotes.upload.test.ts > quotes.upload > allows user to update their own quote status
+[OCR] Text extraction failed: InvalidPDFException: Invalid PDF structure.
+    at getException (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/Exception.ts:198:12)
+    at PDFParse.load (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:197:10)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at PDFParse.getText (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:155:15)
+    at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:186:26)
+    at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+  [cause]: Error: 
+      at BaseExceptionClosure (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:502:29)
+      at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:506:2
+      at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+      at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+      at VitestExecutor.interopedImport (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:421:28)
+      at VitestExecutor.directRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:280:24)
+      at VitestExecutor.cachedRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:206:14)
+      at VitestExecutor.dependencyRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:259:12)
+      at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:184:28)
+      at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+    message: 'Invalid PDF structure.',
+    name: 'InvalidPDFException'
+  }
+}
+[ProcessingV2] Text extraction failed: ExtractionError: Failed to process the uploaded file. Please ensure the file is a valid PDF or image and try again.
+    at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:242:11)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+  originalError: InvalidPDFException: Invalid PDF structure.
+      at getException (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/Exception.ts:198:12)
+      at PDFParse.load (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:197:10)
+      at processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at PDFParse.getText (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdf-parse@2.4.5/node_modules/pdf-parse/src/pdf-parse/PDFParse.ts:155:15)
+      at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:186:26)
+      at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+    [cause]: Error: 
+        at BaseExceptionClosure (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:502:29)
+        at file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/pdfjs-dist@5.4.296/node_modules/pdfjs-dist/legacy/build/webpack:/pdf.js/src/shared/util.js:506:2
+        at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+        at VitestExecutor.interopedImport (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:421:28)
+        at VitestExecutor.directRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:280:24)
+        at VitestExecutor.cachedRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:206:14)
+        at VitestExecutor.dependencyRequest (file:///home/ubuntu/venturr_valdt/node_modules/.pnpm/vite-node@2.1.9_@types+node@24.7.0_lightningcss@1.30.1/node_modules/vite-node/dist/client.mjs:259:12)
+        at Module.extractQuoteText (/home/ubuntu/venturr_valdt/server/aiVerification.ts:184:28)
+        at processQuoteV2 (/home/ubuntu/venturr_valdt/server/processingServiceV2.ts:73:19) {
+      message: 'Invalid PDF structure.',
+      name: 'InvalidPDFException'
+    }
+  }
+}
+
+ ✓ server/notificationPreferences.test.ts (6 tests) 6746ms
+   ✓ Notification Preferences > should create default preferences for new user 670ms
+   ✓ Notification Preferences > should update email preferences 663ms
+   ✓ Notification Preferences > should update push preferences 661ms
+   ✓ Notification Preferences > should update category preferences 660ms
+   ✓ Notification Preferences > should check if notification type is enabled 1099ms
+   ✓ Notification Preferences > should return false when all delivery methods are disabled 879ms
+ ✓ server/quotes.upload.test.ts (4 tests) 10744ms
+   ✓ quotes.upload > creates a quote record with S3 file upload 3043ms
+   ✓ quotes.upload > prevents unauthorized access to other users' quotes 2127ms
+   ✓ quotes.upload > allows user to list their own quotes 3468ms
+   ✓ quotes.upload > allows user to update their own quote status 2103ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  server/comparisonShare.test.ts > Comparison Share > should get detailed contractor data for shared comparison
+AssertionError: expected +0 to be 2 // Object.is equality
+
+- Expected
++ Received
+
+- 2
++ 0
+
+ ❯ server/comparisonShare.test.ts:129:42
+    127|     expect(details).toBeDefined();
+    128|     expect(details?.contractors).toBeDefined();
+    129|     expect(details?.contractors?.length).toBe(2);
+       |                                          ^
+    130|     
+    131|     // Check first contractor has expected fields
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed | 22 passed (23)
+      Tests  1 failed | 383 passed (384)
+   Start at  06:23:53
+   Duration  20.96s (transform 1.74s, setup 0ms, collect 8.10s, tests 79.72s, environment 6ms, prepare 2.36s)
+
+ ELIFECYCLE  Test failed. See above for more details.

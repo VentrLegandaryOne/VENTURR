@@ -1,0 +1,30 @@
+{
+  "query": "SHOW CREATE TABLE regional_rate_adjustments",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute SHOW CREATE TABLE regional_rate_adjustments",
+  "rows": [
+    {
+      "Table": "regional_rate_adjustments",
+      "Create Table": "CREATE TABLE `regional_rate_adjustments` ("
+    }
+  ],
+  "messages": [
+    "  `id` int(11) NOT NULL AUTO_INCREMENT,",
+    "  `state` enum('nsw','vic','qld','sa','wa','tas','nt','act') COLLATE utf8mb4_unicode_ci NOT NULL,",
+    "  `region_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,",
+    "  `region_type` enum('metro','suburban','regional','rural','remote') COLLATE utf8mb4_unicode_ci NOT NULL,",
+    "  `postcode_range_start` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `postcode_range_end` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `labour_multiplier` int(11) NOT NULL DEFAULT '100',",
+    "  `material_multiplier` int(11) NOT NULL DEFAULT '100',",
+    "  `travel_surcharge` int(11) NOT NULL DEFAULT '0',",
+    "  `notes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `is_active` tinyint(1) NOT NULL DEFAULT '1',",
+    "  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,",
+    "  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,",
+    "  PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */",
+    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=60001"
+  ],
+  "stdout": "Table\tCreate Table\nregional_rate_adjustments\tCREATE TABLE `regional_rate_adjustments` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `state` enum('nsw','vic','qld','sa','wa','tas','nt','act') COLLATE utf8mb4_unicode_ci NOT NULL,\n  `region_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `region_type` enum('metro','suburban','regional','rural','remote') COLLATE utf8mb4_unicode_ci NOT NULL,\n  `postcode_range_start` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `postcode_range_end` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `labour_multiplier` int(11) NOT NULL DEFAULT '100',\n  `material_multiplier` int(11) NOT NULL DEFAULT '100',\n  `travel_surcharge` int(11) NOT NULL DEFAULT '0',\n  `notes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `is_active` tinyint(1) NOT NULL DEFAULT '1',\n  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=60001\n",
+  "stderr": "",
+  "execution_time_ms": 1602
+}

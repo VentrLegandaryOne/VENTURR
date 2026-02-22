@@ -1,585 +1,329 @@
 /**
- * WEBHOOK NOTIFICATIONS & ALERTING SYSTEM
- * 
- * Sends real-time alerts via email, SMS, Slack, and PagerDuty
- * Triggered by validation failures, healing issues, and metric thresholds
+ * Webhook Notifications Service
+ * Sends alerts to Slack/Discord when health checks detect degraded services
  */
 
-import { z } from 'zod';
+import { ENV } from './_core/env';
 
-// ============================================================================
-// TYPES
-// ============================================================================
+export interface HealthCheckAlert {
+  status: 'healthy' | 'degraded' | 'critical';
+  timestamp: string;
+  services: {
+    database: { status: 'up' | 'down'; latencyMs: number; error?: string };
+    redis: { status: 'up' | 'down'; latencyMs: number; error?: string; optional: boolean };
+    storage: { status: 'up' | 'down'; latencyMs: number; error?: string };
+  };
+  totalLatencyMs: number;
+}
 
-export interface AlertConfig {
+export interface WebhookConfig {
+  type: 'slack' | 'discord';
+  url: string;
   enabled: boolean;
-  channels: AlertChannel[];
-  thresholds: AlertThreshold[];
-  escalationRules: EscalationRule[];
+  alertOnDegraded: boolean;
+  alertOnCritical: boolean;
 }
 
-export interface AlertChannel {
-  type: 'email' | 'sms' | 'slack' | 'pagerduty' | 'webhook';
-  enabled: boolean;
-  config: Record<string, any>;
-  recipients?: string[];
-}
+/**
+ * In-memory webhook configurations
+ * In production, these should be stored in the database
+ */
+const webhookConfigs: Map<string, WebhookConfig> = new Map();
 
-export interface AlertThreshold {
-  metric: string;
-  operator: 'less_than' | 'greater_than' | 'equals' | 'not_equals';
-  value: number;
-  severity: 'critical' | 'high' | 'medium' | 'low';
-  cooldownMinutes: number;
-}
+/**
+ * Initialize default webhooks from environment variables
+ */
+export function initializeWebhooks(): void {
+  const slackWebhook = process.env.SLACK_WEBHOOK_URL;
+  const discordWebhook = process.env.DISCORD_WEBHOOK_URL;
 
-export interface EscalationRule {
-  severity: 'critical' | 'high' | 'medium' | 'low';
-  delayMinutes: number;
-  channels: AlertChannel[];
-  escalateTo?: string[];
-}
-
-export interface Alert {
-  id: string;
-  timestamp: Date;
-  severity: 'critical' | 'high' | 'medium' | 'low';
-  type: string;
-  title: string;
-  message: string;
-  details: Record<string, any>;
-  channels: string[];
-  status: 'pending' | 'sent' | 'failed';
-  sentAt?: Date;
-  failureReason?: string;
-}
-
-export interface AlertHistory {
-  id: string;
-  alertId: string;
-  timestamp: Date;
-  channel: string;
-  status: 'sent' | 'failed';
-  response?: string;
-  errorMessage?: string;
-}
-
-// ============================================================================
-// WEBHOOK NOTIFICATIONS & ALERTING SYSTEM
-// ============================================================================
-
-export class WebhookNotificationsSystem {
-  private alerts: Alert[] = [];
-  private alertHistory: AlertHistory[] = [];
-  private alertConfig: AlertConfig;
-  private lastAlertTime: Map<string, Date> = new Map();
-  private maxAlerts: number = 10000;
-
-  constructor() {
-    this.alertConfig = this.initializeDefaultConfig();
-  }
-
-  /**
-   * Initialize default alert configuration
-   */
-  private initializeDefaultConfig(): AlertConfig {
-    return {
+  if (slackWebhook) {
+    webhookConfigs.set('slack-default', {
+      type: 'slack',
+      url: slackWebhook,
       enabled: true,
-      channels: [
-        {
-          type: 'email',
-          enabled: true,
-          config: {
-            from: 'alerts@venturr.thomco.com.au',
-            smtpServer: 'smtp.gmail.com',
-            smtpPort: 587,
-          },
-          recipients: ['admin@thomco.com.au', 'ops@thomco.com.au'],
-        },
-        {
-          type: 'slack',
-          enabled: true,
-          config: {
-            webhookUrl: process.env.SLACK_WEBHOOK_URL || '',
-            channel: '#critical-alerts',
-          },
-        },
-        {
-          type: 'sms',
-          enabled: true,
-          config: {
-            provider: 'twilio',
-            accountSid: process.env.TWILIO_ACCOUNT_SID || '',
-            authToken: process.env.TWILIO_AUTH_TOKEN || '',
-            fromNumber: process.env.TWILIO_FROM_NUMBER || '',
-          },
-          recipients: ['+61412345678'],
-        },
-        {
-          type: 'pagerduty',
-          enabled: true,
-          config: {
-            integrationKey: process.env.PAGERDUTY_INTEGRATION_KEY || '',
-          },
-        },
-      ],
-      thresholds: [
-        {
-          metric: 'workflow_success_rate',
-          operator: 'less_than',
-          value: 95,
-          severity: 'critical',
-          cooldownMinutes: 30,
-        },
-        {
-          metric: 'validation_pass_rate',
-          operator: 'less_than',
-          value: 95,
-          severity: 'high',
-          cooldownMinutes: 30,
-        },
-        {
-          metric: 'perception_acceptance',
-          operator: 'less_than',
-          value: 8.5,
-          severity: 'high',
-          cooldownMinutes: 60,
-        },
-        {
-          metric: 'system_uptime',
-          operator: 'less_than',
-          value: 99.9,
-          severity: 'critical',
-          cooldownMinutes: 15,
-        },
-        {
-          metric: 'error_rate',
-          operator: 'greater_than',
-          value: 0.1,
-          severity: 'high',
-          cooldownMinutes: 30,
-        },
-        {
-          metric: 'data_integrity',
-          operator: 'less_than',
-          value: 99,
-          severity: 'critical',
-          cooldownMinutes: 15,
-        },
-        {
-          metric: 'response_latency',
-          operator: 'greater_than',
-          value: 1000,
-          severity: 'medium',
-          cooldownMinutes: 60,
-        },
-      ],
-      escalationRules: [
-        {
-          severity: 'critical',
-          delayMinutes: 0,
-          channels: [
-            { type: 'email', enabled: true, config: {} },
-            { type: 'slack', enabled: true, config: {} },
-            { type: 'pagerduty', enabled: true, config: {} },
-          ],
-          escalateTo: ['director@thomco.com.au'],
-        },
-        {
-          severity: 'high',
-          delayMinutes: 5,
-          channels: [
-            { type: 'email', enabled: true, config: {} },
-            { type: 'slack', enabled: true, config: {} },
-          ],
-          escalateTo: ['admin@thomco.com.au'],
-        },
-        {
-          severity: 'medium',
-          delayMinutes: 15,
-          channels: [{ type: 'slack', enabled: true, config: {} }],
-        },
-        {
-          severity: 'low',
-          delayMinutes: 60,
-          channels: [{ type: 'email', enabled: true, config: {} }],
-        },
-      ],
-    };
+      alertOnDegraded: true,
+      alertOnCritical: true,
+    });
+    console.log('[Webhooks] Slack webhook initialized');
   }
 
-  /**
-   * Check metric thresholds and create alerts
-   */
-  async checkMetricThresholds(metrics: Record<string, number>): Promise<Alert[]> {
-    const createdAlerts: Alert[] = [];
-
-    for (const threshold of this.alertConfig.thresholds) {
-      const metricValue = metrics[threshold.metric];
-
-      if (metricValue === undefined) {
-        continue;
-      }
-
-      const breached = this.checkThreshold(metricValue, threshold.operator, threshold.value);
-
-      if (breached) {
-        const lastAlert = this.lastAlertTime.get(threshold.metric);
-        const cooldownExpired =
-          !lastAlert || Date.now() - lastAlert.getTime() > threshold.cooldownMinutes * 60 * 1000;
-
-        if (cooldownExpired) {
-          const alert = await this.createAlert(
-            threshold.metric,
-            threshold.severity,
-            `Metric threshold breached: ${threshold.metric}`,
-            `${threshold.metric} is ${metricValue} (threshold: ${threshold.value})`,
-            { metric: threshold.metric, value: metricValue, threshold: threshold.value }
-          );
-
-          createdAlerts.push(alert);
-          this.lastAlertTime.set(threshold.metric, new Date());
-        }
-      }
-    }
-
-    return createdAlerts;
-  }
-
-  /**
-   * Check if metric breaches threshold
-   */
-  private checkThreshold(
-    value: number,
-    operator: 'less_than' | 'greater_than' | 'equals' | 'not_equals',
-    threshold: number
-  ): boolean {
-    switch (operator) {
-      case 'less_than':
-        return value < threshold;
-      case 'greater_than':
-        return value > threshold;
-      case 'equals':
-        return value === threshold;
-      case 'not_equals':
-        return value !== threshold;
-      default:
-        return false;
-    }
-  }
-
-  /**
-   * Create an alert
-   */
-  async createAlert(
-    type: string,
-    severity: 'critical' | 'high' | 'medium' | 'low',
-    title: string,
-    message: string,
-    details: Record<string, any>
-  ): Promise<Alert> {
-    const alertId = `alert-${Date.now()}-${Math.random()}`;
-
-    const alert: Alert = {
-      id: alertId,
-      timestamp: new Date(),
-      severity,
-      type,
-      title,
-      message,
-      details,
-      channels: [],
-      status: 'pending',
-    };
-
-    console.log(`[WN] Creating alert: ${severity.toUpperCase()} - ${title}`);
-
-    // Send alert to configured channels
-    const escalationRule = this.alertConfig.escalationRules.find((r) => r.severity === severity);
-
-    if (escalationRule) {
-      for (const channel of escalationRule.channels) {
-        if (channel.enabled) {
-          try {
-            await this.sendAlert(alert, channel);
-            alert.channels.push(channel.type);
-          } catch (error) {
-            console.error(`[WN] Failed to send alert to ${channel.type}:`, error);
-          }
-        }
-      }
-
-      alert.status = alert.channels.length > 0 ? 'sent' : 'failed';
-    }
-
-    this.alerts.push(alert);
-
-    // Enforce retention
-    if (this.alerts.length > this.maxAlerts) {
-      this.alerts = this.alerts.slice(-5000);
-    }
-
-    return alert;
-  }
-
-  /**
-   * Send alert to a specific channel
-   */
-  private async sendAlert(alert: Alert, channel: AlertChannel): Promise<void> {
-    const historyId = `hist-${Date.now()}-${Math.random()}`;
-
-    try {
-      switch (channel.type) {
-        case 'email':
-          await this.sendEmailAlert(alert, channel);
-          break;
-        case 'slack':
-          await this.sendSlackAlert(alert, channel);
-          break;
-        case 'sms':
-          await this.sendSmsAlert(alert, channel);
-          break;
-        case 'pagerduty':
-          await this.sendPagerDutyAlert(alert, channel);
-          break;
-        case 'webhook':
-          await this.sendWebhookAlert(alert, channel);
-          break;
-      }
-
-      this.alertHistory.push({
-        id: historyId,
-        alertId: alert.id,
-        timestamp: new Date(),
-        channel: channel.type,
-        status: 'sent',
-      });
-
-      console.log(`[WN] Alert sent via ${channel.type}`);
-    } catch (error) {
-      console.error(`[WN] Failed to send alert via ${channel.type}:`, error);
-
-      this.alertHistory.push({
-        id: historyId,
-        alertId: alert.id,
-        timestamp: new Date(),
-        channel: channel.type,
-        status: 'failed',
-        errorMessage: String(error),
-      });
-
-      throw error;
-    }
-  }
-
-  /**
-   * Send email alert
-   */
-  private async sendEmailAlert(alert: Alert, channel: AlertChannel): Promise<void> {
-    if (!channel.recipients || channel.recipients.length === 0) {
-      throw new Error('No email recipients configured');
-    }
-
-    const emailBody = `
-Alert: ${alert.title}
-Severity: ${alert.severity.toUpperCase()}
-Time: ${alert.timestamp.toISOString()}
-
-Message: ${alert.message}
-
-Details:
-${JSON.stringify(alert.details, null, 2)}
-
-Dashboard: https://venturr.thomco.com.au/ci-dashboard
-    `;
-
-    console.log(`[WN] Sending email to ${channel.recipients.join(', ')}`);
-    // Email sending implementation would go here
-    // Using nodemailer or similar
-  }
-
-  /**
-   * Send Slack alert
-   */
-  private async sendSlackAlert(alert: Alert, channel: AlertChannel): Promise<void> {
-    const webhookUrl = channel.config.webhookUrl;
-
-    if (!webhookUrl) {
-      throw new Error('Slack webhook URL not configured');
-    }
-
-    const color =
-      alert.severity === 'critical'
-        ? 'danger'
-        : alert.severity === 'high'
-          ? 'warning'
-          : alert.severity === 'medium'
-            ? '#0099ff'
-            : 'good';
-
-    const payload = {
-      attachments: [
-        {
-          color,
-          title: alert.title,
-          text: alert.message,
-          fields: [
-            { title: 'Severity', value: alert.severity.toUpperCase(), short: true },
-            { title: 'Type', value: alert.type, short: true },
-            { title: 'Time', value: alert.timestamp.toISOString(), short: false },
-          ],
-          actions: [
-            {
-              type: 'button',
-              text: 'View Dashboard',
-              url: 'https://venturr.thomco.com.au/ci-dashboard',
-            },
-          ],
-        },
-      ],
-    };
-
-    console.log(`[WN] Sending Slack alert to ${channel.config.channel}`);
-    // Slack webhook implementation would go here
-  }
-
-  /**
-   * Send SMS alert
-   */
-  private async sendSmsAlert(alert: Alert, channel: AlertChannel): Promise<void> {
-    if (!channel.recipients || channel.recipients.length === 0) {
-      throw new Error('No SMS recipients configured');
-    }
-
-    const message = `[${alert.severity.toUpperCase()}] ${alert.title}: ${alert.message}`;
-
-    console.log(`[WN] Sending SMS to ${channel.recipients.join(', ')}`);
-    // SMS sending implementation would go here (Twilio, etc.)
-  }
-
-  /**
-   * Send PagerDuty alert
-   */
-  private async sendPagerDutyAlert(alert: Alert, channel: AlertChannel): Promise<void> {
-    const integrationKey = channel.config.integrationKey;
-
-    if (!integrationKey) {
-      throw new Error('PagerDuty integration key not configured');
-    }
-
-    const payload = {
-      routing_key: integrationKey,
-      event_action: 'trigger',
-      payload: {
-        summary: alert.title,
-        severity: alert.severity === 'critical' ? 'critical' : 'error',
-        source: 'Venturr Validation Loop',
-        custom_details: alert.details,
-      },
-    };
-
-    console.log(`[WN] Sending PagerDuty alert`);
-    // PagerDuty API implementation would go here
-  }
-
-  /**
-   * Send webhook alert
-   */
-  private async sendWebhookAlert(alert: Alert, channel: AlertChannel): Promise<void> {
-    const webhookUrl = channel.config.webhookUrl;
-
-    if (!webhookUrl) {
-      throw new Error('Webhook URL not configured');
-    }
-
-    const payload = {
-      alert_id: alert.id,
-      timestamp: alert.timestamp,
-      severity: alert.severity,
-      type: alert.type,
-      title: alert.title,
-      message: alert.message,
-      details: alert.details,
-    };
-
-    console.log(`[WN] Sending webhook alert to ${webhookUrl}`);
-    // HTTP POST implementation would go here
-  }
-
-  /**
-   * Get recent alerts
-   */
-  getRecentAlerts(limit: number = 100): Alert[] {
-    return this.alerts.slice(-limit);
-  }
-
-  /**
-   * Get alerts by severity
-   */
-  getAlertsBySeverity(severity: 'critical' | 'high' | 'medium' | 'low', limit: number = 50): Alert[] {
-    return this.alerts.filter((a) => a.severity === severity).slice(-limit);
-  }
-
-  /**
-   * Get alert history
-   */
-  getAlertHistory(limit: number = 100): AlertHistory[] {
-    return this.alertHistory.slice(-limit);
-  }
-
-  /**
-   * Get alert statistics
-   */
-  getAlertStatistics(): {
-    totalAlerts: number;
-    criticalAlerts: number;
-    highAlerts: number;
-    mediumAlerts: number;
-    lowAlerts: number;
-    sentAlerts: number;
-    failedAlerts: number;
-    successRate: number;
-  } {
-    const total = this.alerts.length;
-    const critical = this.alerts.filter((a) => a.severity === 'critical').length;
-    const high = this.alerts.filter((a) => a.severity === 'high').length;
-    const medium = this.alerts.filter((a) => a.severity === 'medium').length;
-    const low = this.alerts.filter((a) => a.severity === 'low').length;
-    const sent = this.alerts.filter((a) => a.status === 'sent').length;
-    const failed = this.alerts.filter((a) => a.status === 'failed').length;
-    const successRate = total > 0 ? (sent / total) * 100 : 0;
-
-    return {
-      totalAlerts: total,
-      criticalAlerts: critical,
-      highAlerts: high,
-      mediumAlerts: medium,
-      lowAlerts: low,
-      sentAlerts: sent,
-      failedAlerts: failed,
-      successRate,
-    };
-  }
-
-  /**
-   * Update alert configuration
-   */
-  updateAlertConfig(config: Partial<AlertConfig>): void {
-    this.alertConfig = { ...this.alertConfig, ...config };
-    console.log(`[WN] Alert configuration updated`);
-  }
-
-  /**
-   * Get alert configuration
-   */
-  getAlertConfig(): AlertConfig {
-    return this.alertConfig;
+  if (discordWebhook) {
+    webhookConfigs.set('discord-default', {
+      type: 'discord',
+      url: discordWebhook,
+      enabled: true,
+      alertOnDegraded: true,
+      alertOnCritical: true,
+    });
+    console.log('[Webhooks] Discord webhook initialized');
   }
 }
 
-// ============================================================================
-// EXPORT
-// ============================================================================
+/**
+ * Register a new webhook configuration
+ */
+export function registerWebhook(id: string, config: WebhookConfig): void {
+  webhookConfigs.set(id, config);
+  console.log(`[Webhooks] Registered webhook: ${id}`);
+}
 
-export const webhookNotifications = new WebhookNotificationsSystem();
+/**
+ * Unregister a webhook configuration
+ */
+export function unregisterWebhook(id: string): void {
+  webhookConfigs.delete(id);
+  console.log(`[Webhooks] Unregistered webhook: ${id}`);
+}
 
+/**
+ * Get all registered webhooks
+ */
+export function getWebhooks(): Map<string, WebhookConfig> {
+  return new Map(webhookConfigs);
+}
+
+/**
+ * Format health check alert for Slack
+ */
+function formatSlackMessage(alert: HealthCheckAlert): Record<string, unknown> {
+  const statusColor = alert.status === 'healthy' ? '#36a64f' : alert.status === 'degraded' ? '#ff9900' : '#ff0000';
+  const statusEmoji = alert.status === 'healthy' ? '✅' : alert.status === 'degraded' ? '⚠️' : '🚨';
+
+  const fields: Array<{ title: string; value: string; short: boolean }> = [
+    {
+      title: 'Status',
+      value: `${statusEmoji} ${alert.status.toUpperCase()}`,
+      short: true,
+    },
+    {
+      title: 'Total Latency',
+      value: `${alert.totalLatencyMs}ms`,
+      short: true,
+    },
+    {
+      title: 'Database',
+      value: `${alert.services.database.status === 'up' ? '✅' : '❌'} ${alert.services.database.latencyMs}ms${alert.services.database.error ? ` - ${alert.services.database.error}` : ''}`,
+      short: false,
+    },
+    {
+      title: 'Redis',
+      value: `${alert.services.redis.status === 'up' ? '✅' : '❌'} ${alert.services.redis.latencyMs}ms (optional)${alert.services.redis.error ? ` - ${alert.services.redis.error}` : ''}`,
+      short: false,
+    },
+    {
+      title: 'Storage (S3)',
+      value: `${alert.services.storage.status === 'up' ? '✅' : '❌'} ${alert.services.storage.latencyMs}ms${alert.services.storage.error ? ` - ${alert.services.storage.error}` : ''}`,
+      short: false,
+    },
+  ];
+
+  return {
+    attachments: [
+      {
+        color: statusColor,
+        title: `VENTURR VALDT Health Check Alert`,
+        fields,
+        ts: Math.floor(new Date(alert.timestamp).getTime() / 1000),
+      },
+    ],
+  };
+}
+
+/**
+ * Format health check alert for Discord
+ */
+function formatDiscordMessage(alert: HealthCheckAlert): Record<string, unknown> {
+  const statusColor = alert.status === 'healthy' ? 3394815 : alert.status === 'degraded' ? 16776960 : 16711680;
+  const statusEmoji = alert.status === 'healthy' ? '✅' : alert.status === 'degraded' ? '⚠️' : '🚨';
+
+  const fields = [
+    {
+      name: 'Status',
+      value: `${statusEmoji} ${alert.status.toUpperCase()}`,
+      inline: true,
+    },
+    {
+      name: 'Total Latency',
+      value: `${alert.totalLatencyMs}ms`,
+      inline: true,
+    },
+    {
+      name: 'Database',
+      value: `${alert.services.database.status === 'up' ? '✅' : '❌'} ${alert.services.database.latencyMs}ms${alert.services.database.error ? `\n${alert.services.database.error}` : ''}`,
+      inline: false,
+    },
+    {
+      name: 'Redis',
+      value: `${alert.services.redis.status === 'up' ? '✅' : '❌'} ${alert.services.redis.latencyMs}ms (optional)${alert.services.redis.error ? `\n${alert.services.redis.error}` : ''}`,
+      inline: false,
+    },
+    {
+      name: 'Storage (S3)',
+      value: `${alert.services.storage.status === 'up' ? '✅' : '❌'} ${alert.services.storage.latencyMs}ms${alert.services.storage.error ? `\n${alert.services.storage.error}` : ''}`,
+      inline: false,
+    },
+  ];
+
+  return {
+    embeds: [
+      {
+        title: 'VENTURR VALDT Health Check Alert',
+        color: statusColor,
+        fields,
+        timestamp: alert.timestamp,
+      },
+    ],
+  };
+}
+
+/**
+ * Send webhook notification
+ */
+async function sendWebhookNotification(
+  config: WebhookConfig,
+  alert: HealthCheckAlert
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const payload =
+      config.type === 'slack'
+        ? formatSlackMessage(alert)
+        : formatDiscordMessage(alert);
+
+    const response = await fetch(config.url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      console.error(
+        `[Webhooks] Failed to send ${config.type} notification: ${response.status} ${error}`
+      );
+      return {
+        success: false,
+        error: `HTTP ${response.status}: ${error}`,
+      };
+    }
+
+    console.log(`[Webhooks] Successfully sent ${config.type} notification`);
+    return { success: true };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(`[Webhooks] Error sending ${config.type} notification:`, errorMessage);
+    return {
+      success: false,
+      error: errorMessage,
+    };
+  }
+}
+
+/**
+ * Broadcast health check alert to all configured webhooks
+ */
+export async function broadcastHealthAlert(alert: HealthCheckAlert): Promise<{
+  totalSent: number;
+  successful: number;
+  failed: number;
+  results: Array<{ webhookId: string; success: boolean; error?: string }>;
+}> {
+  const results: Array<{ webhookId: string; success: boolean; error?: string }> = [];
+  let successful = 0;
+  let failed = 0;
+
+  for (const [webhookId, config] of Array.from(webhookConfigs.entries())) {
+    if (!config.enabled) {
+      console.log(`[Webhooks] Skipping disabled webhook: ${webhookId}`);
+      continue;
+    }
+
+    // Check if we should alert based on status
+    if (alert.status === 'degraded' && !config.alertOnDegraded) {
+      console.log(`[Webhooks] Skipping degraded alert for webhook: ${webhookId}`);
+      continue;
+    }
+
+    if (alert.status === 'critical' && !config.alertOnCritical) {
+      console.log(`[Webhooks] Skipping critical alert for webhook: ${webhookId}`);
+      continue;
+    }
+
+    const result = await sendWebhookNotification(config, alert);
+    results.push({
+      webhookId,
+      success: result.success,
+      error: result.error,
+    });
+
+    if (result.success) {
+      successful++;
+    } else {
+      failed++;
+    }
+  }
+
+  return {
+    totalSent: webhookConfigs.size,
+    successful,
+    failed,
+    results,
+  };
+}
+
+/**
+ * Test webhook connectivity
+ */
+export async function testWebhook(webhookId: string): Promise<{ success: boolean; error?: string }> {
+  const config = webhookConfigs.get(webhookId);
+  if (!config) {
+    return {
+      success: false,
+      error: `Webhook not found: ${webhookId}`,
+    };
+  }
+
+  const testAlert: HealthCheckAlert = {
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    services: {
+      database: { status: 'up', latencyMs: 5 },
+      redis: { status: 'up', latencyMs: 2, optional: true },
+      storage: { status: 'up', latencyMs: 8 },
+    },
+    totalLatencyMs: 15,
+  };
+
+  return await sendWebhookNotification(config, testAlert);
+}
+
+/**
+ * Get webhook statistics
+ */
+export function getWebhookStats(): {
+  total: number;
+  enabled: number;
+  disabled: number;
+  byType: Record<string, number>;
+} {
+  const stats = {
+    total: webhookConfigs.size,
+    enabled: 0,
+    disabled: 0,
+    byType: {} as Record<string, number>,
+  };
+
+  for (const config of Array.from(webhookConfigs.values())) {
+    if (config.enabled) {
+      stats.enabled++;
+    } else {
+      stats.disabled++;
+    }
+
+    stats.byType[config.type] = (stats.byType[config.type] || 0) + 1;
+  }
+
+  return stats;
+}

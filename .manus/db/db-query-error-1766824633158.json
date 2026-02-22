@@ -1,0 +1,8 @@
+{
+  "query": "CREATE INDEX IF NOT EXISTS idx_verifications_user_created ON verifications(userId, createdAt);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user qcNV4qQD7qpkaJ4.fb5a500c82ee --database APFRAaBLqYVeRNQZ9fu2LF --execute CREATE INDEX IF NOT EXISTS idx_verifications_user_created ON verifications(userId, createdAt);",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1072 (42000) at line 1: column does not exist: userId"
+  ]
+}
