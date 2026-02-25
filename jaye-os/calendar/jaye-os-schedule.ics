@@ -1,0 +1,223 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//JayeOS//OneThingSchedule//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Jaye OS — One Thing Schedule
+X-WR-TIMEZONE:Australia/Sydney
+
+BEGIN:VTIMEZONE
+TZID:Australia/Sydney
+BEGIN:STANDARD
+DTSTART:19700405T030000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZOFFSETFROM:+1100
+TZOFFSETTO:+1000
+TZNAME:AEST
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:19701004T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=10
+TZOFFSETFROM:+1000
+TZOFFSETTO:+1100
+TZNAME:AEDT
+END:DAYLIGHT
+END:VTIMEZONE
+
+BEGIN:VEVENT
+UID:jaye-os-morning-one-thing-20260302@jayeos
+DTSTAMP:20260226T000000Z
+DTSTART;TZID=Australia/Sydney:20260302T060000
+DTEND;TZID=Australia/Sydney:20260302T070000
+RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR
+SUMMARY:ONE Thing Block (Protected)
+DESCRIPTION:Single highest-leverage action for the day. No phone. No email. One task only.\n\nThis is the non-negotiable block. Everything else fits around it.\n\nBefore starting: confirm today's ONE Thing serves the weekly lead domino.\nAfter completing: log completion in Nightly Reset.
+CATEGORIES:ONE Thing,Protected,Deep Work
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+BEGIN:VALARM
+TRIGGER:-PT10M
+ACTION:DISPLAY
+DESCRIPTION:ONE Thing Block starts in 10 minutes — prepare your single task
+END:VALARM
+END:VEVENT
+
+BEGIN:VEVENT
+UID:jaye-os-operator-window-20260302@jayeos
+DTSTAMP:20260226T000000Z
+DTSTART;TZID=Australia/Sydney:20260302T073000
+DTEND;TZID=Australia/Sydney:20260302T123000
+RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR
+SUMMARY:Operator Window (ThomCo)
+DESCRIPTION:Sites, crew, client decisions, supply chain, critical operator work.\n\nKeep it revenue-critical and risk-critical only.\nBatch non-urgent items to the Close Loops window.\n\nRule: if it doesn't affect cash or safety today, it waits.
+CATEGORIES:Operator,ThomCo
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:jaye-os-close-loops-20260302@jayeos
+DTSTAMP:20260226T000000Z
+DTSTART;TZID=Australia/Sydney:20260302T163000
+DTEND;TZID=Australia/Sydney:20260302T170000
+RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR
+SUMMARY:Close Loops (30 min)
+DESCRIPTION:Invoices, confirmations, email replies, tomorrow setup.\n\nThis is the batched admin window. Everything non-urgent gets handled here.\n\nRule: if you're doing admin outside this window, you're leaking time.
+CATEGORIES:Admin,Batching
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:jaye-os-architect-block-1-20260303@jayeos
+DTSTAMP:20260226T000000Z
+DTSTART;TZID=Australia/Sydney:20260303T133000
+DTEND;TZID=Australia/Sydney:20260303T153000
+RRULE:FREQ=WEEKLY;BYDAY=TU
+SUMMARY:Architect Build Block (Venturr) — 1
+DESCRIPTION:Deep work on Venturr. No operator admin unless genuine emergency.\n\nShip one definable output every session.\n\nBefore starting: define the single deliverable for this session.\nAfter completing: log output in Weekly Calibration.
+CATEGORIES:Architect,Venturr,Deep Work
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+BEGIN:VALARM
+TRIGGER:-PT10M
+ACTION:DISPLAY
+DESCRIPTION:Architect Block #1 starts in 10 minutes — define your deliverable
+END:VALARM
+END:VEVENT
+
+BEGIN:VEVENT
+UID:jaye-os-midweek-calibration-20260304@jayeos
+DTSTAMP:20260226T000000Z
+DTSTART;TZID=Australia/Sydney:20260304T121500
+DTEND;TZID=Australia/Sydney:20260304T124500
+RRULE:FREQ=WEEKLY;BYDAY=WE
+SUMMARY:Midweek Calibration (30 min)
+DESCRIPTION:Quick midweek check-in with yourself.\n\n1. Cash glance — any surprises?\n2. Bottleneck check — is the weekly target on track?\n3. Adjust weekly ONE Thing plan if needed.\n\nThis is calibration, not planning. Keep it under 30 minutes.
+CATEGORIES:Calibration,Review
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:jaye-os-architect-block-2-20260305@jayeos
+DTSTAMP:20260226T000000Z
+DTSTART;TZID=Australia/Sydney:20260305T133000
+DTEND;TZID=Australia/Sydney:20260305T153000
+RRULE:FREQ=WEEKLY;BYDAY=TH
+SUMMARY:Architect Build Block (Venturr) — 2
+DESCRIPTION:Deep work on Venturr. Ship one definable output every session.\n\nThis is your second protected build block of the week.\n\nRule: two architect outputs per week is the minimum viable rhythm.\nIf this block gets cancelled twice in a row, escalate in Weekly Calibration.
+CATEGORIES:Architect,Venturr,Deep Work
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+BEGIN:VALARM
+TRIGGER:-PT10M
+ACTION:DISPLAY
+DESCRIPTION:Architect Block #2 starts in 10 minutes — define your deliverable
+END:VALARM
+END:VEVENT
+
+BEGIN:VEVENT
+UID:jaye-os-weekly-calibration-20260306@jayeos
+DTSTAMP:20260226T000000Z
+DTSTART;TZID=Australia/Sydney:20260306T143000
+DTEND;TZID=Australia/Sydney:20260306T153000
+RRULE:FREQ=WEEKLY;BYDAY=FR
+SUMMARY:Weekly Calibration (60 min)
+DESCRIPTION:End-of-week review and next-week planning.\n\n1. Review this week's ONE Thing — did it get done?\n2. Review energy trend (Nightly Reset data).\n3. Identify top bottleneck for next week.\n4. Pick next week's ONE Thing using the Focusing Question.\n5. Update Weekly Calibration database in Notion.\n6. Batch any remaining admin.\n\nThis is the most important review of the week.
+CATEGORIES:Review,Planning,Weekly
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Weekly Calibration starts in 15 minutes — gather your data
+END:VALARM
+END:VEVENT
+
+BEGIN:VEVENT
+UID:jaye-os-friday-admin-batch-20260306@jayeos
+DTSTAMP:20260226T000000Z
+DTSTART;TZID=Australia/Sydney:20260306T153000
+DTEND;TZID=Australia/Sydney:20260306T163000
+RRULE:FREQ=WEEKLY;BYDAY=FR
+SUMMARY:Friday Admin Batch (60 min)
+DESCRIPTION:All accumulated small admin gets handled here.\n\nInvoicing, filing, non-urgent emails, scheduling for next week.\n\nRule: if it's not done by 16:30 Friday, it either waits until next Friday or gets killed.
+CATEGORIES:Admin,Batching,Friday
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:jaye-os-sunday-planning-20260308@jayeos
+DTSTAMP:20260226T000000Z
+DTSTART;TZID=Australia/Sydney:20260308T190000
+DTEND;TZID=Australia/Sydney:20260308T191500
+RRULE:FREQ=WEEKLY;BYDAY=SU
+SUMMARY:Weekly ONE Thing Selection (15 min)
+DESCRIPTION:Use the Focusing Question to choose next week's lead domino.\n\n"What's the ONE Thing I can do this week such that by doing it everything else will be easier or unnecessary?"\n\nWrite it down. Set Monday's ONE Thing block task. Done.\n\nThis should take 15 minutes maximum. If it takes longer, you're overthinking.
+CATEGORIES:Planning,ONE Thing,Sunday
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+BEGIN:VALARM
+TRIGGER:-PT5M
+ACTION:DISPLAY
+DESCRIPTION:Weekly ONE Thing Selection in 5 minutes — grab your Focusing Question
+END:VALARM
+END:VEVENT
+
+BEGIN:VEVENT
+UID:jaye-os-nightly-reset-20260226@jayeos
+DTSTAMP:20260226T000000Z
+DTSTART;TZID=Australia/Sydney:20260226T213000
+DTEND;TZID=Australia/Sydney:20260226T214000
+RRULE:FREQ=DAILY
+SUMMARY:Nightly Reset (10 min)
+DESCRIPTION:End-of-day reset — 10 minutes maximum.\n\n1. What was today's needle mover?\n2. What was the biggest energy leak?\n3. What must happen tomorrow?\n4. One instruction to tomorrow-you.\n5. Rate energy (1-10).\n6. Did you complete the ONE Thing block? (Y/N)\n\nLog in Notion Nightly Reset database. If this takes more than 10 minutes, it's broken.
+CATEGORIES:Reset,Nightly,Review
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+BEGIN:VALARM
+TRIGGER:-PT5M
+ACTION:DISPLAY
+DESCRIPTION:Nightly Reset in 5 minutes — wind down and reflect
+END:VALARM
+END:VEVENT
+
+BEGIN:VEVENT
+UID:jaye-os-monthly-measurement-20260401@jayeos
+DTSTAMP:20260226T000000Z
+DTSTART;TZID=Australia/Sydney:20260401T140000
+DTEND;TZID=Australia/Sydney:20260401T150000
+RRULE:FREQ=MONTHLY;BYMONTHDAY=1
+SUMMARY:Monthly Measurement (60 min)
+DESCRIPTION:First of the month — deep review.\n\n1. Review last month's ONE Thing — achieved or missed?\n2. What to kill this month (one thing that no longer serves you).\n3. What to systemise this month (one thing to make repeatable).\n4. Stress level (1-10).\n5. Revenue check (optional).\n6. Decision: Expand / Stabilise / Reduce.\n\nUpdate Monthly Measurement database in Notion.\n\nRule: one kill + one systemise decision per month. No more.
+CATEGORIES:Monthly,Review,Measurement
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:Monthly Measurement in 30 minutes — prepare your data
+END:VALARM
+END:VEVENT
+
+BEGIN:VEVENT
+UID:jaye-os-quarterly-reset-20260601@jayeos
+DTSTAMP:20260226T000000Z
+DTSTART;TZID=Australia/Sydney:20260601T090000
+DTEND;TZID=Australia/Sydney:20260601T110000
+RRULE:FREQ=YEARLY;BYMONTH=1,4,7,10;BYMONTHDAY=1
+SUMMARY:Quarterly Reset (2 hours)
+DESCRIPTION:Quarterly strategic reset — 2 hours of deep thinking.\n\n1. Diagnosis: What is the binding constraint right now?\n2. Guiding policy: What is the one policy that addresses it?\n3. Coherent actions: What are the 3 (max) actions that execute the policy?\n4. Operator load vs Architect load — where are you vs target?\n5. One leverage decision that permanently reduces operator load.\n6. Set next quarter's ONE Thing.\n\nUpdate Quarterly Reset database in Notion.\n\nThis is strategy, not planning. Think in constraints and leverage, not tasks.
+CATEGORIES:Quarterly,Strategy,Reset
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+BEGIN:VALARM
+TRIGGER:-PT60M
+ACTION:DISPLAY
+DESCRIPTION:Quarterly Reset in 1 hour — clear your schedule and prepare
+END:VALARM
+END:VEVENT
+
+END:VCALENDAR
